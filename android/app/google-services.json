@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "993203278041",
+    "project_id": "try-your-luck-7b646",
+    "storage_bucket": "try-your-luck-7b646.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993203278041:android:1c1f86196f5e4c8a226ec8",
+        "android_client_info": {
+          "package_name": "com.example.try_your_luck"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "993203278041-rgam7eo1cd32ob4iunuedusipu44e185.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr3x8AnBsN81jF1yhngsArN7UiDao22vA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "993203278041-rgam7eo1cd32ob4iunuedusipu44e185.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
