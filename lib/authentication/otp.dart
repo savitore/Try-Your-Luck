@@ -119,10 +119,6 @@ class _OtpState extends State<Otp> {
                     else if(OTP!.isEmpty){
                       showToastOTP();
                     }
-                    else
-                      {
-                        showToastIncorrect();
-                      }
                   },
                   child: Text('Verify Phone Number'),
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
@@ -175,7 +171,7 @@ class _OtpState extends State<Otp> {
     );
   }
   Future<void> signIn(String otp) async {
-    await FirebaseAuth.instance
+     await FirebaseAuth.instance
         .signInWithCredential(PhoneAuthProvider.credential(
         verificationId: verificationCode,
         smsCode: OTP!
