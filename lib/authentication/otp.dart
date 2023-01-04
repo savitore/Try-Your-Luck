@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pinput/pinput.dart';
 
 import '../home.dart';
@@ -20,8 +21,8 @@ class _OtpState extends State<Otp> {
     verifyPhone();
   }
 
-  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
-  String? _verificationCode;
+  final GlobalKey<FormState> scaffoldkey = GlobalKey<FormState>();
+  late String verificationCode,authStatus;
   String? OTP="";
   FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -50,7 +51,7 @@ class _OtpState extends State<Otp> {
     );
 
     return Scaffold(
-      key: _scaffoldkey,
+      key: scaffoldkey,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -89,33 +90,39 @@ class _OtpState extends State<Otp> {
                   });
                 },
                ),
+              SizedBox(height: 5,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Did not receive OTP?',style: TextStyle(color: Colors.grey[600]),),
+                  GestureDetector(
+                    onTap: (){
+                      verifyPhone();
+                    },
+                    child: Text('Resend OTP',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                  ),
+                ],
+              ),
               SizedBox(height: 25,),
               SizedBox(
                 height: 45,
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async{
-                    await auth.verifyPhoneNumber(
-                        phoneNumber: widget.phone,
-                        verificationCompleted: (PhoneAuthCredential credential) async {},
-                        verificationFailed: (FirebaseAuthException e) {},
-                        codeSent: (String verficationID, int? resendToken) async{
-                          PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verficationID, smsCode: OTP!);
-                          await auth.signInWithCredential(credential);
-                        },
-                        codeAutoRetrievalTimeout: (String verificationID) {
-                          setState(() {
-                            _verificationCode = verificationID;
-                          });
-                        },
-                        timeout: Duration(seconds: 60));
-
+                    signIn(OTP!);
                     if(FirebaseAuth.instance.currentUser!=null){
                       Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (context) => Home()),
                               (route) => false);
                     }
+                    else if(OTP!.isEmpty){
+                      showToastOTP();
+                    }
+                    else
+                      {
+                        showToastIncorrect();
+                      }
                   },
                   child: Text('Verify Phone Number'),
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
@@ -136,27 +143,62 @@ class _OtpState extends State<Otp> {
       ),
     );
   }
-  verifyPhone() async {
+  Future<void> verifyPhone() async {
     await auth.verifyPhoneNumber(
         phoneNumber: widget.phone,
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await auth.signInWithCredential(credential);
+        verificationCompleted: (AuthCredential credential) async {
+          setState(() {
+            authStatus = "Your account is successfully verified";
+          });
         },
         verificationFailed: (FirebaseAuthException e) {
+          setState(() {
+            authStatus = "Authentication failed";
+          });
           if (e.code == 'invalid-phone-number') {
             print('The provided phone number is not valid.');
           }
         },
-        codeSent: (String verficationID, int? resendToken) async{
-          PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verficationID, smsCode: OTP!);
-          await auth.signInWithCredential(credential);
-        },
-        codeAutoRetrievalTimeout: (String verificationID) {
+        codeSent: (String verificationID, int? resendToken) async{
+          verificationCode = verificationID;
           setState(() {
-            _verificationCode = verificationID;
+            authStatus = "OTP has been successfully send";
           });
         },
-        timeout: Duration(seconds: 60)
+        codeAutoRetrievalTimeout: (String verificationID) {
+            verificationCode = verificationID;
+            setState(() {
+              authStatus = "TIMEOUT";
+            });
+        },
+        timeout: Duration(seconds: 15)
     );
   }
+  Future<void> signIn(String otp) async {
+    await FirebaseAuth.instance
+        .signInWithCredential(PhoneAuthProvider.credential(
+        verificationId: verificationCode,
+        smsCode: OTP!
+    ));
+  }
+  void showToastIncorrect() =>
+      Fluttertoast.showToast(
+          msg: "Entered OTP is incorrect.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.black,
+          fontSize: 16.0
+      );
+  void showToastOTP() =>
+      Fluttertoast.showToast(
+          msg: "Please enter OTP.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.black,
+          fontSize: 16.0
+      );
 }

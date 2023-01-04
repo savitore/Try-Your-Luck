@@ -9,11 +9,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  String? uid;
+  String? uid,phno;
   @override
   void initState() {
     super.initState();
     uid = FirebaseAuth.instance.currentUser!.uid;
+    phno=FirebaseAuth.instance.currentUser?.phoneNumber;
   }
 
   @override
@@ -35,7 +36,12 @@ class _HomeState extends State<Home> {
         ],
       ),
       body: Center(
-        child: Text(uid!),
+        child: Column(
+          children: [
+            Text(uid!),
+            Text(phno!)
+          ],
+        ),
       ),
     );
   }
