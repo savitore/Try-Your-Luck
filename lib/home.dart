@@ -19,6 +19,8 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green.shade600,
+        foregroundColor: Colors.white,
         leading: Builder(
           builder: (context) => GestureDetector(
             child:

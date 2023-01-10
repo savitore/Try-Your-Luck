@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:try_your_luck/profile.dart';
+import 'package:try_your_luck/wallet.dart';
 
 import 'authentication/phone.dart';
 
@@ -61,7 +62,11 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                 Divider(height: 1,thickness: 0.5,color: Colors.grey[500],),
                 SizedBox(height: 15,),
                 InkWell(
-                  onTap: (){},
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context)=> Wallet()
+                    ));
+                  },
                   child: Row(
                     children: [
                       Icon(Icons.account_balance_wallet_outlined),
