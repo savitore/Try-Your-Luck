@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../home.dart';
+import '../../home.dart';
 
 class AddMoney extends StatefulWidget {
   const AddMoney({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:try_your_luck/profile.dart';
-import 'package:try_your_luck/wallet.dart';
+import 'package:try_your_luck/wallet/wallet.dart';
 
 import 'authentication/phone.dart';
 

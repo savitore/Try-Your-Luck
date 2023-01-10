@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:mongo_dart/mongo_dart.dart';
-import 'package:try_your_luck/constant.dart';
+import 'package:try_your_luck/others/constant.dart';
 import 'package:try_your_luck/models/MongoDBModel.dart';
 
 class UserInformation{
