@@ -9,17 +9,24 @@ import 'package:try_your_luck/db/userInfo.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool? isLoggedIn = false;
-  isLoggedIn = (prefs.getBool('isLoggedIn')==null) ? false : prefs.getBool('isLoggedIn');
+  // final SharedPreferences prefs = await SharedPreferences.getInstance();
+  // bool? isLoggedIn = (prefs.getBool('isLoggedIn')==null) ? false : prefs.getBool('isLoggedIn');
   await Firebase.initializeApp();
+  User? firebaseUser = FirebaseAuth.instance.currentUser;
+  Widget first;
+  if (firebaseUser != null) {
+    first = Home();
+  } else {
+    first = Phone();
+  }
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    initialRoute: 'phone',
-    routes: {
-      'phone':(context) => Phone(),
-      'name':(context)=>Name()
-    },
+    // initialRoute: 'phone',
+    // routes: {
+    //   'phone':(context) => Phone(),
+    //   'name':(context)=>Name()
+    // },
+    home: first,
   ));
 }
 

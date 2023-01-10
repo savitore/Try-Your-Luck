@@ -133,7 +133,7 @@ class _NameState extends State<Name> {
   Future<void> _insertData(String name, String phoneno) async{
     var _id = M.ObjectId();
     final data = MongoDbModel(id: _id, name: name, phoneno: phoneno);
-    // var result = await UserInformation.insert(data);
+    var result = await UserInformation.insert(data);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Inserted ID" + _id.$oid)));
   }
 }

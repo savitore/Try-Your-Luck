@@ -21,12 +21,12 @@ class _PhoneState extends State<Phone> {
   void initState() {
     super.initState();
     countrycode.text = "+91";
-    if(FirebaseAuth.instance.currentUser!= null){
-
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => Home()
-      ));
-    }
+    // if(FirebaseAuth.instance.currentUser!= null){
+    //
+    //   Navigator.of(context).pushReplacement(MaterialPageRoute(
+    //       builder: (context) => Home()
+    //   ));
+    // }
   }
 
   Widget build(BuildContext context) {

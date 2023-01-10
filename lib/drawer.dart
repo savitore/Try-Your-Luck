@@ -42,7 +42,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                 ),
                 Row(
                   children: [
-                    GestureDetector(
+                    InkWell(
                       child: Text(
                         'View profile',
                         style: TextStyle(
