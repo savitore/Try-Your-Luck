@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:try_your_luck/authentication/phone.dart';
+import 'package:try_your_luck/drawer.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -18,25 +19,41 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => Phone()),
-                      (route) => false);
-            },
-          )
-        ],
+        leading: Builder(
+          builder: (context) => GestureDetector(
+            child:
+            // CircleAvatar(
+            //   backgroundImage: AssetImage('assets/empty_person.jpg'),
+            //   // backgroundImage: NetworkImage('url'),
+            //   radius: 5,
+            // ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(100),
+                image: DecorationImage(
+                  image: AssetImage('assets/empty_person.jpg'),
+                )
+              ),
+            ),
+            onTap: (){Scaffold.of(context).openDrawer();},
+          ),
+        ),
+        title: Text('Try Your Luck'),
       ),
       body: Center(
         child: Column(
           children: [
           ],
         ),
+      ),
+      drawer: Drawer(
+          child: Container(
+            child: Column(
+              children: [
+                MyHeaderDrawer()
+              ],
+            ),
+          ),
       ),
     );
   }

@@ -1,6 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mongo_dart/mongo_dart.dart' as M;
+import 'package:try_your_luck/db/userInfo.dart';
+import 'package:try_your_luck/models/MongoDBModel.dart';
+
+import '../home.dart';
 
 class Name extends StatefulWidget {
   const Name({Key? key}) : super(key: key);
@@ -17,6 +22,9 @@ class _NameState extends State<Name> {
     super.initState();
     uid = FirebaseAuth.instance.currentUser!.uid;
     phno=FirebaseAuth.instance.currentUser?.phoneNumber;
+    UserInformation.connect();
+    // uid="111";
+    // phno="9406380105";
   }
   @override
   Widget build(BuildContext context) {
@@ -35,12 +43,11 @@ class _NameState extends State<Name> {
                   Row(
                   children: [
                     Text(
-                      'Enter your name',
+                      'What is your name?',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 30,
-                        fontWeight: FontWeight.w400,
-                        fontFamily:'Raleway'
+                        // fontFamily:'Raleway'
                       ),
 
                     ),
@@ -62,7 +69,7 @@ class _NameState extends State<Name> {
                       },
                       decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: "Name"
+                          hintText: "Enter Your Name"
                       ),
                       style: TextStyle(fontSize: 26),
                     ),
@@ -82,6 +89,15 @@ class _NameState extends State<Name> {
                       else if(name.length<3)
                         {
                           showToastIncomplete();
+                        }
+                      else
+                        {
+                          print("hi");
+                          _insertData(name, phno!);
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => Home()),
+                                  (route) => false);
                         }
                     },
                     child: Text('Next'),
@@ -114,4 +130,10 @@ class _NameState extends State<Name> {
           textColor: Colors.black,
           fontSize: 16.0
       );
+  Future<void> _insertData(String name, String phoneno) async{
+    var _id = M.ObjectId();
+    final data = MongoDbModel(id: _id, name: name, phoneno: phoneno);
+    // var result = await UserInformation.insert(data);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Inserted ID" + _id.$oid)));
+  }
 }
