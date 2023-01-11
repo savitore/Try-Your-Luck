@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:pay/pay.dart';
 
 import '../../home.dart';
 
@@ -14,6 +15,7 @@ class AddMoney extends StatefulWidget {
 class _AddMoneyState extends State<AddMoney> {
   var amount="";
   TextEditingController amount_100 = TextEditingController();
+  final _paymentItem= <PaymentItem>[];
   @override
   void initState() {
     super.initState();
@@ -29,7 +31,7 @@ class _AddMoneyState extends State<AddMoney> {
           onPressed: (){
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios_new_rounded,color: Colors.black,),
+          icon: Icon(Icons.arrow_back,color: Colors.black,),
         ),
       ),
       // body: Container(
@@ -116,20 +118,48 @@ class _AddMoneyState extends State<AddMoney> {
             SizedBox(
               height: 45,
               width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  if(amount==null)
-                    {
-                      showToastEmpty();
-                    }
-                  else{
-
-                  }
+              child: GooglePayButton(
+                paymentConfigurationAsset: 'gpay.json',
+                paymentItems: [PaymentItem(amount: amount)],
+                type: GooglePayButtonType.pay,
+                margin: const EdgeInsets.only(top: 15.0),
+                onPaymentResult: (data){
+                  print(data);
                 },
-                child: Text('Next'),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                loadingIndicator: const Center(
+                  child: CircularProgressIndicator(),
+                ),
               ),
+              // child: ElevatedButton(
+              //   onPressed: () {
+              //     if(amount==null)
+              //       {
+              //         showToastEmpty();
+              //       }
+              //     else{
+              //
+              //     }
+              //   },
+              //   child: Text('Next'),
+              //   style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+              // ),
             ),
+            // Row(
+            //   children: [
+            //     GooglePayButton(
+            //       paymentConfigurationAsset: 'gpay.json',
+            //       paymentItems: [PaymentItem(amount: amount)],
+            //       type: GooglePayButtonType.pay,
+            //       margin: const EdgeInsets.only(top: 15.0),
+            //       onPaymentResult: (data){
+            //         print(data);
+            //       },
+            //       loadingIndicator: const Center(
+            //         child: CircularProgressIndicator(),
+            //       ),
+            //     ),
+            //   ],
+            // )
           ],
         ),
       ),

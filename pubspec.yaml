@@ -42,6 +42,7 @@ dependencies:
   fluttertoast: ^8.1.2
   mongo_dart: ^0.8.2
   shared_preferences: ^2.0.15
+  pay: ^1.0.11
 
 dev_dependencies:
   flutter_test:

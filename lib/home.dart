@@ -21,25 +21,25 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         backgroundColor: Colors.green.shade600,
         foregroundColor: Colors.white,
-        leading: Builder(
-          builder: (context) => GestureDetector(
-            child:
-            // CircleAvatar(
-            //   backgroundImage: AssetImage('assets/empty_person.jpg'),
-            //   // backgroundImage: NetworkImage('url'),
-            //   radius: 5,
-            // ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                image: DecorationImage(
-                  image: AssetImage('assets/empty_person.jpg'),
-                )
-              ),
-            ),
-            onTap: (){Scaffold.of(context).openDrawer();},
-          ),
-        ),
+        // leading: Builder(
+        //   builder: (context) => GestureDetector(
+        //     child:
+        //     // CircleAvatar(
+        //     //   backgroundImage: AssetImage('assets/empty_person.jpg'),
+        //     //   // backgroundImage: NetworkImage('url'),
+        //     //   radius: 5,
+        //     // ),
+        //     Container(
+        //       decoration: BoxDecoration(
+        //         borderRadius: BorderRadius.circular(100),
+        //         image: DecorationImage(
+        //           image: AssetImage('assets/empty_person.jpg'),
+        //         )
+        //       ),
+        //     ),
+        //     onTap: (){Scaffold.of(context).openDrawer();},
+        //   ),
+        // ),
         title: Text('Try Your Luck'),
       ),
       body: Center(

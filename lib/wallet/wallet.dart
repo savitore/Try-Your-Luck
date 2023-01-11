@@ -65,29 +65,38 @@ class _WalletState extends State<Wallet> {
                         SizedBox(height: 10,),
 
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Icon(Icons.add_task,size: 35,),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
-                                Row(
+                                Icon(Icons.add_task,size: 35,),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Icon(Icons.currency_rupee,size: 12,color: Colors.black,),
-                                    Text('100',style: TextStyle(fontSize: 12,color: Colors.black),),
-                                    SizedBox(width: 5,),
-                                    Text('added',style: TextStyle(fontSize: 12,color: Colors.black),)
-                                  ],
-                                ),
-                                SizedBox(height: 5,),
-                                Row(
-                                  children: [
-                                    SizedBox(width: 5,),
-                                    Text('10/01/23',style: TextStyle(fontSize: 10,color: Colors.grey[600]),),
+                                    Row(
+                                      children: [
+                                        SizedBox(width: 5,),
+                                        Text('Amount added',style: TextStyle(fontSize: 12,color: Colors.black),),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5,),
+                                    Row(
+                                      children: [
+                                        SizedBox(width: 5,),
+                                        Text('10/01/23',style: TextStyle(fontSize: 10,color: Colors.grey[600]),),
+                                      ],
+                                    )
                                   ],
                                 )
                               ],
-                            )
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.currency_rupee,size: 15,),
+                              Text('100',style: TextStyle(fontSize:15),)
+                              ],
+                            ),
                           ],
                         ),
                       ],

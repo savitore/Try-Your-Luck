@@ -60,7 +60,7 @@ class _OtpState extends State<Otp> {
           onPressed: (){
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios_new_rounded,color: Colors.black,),
+          icon: Icon(Icons.arrow_back,color: Colors.black,),
         ),
       ),
       body: Container(
