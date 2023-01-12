@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:try_your_luck/wallet/add_money.dart';
 
 class Wallet extends StatefulWidget {
@@ -9,6 +10,7 @@ class Wallet extends StatefulWidget {
 }
 
 class _WalletState extends State<Wallet> {
+  var balance=0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +35,7 @@ class _WalletState extends State<Wallet> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.currency_rupee,color: Colors.black,size: 20,),
-                    Text('0',style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
+                    Text(balance.toString(),style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
                   ],
                 ),
                 SizedBox(height: 5,),
@@ -41,7 +43,7 @@ class _WalletState extends State<Wallet> {
                   onPressed: (){
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AddMoney()));
+                        MaterialPageRoute(builder: (context) => AddMoney(balance.toString())));
                   },
                   child:Text('ADD MONEY'),
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
@@ -110,6 +112,7 @@ class _WalletState extends State<Wallet> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
+                  showToast();
                 },
                 child: Text('Withdraw'),
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
@@ -121,4 +124,14 @@ class _WalletState extends State<Wallet> {
       ),
     );
   }
+  showToast() =>
+      Fluttertoast.showToast(
+          msg: "Withdraw option will come soon.",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.black,
+          fontSize: 20.0
+      );
 }

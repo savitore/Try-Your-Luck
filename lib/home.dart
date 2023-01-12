@@ -41,6 +41,7 @@ class _HomeState extends State<Home> {
         //   ),
         // ),
         title: Text('Try Your Luck'),
+        centerTitle: true,
       ),
       body: Center(
         child: Column(

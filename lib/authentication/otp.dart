@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pinput/pinput.dart';
 import 'package:try_your_luck/authentication/name.dart';
+import 'package:try_your_luck/authentication/phone.dart';
 
 
 class Otp extends StatefulWidget {
@@ -64,78 +65,75 @@ class _OtpState extends State<Otp> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.only(left: 25,right: 25),
-        alignment: Alignment.centerLeft,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Image.asset('assets/bg.png',width: 150,height: 150,),
-              SizedBox(height: 25,),
-              Text(
-                'Enter OTP sent to',
-                style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: Colors.grey[600]),
-              ),
-              Text(
-                widget.phone,
-                style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 20),
-              Pinput(
-                length: 6,
-                showCursor: true,
-                onCompleted: (value){
-                  setState(() {
-                    OTP=value;
-                  });
-                },
-               ),
-              SizedBox(height: 5,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Did not receive OTP?',style: TextStyle(color: Colors.grey[600]),),
-                  GestureDetector(
-                    onTap: (){
-                      verifyPhone();
-                    },
-                    child: Text('Resend OTP',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-                  ),
-                ],
-              ),
-              SizedBox(height: 25,),
-              SizedBox(
-                height: 45,
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () async{
-                    signIn(OTP!);
-                    if(FirebaseAuth.instance.currentUser!=null){
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => Name()),
-                              (route) => false);
-                    }
-                    else if(OTP!.isEmpty){
-                      showToastOTP();
-                    }
-                  },
-                  child: Text('Verify Phone Number'),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+        margin: EdgeInsets.fromLTRB(20, 110, 20, 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Enter OTP sent to',
+                  style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold,color: Colors.grey[700]),
                 ),
-              ),
-              Row(
-                children: [
-                  TextButton(
-                      onPressed: (){
-                        Navigator.pushNamedAndRemoveUntil(context, 'phone', (route) => false);
+                Text(
+                  widget.phone,
+                  style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 1,),
+                InkWell(
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                  child: Text('Edit Phone Number?',style: TextStyle(color: Colors.black),),
+                ),
+                SizedBox(height: 20),
+                Pinput(
+                  length: 6,
+                  showCursor: true,
+                  onCompleted: (value){
+                    setState(() {
+                      OTP=value;
+                    });
+                  },
+                 ),
+                SizedBox(height: 5,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Did not receive OTP?',style: TextStyle(color: Colors.grey[800]),),
+                    GestureDetector(
+                      onTap: (){
+                        verifyPhone();
                       },
-                      child: Text('Edit Phone Number ?',style: TextStyle(color: Colors.black),)),
-                ],
-              )
-            ],
-          ),
-        ),
+                      child: Text('Resend OTP',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+                SizedBox(
+                  height: 45,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async{
+                      signIn(OTP!);
+                      if(FirebaseAuth.instance.currentUser!=null){
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => Name()),
+                                (route) => false);
+                      }
+                      else if(OTP!.isEmpty){
+                        showToastOTP();
+                      }
+                    },
+                    child: Text('Verify Phone Number'),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  ),
+                ),
+              ],
+            ),
       ),
     );
   }

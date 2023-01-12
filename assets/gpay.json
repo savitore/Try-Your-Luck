@@ -36,8 +36,8 @@
       "merchantName": "Try Your Luck"
     },
     "transactionInfo": {
-      "countryCode": "IND",
-      "currencyCode": "INR"
+      "countryCode": "US",
+      "currencyCode": "USD"
     }
   }
 }
