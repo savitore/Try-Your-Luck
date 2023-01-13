@@ -1,7 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:try_your_luck/authentication/phone.dart';
 import 'package:try_your_luck/drawer.dart';
+
+import 'models/UserModel.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -10,11 +12,40 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  List<UserModel>? list=[];
+
   @override
   void initState() {
     super.initState();
+    fetchDataContests();
   }
 
+  Future<void> fetchDataContests() async{
+    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
+    final body={
+      "dataSource":"Cluster0",
+      "database":"db",
+      "collection":"contests",
+    };
+    final response;
+    try{
+      response=await http.post(Uri.parse(baseUrl),
+          headers: {'Content-Type':'application/json',
+            'Accept':'application/json',
+            'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
+            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+          body: jsonEncode(body)
+      );
+      var data = jsonDecode(response.body);
+      print(data.toString());
+      print(data['document'].length);
+      setState((){
+
+      });
+    }catch(e){
+      print(e.toString());
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,11 +74,11 @@ class _HomeState extends State<Home> {
         title: Text('Try Your Luck'),
         centerTitle: true,
       ),
-      body: Center(
-        child: Column(
-          children: [
-          ],
-        ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child:Column()
+      ),
       ),
       drawer: Drawer(
           child: Container(

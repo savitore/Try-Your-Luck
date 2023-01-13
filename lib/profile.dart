@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
@@ -8,6 +11,46 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+
+  String? phno="";
+  String name="",phone="";
+  @override
+  void initState() {
+    super.initState();
+    phno=FirebaseAuth.instance.currentUser?.phoneNumber;
+    fetchDataProfile();
+  }
+   Future<void> fetchDataProfile() async{
+    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
+    final body={
+      "dataSource":"Cluster0",
+      "database":"db",
+      "collection":"users",
+      "filter":{
+        "phone_number": phno
+      }
+    };
+    final response;
+    try{
+      response=await http.post(Uri.parse(baseUrl),
+         headers: {'Content-Type':'application/json',
+           'Accept':'application/json',
+           'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
+           'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+          body: jsonEncode(body)
+      );
+      var data = jsonDecode(response.body);
+      print(data.toString());
+      setState((){
+        name=data['document']['name'].toString();
+        phone=data['document']['phone_number'].toString();
+      });
+      print(data['document']['name']);
+    }catch(e){
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,11 +76,12 @@ class _ProfileState extends State<Profile> {
                 SizedBox(height: 20,),
                 Text('Name',style: TextStyle(color: Colors.grey[700],fontSize: 20),),
                 SizedBox(height: 5,),
-                Text('Krishna Agrawal',style: TextStyle(color: Colors.black,fontSize: 20)),
+                Text(name,
+                    style: TextStyle(color: Colors.black,fontSize: 20)),
                 SizedBox(height: 10,),
                 Text('Phone number',style: TextStyle(color: Colors.grey[700],fontSize: 20),),
                 SizedBox(height: 5,),
-                Text('+919406380105',style: TextStyle(color: Colors.black,fontSize: 20)),
+                Text(phone.toString(),style: TextStyle(color: Colors.black,fontSize: 20)),
               ],
             ),
           ],

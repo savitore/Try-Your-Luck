@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mongo_dart/mongo_dart.dart' as M;
-import 'package:try_your_luck/db/userInfo.dart';
-import 'package:try_your_luck/models/MongoDBModel.dart';
 
+import '../data_services.dart';
 import '../home.dart';
 
 class Name extends StatefulWidget {
@@ -22,16 +20,11 @@ class _NameState extends State<Name> {
     super.initState();
     uid = FirebaseAuth.instance.currentUser!.uid;
     phno=FirebaseAuth.instance.currentUser?.phoneNumber;
-    UserInformation.connect();
-    // uid="111";
-    // phno="9406380105";
   }
+  DataService dataService=DataService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: Container(
-      //   margin: EdgeInsets.only(left: 25,right: 25,top: 100),
-      //   alignment: Alignment.topLeft,
         body: Padding(
           padding: const EdgeInsets.fromLTRB(25, 150, 25, 40),
           child: Column(
@@ -131,9 +124,6 @@ class _NameState extends State<Name> {
           fontSize: 16.0
       );
   Future<void> _insertData(String name, String phoneno) async{
-    var _id = M.ObjectId();
-    final data = MongoDbModel(id: _id, name: name, phoneno: phoneno);
-    var result = await UserInformation.insert(data);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Inserted ID" + _id.$oid)));
+    dataService.DataInsertUsers(name,phoneno,context);
   }
 }

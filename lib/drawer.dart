@@ -1,6 +1,9 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:try_your_luck/profile.dart';
+import 'package:try_your_luck/user_contests.dart';
 import 'package:try_your_luck/wallet/wallet.dart';
 
 import 'authentication/phone.dart';
@@ -13,6 +16,43 @@ class MyHeaderDrawer extends StatefulWidget {
 }
 
 class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
+  String name="";
+  String? phno="";
+  @override
+  void initState() {
+    super.initState();
+    phno=FirebaseAuth.instance.currentUser?.phoneNumber;
+    fetchDataDrawer();
+  }
+  Future<void> fetchDataDrawer() async{
+    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
+    final body={
+      "dataSource":"Cluster0",
+      "database":"db",
+      "collection":"users",
+      "filter":{
+        "phone_number": phno
+      }
+    };
+    final response;
+    try{
+      response=await http.post(Uri.parse(baseUrl),
+          headers: {'Content-Type':'application/json',
+            'Accept':'application/json',
+            'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
+            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+          body: jsonEncode(body)
+      );
+      var data = jsonDecode(response.body);
+      print(data.toString());
+      setState((){
+        name=data['document']['name'].toString();
+      });
+      print(data['document']['name']);
+    }catch(e){
+      print(e.toString());
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,42 +61,47 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
           children: [
             Column(
               children: [
-                Row(
-                  children: [CircleAvatar(
-                    backgroundImage: AssetImage('assets/empty_person.jpg'),
-                    // backgroundImage: NetworkImage('url'),
-                    radius: 30,
-                  )
-                  ],
-                ),
-                SizedBox(height: 10,),
-                Row(
+                InkWell(
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context)=> Profile()
+                    ));
+                  },
+                  child: Column(
                     children: [
-                      Text('Krishna Agrawal',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          // fontWeight: FontWeight.bold
-                        ),
-                      )
-                    ]
-                ),
-                Row(
-                  children: [
-                    InkWell(
-                      child: Text(
-                        'View profile',
-                        style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 14),
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundImage: AssetImage('assets/empty_person.jpg'),
+                            // backgroundImage: NetworkImage('url'),
+                            radius: 30,
+                          )
+                        ],
                       ),
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context)=> Profile()
-                        ));
-                      },
-                    )
-                  ],
+                      SizedBox(height: 10,),
+                      Row(
+                          children: [
+                            Text(name,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                // fontWeight: FontWeight.bold
+                              ),
+                            )
+                          ]
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'View profile',
+                            style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 14),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(height: 10,),
                 Divider(height: 1,thickness: 0.5,color: Colors.grey[500],),
@@ -75,9 +120,24 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                     ],
                   ),
                 ),
+                SizedBox(height: 15,),
+                InkWell(
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context)=> MyContests()
+                    ));
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.add_business_outlined),
+                      SizedBox(width: 5,),
+                      Text('My Contests')
+                    ],
+                  ),
+                ),
               ],
             ),
-            SizedBox(height: 500,),
+            SizedBox(height: 460,),
             Divider(height: 1,thickness: 0.5,color: Colors.grey[500]),
             SizedBox(height: 10,),
             Column(
