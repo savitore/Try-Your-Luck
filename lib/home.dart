@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:try_your_luck/ContestExpandable.dart';
 import 'package:try_your_luck/drawer.dart';
 
+import 'models/ContestModel.dart';
 import 'models/UserModel.dart';
 
 class Home extends StatefulWidget {
@@ -12,8 +14,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  List<UserModel>? list=[];
-
+  List<ContestModel>? list=[];
+  int flag=0;
   @override
   void initState() {
     super.initState();
@@ -21,7 +23,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> fetchDataContests() async{
-    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
+    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/find';
     final body={
       "dataSource":"Cluster0",
       "database":"db",
@@ -38,10 +40,13 @@ class _HomeState extends State<Home> {
       );
       var data = jsonDecode(response.body);
       print(data.toString());
-      print(data['document'].length);
-      setState((){
-
-      });
+      for(int i=0; i<data['documents'].length;i++){
+        setState((){
+          list?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount']));
+        });
+      }
+      print(data['documents'][0]['name']);
+      flag=1;
     }catch(e){
       print(e.toString());
     }
@@ -52,32 +57,13 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         backgroundColor: Colors.green.shade600,
         foregroundColor: Colors.white,
-        // leading: Builder(
-        //   builder: (context) => GestureDetector(
-        //     child:
-        //     // CircleAvatar(
-        //     //   backgroundImage: AssetImage('assets/empty_person.jpg'),
-        //     //   // backgroundImage: NetworkImage('url'),
-        //     //   radius: 5,
-        //     // ),
-        //     Container(
-        //       decoration: BoxDecoration(
-        //         borderRadius: BorderRadius.circular(100),
-        //         image: DecorationImage(
-        //           image: AssetImage('assets/empty_person.jpg'),
-        //         )
-        //       ),
-        //     ),
-        //     onTap: (){Scaffold.of(context).openDrawer();},
-        //   ),
-        // ),
         title: Text('Try Your Luck'),
         centerTitle: true,
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child:Column()
+          child:loaded(),
       ),
       ),
       drawer: Drawer(
@@ -90,5 +76,55 @@ class _HomeState extends State<Home> {
           ),
       ),
     );
+  }
+  Widget loaded(){
+    if(flag==1){
+      return Column(
+        children: list!.map((contests){
+          return InkWell(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.no_of_people, prize: contests.win_amount)));
+            },
+            child: Card(
+              color: Colors.green,
+              child: ListTile(
+                tileColor: Colors.white,
+                title: Text(
+                  contests.name,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    fontSize: 20
+                  ),
+                ),
+                subtitle: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text('Entry fee: ',style: TextStyle(color: Colors.black),),
+                        Icon(Icons.currency_rupee,color: Colors.black,size: 12,),
+                        Text(contests.no_of_people,style: TextStyle(color: Colors.black)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('Prize Pool: ',style: TextStyle(color: Colors.black),),
+                        Icon(Icons.currency_rupee,color: Colors.black,size: 12,),
+                        Text(contests.win_amount,style: TextStyle(color: Colors.black)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      );
+    }
+    else{
+      return Center(child: CircularProgressIndicator());
+    }
   }
 }

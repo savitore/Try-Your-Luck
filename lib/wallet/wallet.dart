@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:try_your_luck/wallet/add_money.dart';
+import 'package:http/http.dart' as http;
 
 class Wallet extends StatefulWidget {
   const Wallet({Key? key}) : super(key: key);
@@ -10,7 +14,43 @@ class Wallet extends StatefulWidget {
 }
 
 class _WalletState extends State<Wallet> {
-  var balance=0;
+
+  String? phno="";
+  String balance='';
+
+  @override
+  void initState() {
+    super.initState();
+    phno=FirebaseAuth.instance.currentUser?.phoneNumber;
+    fetchDataProfile();
+  }
+  Future<void> fetchDataProfile() async{
+    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
+    final body={
+      "dataSource":"Cluster0",
+      "database":"db",
+      "collection":"users",
+      "filter":{
+        "phone_number": phno
+      }
+    };
+    final response;
+    try{
+      response=await http.post(Uri.parse(baseUrl),
+          headers: {'Content-Type':'application/json',
+            'Accept':'application/json',
+            'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
+            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+          body: jsonEncode(body)
+      );
+      var data = jsonDecode(response.body);
+      setState((){
+        balance=data['document']['balance'].toString();
+      });
+    }catch(e){
+      print(e.toString());
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +75,7 @@ class _WalletState extends State<Wallet> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.currency_rupee,color: Colors.black,size: 20,),
-                    Text(balance.toString(),style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
+                    Text(balance,style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
                   ],
                 ),
                 SizedBox(height: 5,),

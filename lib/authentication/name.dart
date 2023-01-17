@@ -124,6 +124,6 @@ class _NameState extends State<Name> {
           fontSize: 16.0
       );
   Future<void> _insertData(String name, String phoneno) async{
-    dataService.DataInsertUsers(name,phoneno,context);
+    dataService.DataInsertUsers(name,phoneno,0.toString(),context);
   }
 }

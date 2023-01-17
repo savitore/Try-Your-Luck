@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class DataService{
 
-  Future DataInsertUsers(String name, String phone_number, BuildContext context) async {
+  Future DataInsertUsers(String name, String phone_number, String balance, BuildContext context) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/insertOne';
     final body={
       "dataSource":"Cluster0",
@@ -15,6 +15,7 @@ class DataService{
       "document":{
         "name":name,
         "phone_number":phone_number,
+        "balance": balance
       }
     };
     HttpClient httpClient=new HttpClient();

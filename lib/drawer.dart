@@ -18,6 +18,7 @@ class MyHeaderDrawer extends StatefulWidget {
 class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
   String name="";
   String? phno="";
+  int flag=0;
   @override
   void initState() {
     super.initState();
@@ -47,6 +48,9 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
       print(data.toString());
       setState((){
         name=data['document']['name'].toString();
+        if(name==data['document']['name'].toString()){
+          flag=1;
+        }
       });
       print(data['document']['name']);
     }catch(e){
@@ -61,48 +65,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
           children: [
             Column(
               children: [
-                InkWell(
-                  onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context)=> Profile()
-                    ));
-                  },
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: AssetImage('assets/empty_person.jpg'),
-                            // backgroundImage: NetworkImage('url'),
-                            radius: 30,
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 10,),
-                      Row(
-                          children: [
-                            Text(name,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                // fontWeight: FontWeight.bold
-                              ),
-                            )
-                          ]
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'View profile',
-                            style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 14),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                loaded(),
                 SizedBox(height: 10,),
                 Divider(height: 1,thickness: 0.5,color: Colors.grey[500],),
                 SizedBox(height: 15,),
@@ -167,5 +130,54 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
         ),
     );
     // );
+  }
+  Widget loaded(){
+    if(flag==1){
+      return InkWell(
+        onTap: (){
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context)=> Profile()
+          ));
+        },
+        child: Column(
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: AssetImage('assets/empty_person.jpg'),
+                  // backgroundImage: NetworkImage('url'),
+                  radius: 30,
+                )
+              ],
+            ),
+            SizedBox(height: 10,),
+            Row(
+                children: [
+                  Text(name,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      // fontWeight: FontWeight.bold
+                    ),
+                  )
+                ]
+            ),
+            Row(
+              children: [
+                Text(
+                  'View profile',
+                  style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14),
+                )
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+    else{
+      return CircularProgressIndicator();
+    }
   }
 }
