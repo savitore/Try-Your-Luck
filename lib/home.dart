@@ -5,7 +5,6 @@ import 'package:try_your_luck/ContestExpandable.dart';
 import 'package:try_your_luck/drawer.dart';
 
 import 'models/ContestModel.dart';
-import 'models/UserModel.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -42,7 +41,7 @@ class _HomeState extends State<Home> {
       print(data.toString());
       for(int i=0; i<data['documents'].length;i++){
         setState((){
-          list?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount']));
+          list?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount'], people_joined: data['documents'][i]['people_joined'], fee: data['documents'][i]['fee']));
         });
       }
       print(data['documents'][0]['name']);
@@ -85,7 +84,7 @@ class _HomeState extends State<Home> {
             onTap: (){
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.no_of_people, prize: contests.win_amount)));
+                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, people_joined: contests.people_joined,)));
             },
             child: Card(
               color: Colors.green,
@@ -105,7 +104,7 @@ class _HomeState extends State<Home> {
                       children: [
                         Text('Entry fee: ',style: TextStyle(color: Colors.black),),
                         Icon(Icons.currency_rupee,color: Colors.black,size: 12,),
-                        Text(contests.no_of_people,style: TextStyle(color: Colors.black)),
+                        Text(contests.fee,style: TextStyle(color: Colors.black)),
                       ],
                     ),
                     Row(

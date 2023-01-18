@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -33,15 +34,16 @@ class DataService{
     print(output['insertedId']);
   }
 
-  Future DataInsertContestUsers(String name, String phone_number, BuildContext context) async {
+  Future DataInsertContestUsers(String name, String phone_number, String contest_name, bool alreadyJoined, BuildContext context) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/insertOne';
     final body={
       "dataSource":"Cluster0",
-      "database":"db",
-      "collection":"contestUsers",
+      "database":"contests",
+      "collection":contest_name,
       "document":{
         "name":name,
         "phone_number":phone_number,
+        "already_joined": alreadyJoined,
       }
     };
     HttpClient httpClient=new HttpClient();
