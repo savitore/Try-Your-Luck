@@ -17,6 +17,7 @@ class _WalletState extends State<Wallet> {
 
   String? phno="";
   String balance='';
+  int flag=0;
 
   @override
   void initState() {
@@ -47,6 +48,7 @@ class _WalletState extends State<Wallet> {
       setState((){
         balance=data['document']['balance'].toString();
       });
+      flag=1;
     }catch(e){
       print(e.toString());
     }
@@ -71,13 +73,7 @@ class _WalletState extends State<Wallet> {
                 SizedBox(height: 15,),
                 Text('Total Balance',style: TextStyle(color: Colors.grey[600],fontSize: 15),),
                 SizedBox(height: 5,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.currency_rupee,color: Colors.black,size: 20,),
-                    Text(balance,style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
-                  ],
-                ),
+                loading_balance(),
                 SizedBox(height: 5,),
                 ElevatedButton(
                   onPressed: (){
@@ -163,6 +159,19 @@ class _WalletState extends State<Wallet> {
 
       ),
     );
+  }
+  Widget loading_balance(){
+    if(flag==1){
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.currency_rupee,color: Colors.black,size: 20,),
+          Text(balance,style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
+        ],
+      );
+    }else{
+      return Center(child: CircularProgressIndicator());
+    }
   }
   showToast() =>
       Fluttertoast.showToast(

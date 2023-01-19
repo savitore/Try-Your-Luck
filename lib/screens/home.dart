@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:try_your_luck/ContestExpandable.dart';
-import 'package:try_your_luck/drawer.dart';
+import 'package:try_your_luck/screens/ContestExpandable.dart';
+import 'package:try_your_luck/screens/drawer.dart';
 
-import 'models/ContestModel.dart';
+import '../models/ContestModel.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
       print(data.toString());
       for(int i=0; i<data['documents'].length;i++){
         setState((){
-          list?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount'], people_joined: data['documents'][i]['people_joined'], fee: data['documents'][i]['fee']));
+          list?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount'], fee: data['documents'][i]['fee'], lucky_draw_no: data['documents'][i]['lucky_draw_no']));
         });
       }
       print(data['documents'][0]['name']);
@@ -84,7 +84,7 @@ class _HomeState extends State<Home> {
             onTap: (){
               Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, people_joined: contests.people_joined,)));
+                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no,)));
             },
             child: Card(
               color: Colors.green,

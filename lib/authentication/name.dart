@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../data_services.dart';
-import '../home.dart';
+import '../services/data_services.dart';
+import '../screens/home.dart';
 
 class Name extends StatefulWidget {
   const Name({Key? key}) : super(key: key);

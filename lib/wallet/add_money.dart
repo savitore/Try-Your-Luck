@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pay/pay.dart';
 import 'package:try_your_luck/wallet/payment_options.dart';
 
-import '../../home.dart';
+import '../screens/home.dart';
 
 class AddMoney extends StatefulWidget {
   final String balance;

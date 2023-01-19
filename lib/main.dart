@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:try_your_luck/home.dart';
+import 'package:try_your_luck/screens/home.dart';
 import 'authentication/phone.dart';
 
 void main() async{

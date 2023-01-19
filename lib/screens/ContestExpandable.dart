@@ -4,16 +4,16 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:try_your_luck/wallet/add_money.dart';
 
-import 'data_services.dart';
-import 'models/ContestUsersModel.dart';
+import '../services/data_services.dart';
+import '../models/ContestUsersModel.dart';
 
 class ContestExpandable extends StatefulWidget {
   final String name;
   final String fee;
   final String prize;
   final String no_of_people;
-  final String people_joined;
-  ContestExpandable({required this.name,required this.fee,required this.prize, required this.no_of_people, required this.people_joined});
+  final String lucky_draw_no;
+  ContestExpandable({required this.name,required this.fee,required this.prize, required this.no_of_people, required this.lucky_draw_no});
 
   @override
   State<ContestExpandable> createState() => _ContestExpandableState();
@@ -23,7 +23,9 @@ class _ContestExpandableState extends State<ContestExpandable> {
   String? phno="";
   String balance='',userName='';
   int flag=0;
+  var people_joined=0;
   var lucky=0;
+  String lucky_no_user='';
   bool alreadyJoined=false;
   List<ContestUsersModel>? contestUsers=[];
 
@@ -116,6 +118,8 @@ class _ContestExpandableState extends State<ContestExpandable> {
           contestUsers?.add(ContestUsersModel(name: data['documents'][i]['name'], lucky_number: lucky.toString()));
         });
       }
+      people_joined=data['documents'].length;
+      lucky_no_user=(people_joined+1).toString();
     }catch(e){
       print(e.toString());
     }
@@ -162,7 +166,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
@@ -183,97 +186,11 @@ class _ContestExpandableState extends State<ContestExpandable> {
                     Row(
                       children: [
                         Text('People joined: ',style: TextStyle(color: Colors.black,fontSize: 20),),
-                        Text(widget.people_joined,style: TextStyle(color: Colors.black,fontSize: 20)),
+                        Text(people_joined.toString(),style: TextStyle(color: Colors.black,fontSize: 20)),
                       ],
                     ),
                     SizedBox(height: 20,),
-                    SizedBox(
-                      height: 45,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if(alreadyJoined==false){
-                            if(double.parse(balance)>double.parse(widget.fee)){
-                              showDialog(context: context, builder: (context){
-                                return Container(
-                                  child: AlertDialog(
-                                    actionsAlignment: MainAxisAlignment.center,
-                                    title: Text('CONFIRMATION',style: TextStyle(fontWeight: FontWeight.bold),),
-                                    content: Container(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text('To Pay'),
-                                            Row(
-                                              children: [
-                                                Icon(Icons.currency_rupee,color: Colors.black,),
-                                                Text(widget.fee,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22),),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    actions: [
-                                      ElevatedButton(
-                                          onPressed: (){
-                                            alreadyJoined=true;
-                                            updateBalance();
-                                            dataService.DataInsertContestUsers(userName, phno!, widget.name,alreadyJoined, context);
-                                            Navigator.pop(context);
-                                            Navigator.pop(context);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              elevation: 12,
-                                              backgroundColor: Colors.green.shade600
-                                          ),
-                                          child: Text('JOIN CONTEST')
-                                      )
-                                    ],
-                                  ),
-                                );
-                              });
-                            }else{
-                              showDialog(context: context, builder: (context){
-                                return Container(
-                                  child: AlertDialog(
-                                    actionsAlignment: MainAxisAlignment.center,
-                                    title: Text('Insufficient balance',style: TextStyle(fontWeight: FontWeight.normal),),
-                                    actions: [
-                                      ElevatedButton(
-                                          onPressed: (){
-                                            Navigator.of(context).push(MaterialPageRoute(
-                                                builder: (context)=> AddMoney(balance)
-                                            ));
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              elevation: 12,
-                                              backgroundColor: Colors.green.shade600
-                                          ),
-                                          child: Text('Add money?')
-                                      )
-                                    ],
-                                  ),
-                                );
-                              });
-                            }
-                          }
-                          else{
-                            showDialog(context: context, builder: (context){
-                              return Container(
-                                child: AlertDialog(
-                                  title: Text('Already joined',style: TextStyle(fontWeight: FontWeight.normal),),
-                                ),
-                              );
-                            });
-                          }
-                        },
-                        child: Text('JOIN CONTEST'),
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                      ),
-                    ),
+                    contestIsFullOrElse()
                   ],
                 ),
               ),
@@ -317,7 +234,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
     return Column(
       children: contestUsers!.map((contestUsers){
         return Card(
-          color: Colors.green,
           child: ListTile(
             tileColor: Colors.white,
             title: Row(
@@ -345,5 +261,120 @@ class _ContestExpandableState extends State<ContestExpandable> {
         );
       }).toList(),
     );
+  }
+
+  Widget contestIsFullOrElse(){
+    if(people_joined<double.parse(widget.no_of_people)){
+      return SizedBox(
+        height: 45,
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () {
+            if(alreadyJoined==false){
+              if(people_joined<double.parse(widget.no_of_people)){
+                if(double.parse(balance)>double.parse(widget.fee)){
+                  showDialog(context: context, builder: (context){
+                    return Container(
+                      child: AlertDialog(
+                        actionsAlignment: MainAxisAlignment.center,
+                        title: Text('CONFIRMATION',style: TextStyle(fontWeight: FontWeight.bold),),
+                        content: Container(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('To Pay'),
+                                Row(
+                                  children: [
+                                    Icon(Icons.currency_rupee,color: Colors.black,),
+                                    Text(widget.fee,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22),),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        actions: [
+                          ElevatedButton(
+                              onPressed: (){
+                                alreadyJoined=true;
+                                updateBalance();
+                                dataService.DataInsertContestUsers(userName, phno!, widget.name,alreadyJoined, context);
+                                dataService.DataInsertUserMultipleContests(widget.name, phno!, widget.prize,lucky_no_user, context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 12,
+                                  backgroundColor: Colors.green.shade600
+                              ),
+                              child: Text('JOIN CONTEST')
+                          )
+                        ],
+                      ),
+                    );
+                  });
+                }else{
+                  showDialog(context: context, builder: (context){
+                    return Container(
+                      child: AlertDialog(
+                        actionsAlignment: MainAxisAlignment.center,
+                        title: Text('Insufficient balance',style: TextStyle(fontWeight: FontWeight.normal),),
+                        actions: [
+                          ElevatedButton(
+                              onPressed: (){
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context)=> AddMoney(balance)
+                                ));
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 12,
+                                  backgroundColor: Colors.green.shade600
+                              ),
+                              child: Text('Add money?')
+                          )
+                        ],
+                      ),
+                    );
+                  });
+                }
+              }
+              else{
+                showDialog(context: context, builder: (context){
+                  return Container(
+                    child: AlertDialog(
+                      title: Text('Contest full!',style: TextStyle(fontWeight: FontWeight.normal),),
+                    ),
+                  );
+                });
+              }
+            }
+            else{
+              showDialog(context: context, builder: (context){
+                return Container(
+                  child: AlertDialog(
+                    title: Text('Already joined',style: TextStyle(fontWeight: FontWeight.normal),),
+                  ),
+                );
+              });
+            }
+          },
+          child: Text('JOIN CONTEST'),
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+        ),
+      );
+    }else{
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Divider(
+            height: 5,
+            thickness: 2,
+          ),
+          SizedBox(height: 10,),
+          Text('Lucky draw number',style: TextStyle(fontSize: 20)),
+          Text(widget.lucky_draw_no.toString(),style: TextStyle(fontSize: 60,color: Colors.green.shade600),)
+        ],
+      );
+    }
   }
 }

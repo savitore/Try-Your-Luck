@@ -60,5 +60,30 @@ class DataService{
     var output=jsonDecode(contents.toString());
     print(output['insertedId']);
   }
-
+  Future DataInsertUserMultipleContests(String contestName, String phone_number,String winning_amount, String lucky_no_user, BuildContext context) async {
+    String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/insertOne';
+    final body={
+      "dataSource":"Cluster0",
+      "database":"users",
+      "collection":phone_number,
+      "document":{
+        "contest":contestName,
+        "winning_amount": winning_amount,
+        "lucky_no_user": lucky_no_user
+      }
+    };
+    HttpClient httpClient=new HttpClient();
+    HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
+    httpClientRequest.headers.set("Content-Type", "application/json");
+    httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+    httpClientRequest.add(utf8.encode(jsonEncode(body)));
+    HttpClientResponse response=await httpClientRequest.close();
+    httpClient.close();
+    final contents = StringBuffer();
+    await for (var data in response.transform(utf8.decoder)) {
+      contents.write(data);
+    }
+    var output=jsonDecode(contents.toString());
+    print(output['insertedId']);
+  }
 }

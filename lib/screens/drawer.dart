@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:try_your_luck/profile.dart';
-import 'package:try_your_luck/user_contests.dart';
+import 'package:try_your_luck/screens/profile.dart';
+import 'package:try_your_luck/screens/my_contests.dart';
 import 'package:try_your_luck/wallet/wallet.dart';
 
-import 'authentication/phone.dart';
+import '../authentication/phone.dart';
 
 class MyHeaderDrawer extends StatefulWidget {
   const MyHeaderDrawer({Key? key}) : super(key: key);
