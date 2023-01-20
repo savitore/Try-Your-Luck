@@ -21,12 +21,14 @@ class ContestExpandable extends StatefulWidget {
 
 class _ContestExpandableState extends State<ContestExpandable> {
   String? phno="";
-  String balance='',userName='';
-  int flag=0;
+  String balance='',userName='',luckyUserIfString='';
+  int flag=0,luckyUserIf=0;
   var people_joined=0;
   var lucky=0;
-  String lucky_no_user='';
+  String lucky_no_user='',luckyUser='';
   bool alreadyJoined=false;
+  String contestJoined='JOIN CONTEST';
+  Color? button = Colors.green.shade600;
   List<ContestUsersModel>? contestUsers=[];
 
   @override
@@ -63,9 +65,9 @@ class _ContestExpandableState extends State<ContestExpandable> {
         balance=data['document']['balance'].toString();
         userName=data['document']['name'].toString();
       });
-      if(balance==data['document']['balance']){
+      // if(balance==data['document']['balance']){
         flag=1;
-      }
+      // }
     }catch(e){
       print(e.toString());
     }
@@ -79,7 +81,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       "filter":{
         "phone_number": phno
       },
-      "update": {  "balance": (double.parse(balance)-double.parse(widget.fee)).toString() }
+      // "update": {  "$set":{ "balance": (double.parse(balance)-double.parse(widget.fee)).toString() }}
     };
     final response;
     try{
@@ -119,6 +121,12 @@ class _ContestExpandableState extends State<ContestExpandable> {
         });
       }
       people_joined=data['documents'].length;
+      print(luckyUserIfString);
+      if(data['documents'].length>=int.parse(widget.lucky_draw_no)){
+      luckyUserIf=int.parse(widget.lucky_draw_no);
+      luckyUserIfString=(luckyUserIf-1).toString();
+        luckyUser=data['documents'][int.parse(luckyUserIfString)]['name'];
+      }
       lucky_no_user=(people_joined+1).toString();
     }catch(e){
       print(e.toString());
@@ -146,8 +154,11 @@ class _ContestExpandableState extends State<ContestExpandable> {
       var data = jsonDecode(response.body);
         setState((){
           alreadyJoined=data['document']['already_joined'];
+          if(alreadyJoined==true){
+            contestJoined='ALREADY JOINED';
+            button=Colors.green.shade100;
+          }
         });
-      print(data['document']['name']);
     }catch(e){
       print("this"+e.toString());
     }
@@ -197,8 +208,8 @@ class _ContestExpandableState extends State<ContestExpandable> {
               SizedBox(height: 10,),
               Divider(
                 height: 1,
-                thickness: 3,
-                color: Colors.grey[400],
+                thickness: 1,
+                color: Colors.grey[600],
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -210,8 +221,8 @@ class _ContestExpandableState extends State<ContestExpandable> {
               ),
               Divider(
                 height: 1,
-                thickness: 3,
-                color: Colors.grey[400],
+                thickness: 1,
+                color: Colors.grey[600],
               ),
               SafeArea(
                 child: SingleChildScrollView(
@@ -302,6 +313,36 @@ class _ContestExpandableState extends State<ContestExpandable> {
                                 updateBalance();
                                 dataService.DataInsertContestUsers(userName, phno!, widget.name,alreadyJoined, context);
                                 dataService.DataInsertUserMultipleContests(widget.name, phno!, widget.prize,lucky_no_user, context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                showDialog(context: context, builder: (context){
+                                  return Container(
+                                    child: AlertDialog(
+                                      title: Text('Congratulations!',style: TextStyle(fontWeight: FontWeight.normal,fontSize: 22),),
+                                      actions: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text('Contest joined',style: TextStyle(fontSize: 20),),
+                                          ],
+                                        ),
+                                        SizedBox(height: 10,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text('Your Lucky Number is',style: TextStyle(fontSize: 22)),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(lucky_no_user,style: TextStyle(fontSize: 60,color: Colors.green.shade600),),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                });
                               },
                               style: ElevatedButton.styleFrom(
                                   elevation: 12,
@@ -358,8 +399,8 @@ class _ContestExpandableState extends State<ContestExpandable> {
               });
             }
           },
-          child: Text('JOIN CONTEST'),
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+          child: Text(contestJoined),
+          style: ElevatedButton.styleFrom(backgroundColor: button,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
         ),
       );
     }else{
@@ -372,7 +413,14 @@ class _ContestExpandableState extends State<ContestExpandable> {
           ),
           SizedBox(height: 10,),
           Text('Lucky draw number',style: TextStyle(fontSize: 20)),
-          Text(widget.lucky_draw_no.toString(),style: TextStyle(fontSize: 60,color: Colors.green.shade600),)
+          Text(widget.lucky_draw_no.toString(),style: TextStyle(fontSize: 60,color: Colors.green.shade600),),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Winner is ',style: TextStyle(fontSize: 20),),
+              Text(luckyUser.toString(),style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)
+            ],
+          ),
         ],
       );
     }

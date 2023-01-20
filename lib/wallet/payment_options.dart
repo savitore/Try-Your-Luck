@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:try_your_luck/wallet/add_money.dart';
 import 'package:try_your_luck/wallet/upi.dart';
 
@@ -83,9 +84,7 @@ class _PaymentOptionsState extends State<PaymentOptions> {
                 SizedBox(height: 20,),
                 InkWell(
                   onTap: (){
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => UPI(widget.amount)));
+                    showToast();
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -112,4 +111,14 @@ class _PaymentOptionsState extends State<PaymentOptions> {
       ),
     );
   }
+  showToast() =>
+      Fluttertoast.showToast(
+          msg: "Withdraw option will come soon.",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.black,
+          fontSize: 20.0
+      );
 }

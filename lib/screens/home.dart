@@ -79,47 +79,54 @@ class _HomeState extends State<Home> {
   Widget loaded(){
     if(flag==1){
       return Column(
-        children: list!.map((contests){
-          return InkWell(
-            onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no,)));
-            },
-            child: Card(
-              color: Colors.green,
-              child: ListTile(
-                tileColor: Colors.white,
-                title: Text(
-                  contests.name,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    fontSize: 20
+        crossAxisAlignment:CrossAxisAlignment.start ,
+        children: [
+          Text('Upcoming contests',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+          SizedBox(height: 10,),
+          Column(
+            children: list!.map((contests){
+              return InkWell(
+                onTap: (){
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no,)));
+                },
+                child: Card(
+                  color: Colors.green,
+                  child: ListTile(
+                    tileColor: Colors.white,
+                    title: Text(
+                      contests.name,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        fontSize: 20
+                      ),
+                    ),
+                    subtitle: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text('Entry fee: ',style: TextStyle(color: Colors.black),),
+                            Icon(Icons.currency_rupee,color: Colors.black,size: 12,),
+                            Text(contests.fee,style: TextStyle(color: Colors.black)),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text('Prize Pool: ',style: TextStyle(color: Colors.black),),
+                            Icon(Icons.currency_rupee,color: Colors.black,size: 12,),
+                            Text(contests.win_amount,style: TextStyle(color: Colors.black)),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                subtitle: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text('Entry fee: ',style: TextStyle(color: Colors.black),),
-                        Icon(Icons.currency_rupee,color: Colors.black,size: 12,),
-                        Text(contests.fee,style: TextStyle(color: Colors.black)),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text('Prize Pool: ',style: TextStyle(color: Colors.black),),
-                        Icon(Icons.currency_rupee,color: Colors.black,size: 12,),
-                        Text(contests.win_amount,style: TextStyle(color: Colors.black)),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }).toList(),
+              );
+            }).toList(),
+          ),
+        ],
       );
     }
     else{
