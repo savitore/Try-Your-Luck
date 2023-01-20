@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:try_your_luck/wallet/add_money.dart';
 
 import '../services/data_services.dart';
@@ -194,10 +195,43 @@ class _ContestExpandableState extends State<ContestExpandable> {
                       ],
                     ),
                     SizedBox(height: 5,),
-                    Row(
+                    // Row(
+                    //   children: [
+                    //     Text('People joined: ',style: TextStyle(color: Colors.black,fontSize: 20),),
+                    //     Text(people_joined.toString(),style: TextStyle(color: Colors.black,fontSize: 20)),
+                    //     new LinearPercentIndicator(
+                    //       width: 100,
+                    //       animation: true,
+                    //       lineHeight: 10.0,
+                    //       animationDuration: 2500,
+                    //       percent: 0.8,
+                    //       // center: Text("80.0%"),
+                    //       // linearStrokeCap: LinearStrokeCap.roundAll,
+                    //       progressColor: Colors.green,
+                    //     ),
+                    //   ],
+                    // ),
+                    Column(
                       children: [
-                        Text('People joined: ',style: TextStyle(color: Colors.black,fontSize: 20),),
-                        Text(people_joined.toString(),style: TextStyle(color: Colors.black,fontSize: 20)),
+                        Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: new LinearPercentIndicator(
+                            width: MediaQuery.of(context).size.width-50,
+                            animation: true,
+                            lineHeight: 10.0,
+                            animationDuration: 2500,
+                            percent: (double.parse(people_joined.toString())/double.parse(widget.no_of_people)),
+                            // center: Text("80.0%"),
+                            // linearStrokeCap: LinearStrokeCap.roundAll,
+                            progressColor: Colors.green,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text( people_joined.toString()+' joined out of '+widget.no_of_people,style: TextStyle(fontSize: 20),),
+                          ],
+                        )
                       ],
                     ),
                     SizedBox(height: 20,),

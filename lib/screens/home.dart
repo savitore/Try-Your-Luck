@@ -98,7 +98,7 @@ class _HomeState extends State<Home> {
                     title: Text(
                       contests.name,
                       style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.green,
                           fontWeight: FontWeight.bold,
                         fontSize: 20
                       ),

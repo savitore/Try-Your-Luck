@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pinput/pinput.dart';
 import 'package:try_your_luck/authentication/name.dart';
 import 'package:try_your_luck/authentication/phone.dart';
+import 'package:try_your_luck/isUserAlreadyRegistered.dart';
 
 
 class Otp extends StatefulWidget {
@@ -121,7 +122,7 @@ class _OtpState extends State<Otp> {
                       if(FirebaseAuth.instance.currentUser!=null){
                         Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (context) => Name()),
+                            MaterialPageRoute(builder: (context) => IsUserAlreadyRegistered()),
                                 (route) => false);
                       }
                       else if(OTP!.isEmpty){

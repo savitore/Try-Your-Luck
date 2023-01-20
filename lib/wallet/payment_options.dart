@@ -29,19 +29,6 @@ class _PaymentOptionsState extends State<PaymentOptions> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                      Text('Paying to: Try Your Luck',style: TextStyle(fontSize: 20,fontWeight: FontWeight.normal),),
-              ],
-            ),
-          ),
-          Divider(
-            thickness: 10,
-            color: Colors.grey[200],
-          ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 15, 15, 10),
                 child: Row(
@@ -113,7 +100,7 @@ class _PaymentOptionsState extends State<PaymentOptions> {
   }
   showToast() =>
       Fluttertoast.showToast(
-          msg: "Withdraw option will come soon.",
+          msg: "UPI will come soon.",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
