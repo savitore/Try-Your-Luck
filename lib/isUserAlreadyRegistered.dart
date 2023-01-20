@@ -45,7 +45,7 @@ class _IsUserAlreadyRegisteredState extends State<IsUserAlreadyRegistered> {
       setState((){
         phoneFetched=data['document']['phone_number'];
       });
-      if(phoneFetched==phno!){
+      if(phoneFetched==phno.toString()){
         Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => Home()));

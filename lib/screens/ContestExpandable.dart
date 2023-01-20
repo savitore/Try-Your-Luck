@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -22,7 +24,7 @@ class ContestExpandable extends StatefulWidget {
 
 class _ContestExpandableState extends State<ContestExpandable> {
   String? phno="";
-  String balance='',userName='',luckyUserIfString='';
+  String balance='',userName='',luckyUserPhone='',luckyUserIfString='';
   int flag=0,luckyUserIf=0;
   var people_joined=0;
   var lucky=0;
@@ -82,18 +84,31 @@ class _ContestExpandableState extends State<ContestExpandable> {
       "filter":{
         "phone_number": phno
       },
-      // "update": {  "$set":{ "balance": (double.parse(balance)-double.parse(widget.fee)).toString() }}
+      "update": {
+        "name": userName,
+        "phone_number": phno,
+        "balance": (int.parse(balance)-int.parse(widget.fee)).toString()
+      }
     };
+    print("hi");
+    print(userName);
+    print(phno);
+    print((int.parse(balance)-int.parse(widget.fee)).toString());
     final response;
     try{
-      response=await http.post(Uri.parse(baseUrl),
-          headers: {'Content-Type':'application/json',
-            'Accept':'application/json',
-            'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
-          body: jsonEncode(body)
-      );
-      var data = jsonDecode(response.body);
+      HttpClient httpClient=new HttpClient();
+      HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
+      httpClientRequest.headers.set("Content-Type", "application/json");
+      httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+      httpClientRequest.add(utf8.encode(jsonEncode(body)));
+      HttpClientResponse response=await httpClientRequest.close();
+      httpClient.close();
+      final contents = StringBuffer();
+      await for (var data in response.transform(utf8.decoder)) {
+        contents.write(data);
+      }
+      var output=jsonDecode(contents.toString());
+      print(output);
     }catch(e){
       print(e.toString());
     }
@@ -127,6 +142,8 @@ class _ContestExpandableState extends State<ContestExpandable> {
       luckyUserIf=int.parse(widget.lucky_draw_no);
       luckyUserIfString=(luckyUserIf-1).toString();
         luckyUser=data['documents'][int.parse(luckyUserIfString)]['name'];
+      luckyUserPhone=data['documents'][int.parse(luckyUserIfString)]['phone_number'];
+
       }
       lucky_no_user=(people_joined+1).toString();
     }catch(e){
@@ -164,6 +181,36 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print("this"+e.toString());
     }
   }
+  Future<void> UpdateUserMultipleContests(String lucky_user_phone) async {
+    String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
+    final body={
+      "dataSource":"Cluster0",
+      "database":"users",
+      "collection":lucky_user_phone,
+      "filter":{
+        "contest":widget.name,
+      },
+      "update":{
+        "contest":widget.name,
+        "winning_amount": widget.prize,
+        "lucky_no_user": lucky_no_user,
+        "result":"won"
+      }
+    };
+    HttpClient httpClient=new HttpClient();
+    HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
+    httpClientRequest.headers.set("Content-Type", "application/json");
+    httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+    httpClientRequest.add(utf8.encode(jsonEncode(body)));
+    HttpClientResponse response=await httpClientRequest.close();
+    httpClient.close();
+    final contents = StringBuffer();
+    await for (var data in response.transform(utf8.decoder)) {
+      contents.write(data);
+    }
+    var output=jsonDecode(contents.toString());
+    print(output['insertedId']);
+  }
   @override
   Widget build(BuildContext context) {
     if(flag==1){
@@ -195,22 +242,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
                       ],
                     ),
                     SizedBox(height: 5,),
-                    // Row(
-                    //   children: [
-                    //     Text('People joined: ',style: TextStyle(color: Colors.black,fontSize: 20),),
-                    //     Text(people_joined.toString(),style: TextStyle(color: Colors.black,fontSize: 20)),
-                    //     new LinearPercentIndicator(
-                    //       width: 100,
-                    //       animation: true,
-                    //       lineHeight: 10.0,
-                    //       animationDuration: 2500,
-                    //       percent: 0.8,
-                    //       // center: Text("80.0%"),
-                    //       // linearStrokeCap: LinearStrokeCap.roundAll,
-                    //       progressColor: Colors.green,
-                    //     ),
-                    //   ],
-                    // ),
                     Column(
                       children: [
                         Padding(
@@ -221,8 +252,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
                             lineHeight: 10.0,
                             animationDuration: 2500,
                             percent: (double.parse(people_joined.toString())/double.parse(widget.no_of_people)),
-                            // center: Text("80.0%"),
-                            // linearStrokeCap: LinearStrokeCap.roundAll,
                             progressColor: Colors.green,
                           ),
                         ),
@@ -438,6 +467,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
         ),
       );
     }else{
+      UpdateUserMultipleContests(luckyUserPhone);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

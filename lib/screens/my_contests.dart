@@ -43,7 +43,7 @@ class _MyContestsState extends State<MyContests> {
       setState((){
         for(int i=0; i<data['documents'].length;i++){
           setState(() {
-            list?.add(MyContestsModel(contest_name: data['documents'][i]['contest'], lucky_number: data['documents'][i]['lucky_no_user'], winning_amount: data['documents'][i]['winning_amount']));
+            list?.add(MyContestsModel(contest_name: data['documents'][i]['contest'], lucky_number: data['documents'][i]['lucky_no_user'], winning_amount: data['documents'][i]['winning_amount'], result: data['documents'][i]['result']));
           });
         }
         flag=1;
@@ -71,18 +71,24 @@ class _MyContestsState extends State<MyContests> {
                     return Card(
                       child: ListTile(
                         tileColor: Colors.white,
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(contests.contest_name,style: TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.bold),),
-                            Row(
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Total prize: '),
-                                Icon(Icons.currency_rupee,size: 15,color: Colors.black,),
-                                Text(contests.winning_amount)
+                                Text(contests.contest_name,style: TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.bold),),
+                                Row(
+                                  children: [
+                                    Text('Total prize: '),
+                                    Icon(Icons.currency_rupee,size: 15,color: Colors.black,),
+                                    Text(contests.winning_amount)
+                                  ],
+                                ),
+                                Text('Lucky number: '+contests.lucky_number)
                               ],
                             ),
-                            Text('Lucky number: '+contests.lucky_number)
+                            ifWon(contests.result)
                           ],
                         ),
                       ),
@@ -97,6 +103,13 @@ class _MyContestsState extends State<MyContests> {
       return Scaffold(
           body: Center(child: CircularProgressIndicator())
       );
+    }
+  }
+  Widget ifWon(String result){
+    if(result.isNotEmpty){
+      return Text(result);
+    }else{
+      return Text('');
     }
   }
 }

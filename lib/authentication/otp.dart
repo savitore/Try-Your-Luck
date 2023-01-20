@@ -122,7 +122,7 @@ class _OtpState extends State<Otp> {
                       if(FirebaseAuth.instance.currentUser!=null){
                         Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (context) => IsUserAlreadyRegistered()),
+                            MaterialPageRoute(builder: (context) => Name()),
                                 (route) => false);
                       }
                       else if(OTP!.isEmpty){
