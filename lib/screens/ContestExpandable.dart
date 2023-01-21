@@ -193,7 +193,8 @@ class _ContestExpandableState extends State<ContestExpandable> {
       "update":{
         "contest":widget.name,
         "winning_amount": widget.prize,
-        "lucky_no_user": lucky_no_user,
+        "lucky_no_user": widget.lucky_draw_no,
+        "redeemed":"no",
         "result":"won"
       }
     };
@@ -249,16 +250,17 @@ class _ContestExpandableState extends State<ContestExpandable> {
                           child: new LinearPercentIndicator(
                             width: MediaQuery.of(context).size.width-50,
                             animation: true,
-                            lineHeight: 10.0,
+                            lineHeight: 5.0,
                             animationDuration: 2500,
                             percent: (double.parse(people_joined.toString())/double.parse(widget.no_of_people)),
                             progressColor: Colors.green,
                           ),
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text( people_joined.toString()+' joined out of '+widget.no_of_people,style: TextStyle(fontSize: 20),),
+                            spotsLeft(),
+                            Text( widget.no_of_people+' spots',style: TextStyle(fontSize: 18),),
                           ],
                         )
                       ],
@@ -467,6 +469,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
         ),
       );
     }else{
+      // dataService.DataInsertUserMultipleContests(widget.name,luckyUserPhone , widget.prize, widget.lucky_draw_no, context);
       UpdateUserMultipleContests(luckyUserPhone);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -487,6 +490,16 @@ class _ContestExpandableState extends State<ContestExpandable> {
           ),
         ],
       );
+    }
+  }
+  Widget spotsLeft(){
+    if(people_joined<int.parse(widget.no_of_people) && int.parse(widget.no_of_people)-people_joined!=1){
+      return Text( (int.parse(widget.no_of_people)-people_joined).toString()+' spots left',style: TextStyle(fontSize: 18));
+    }
+    else if(int.parse(widget.no_of_people)-people_joined==1){
+      return Text( (int.parse(widget.no_of_people)-people_joined).toString()+' spot left',style: TextStyle(fontSize: 18));
+    }else{
+      return Text('Contest Over',style: TextStyle(fontSize: 18));
     }
   }
 }

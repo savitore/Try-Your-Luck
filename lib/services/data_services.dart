@@ -33,7 +33,6 @@ class DataService{
     var output=jsonDecode(contents.toString());
     print(output['insertedId']);
   }
-
   Future DataInsertContestUsers(String name, String phone_number, String contest_name, bool alreadyJoined, BuildContext context) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/insertOne';
     final body={
@@ -69,7 +68,8 @@ class DataService{
       "document":{
         "contest":contestName,
         "winning_amount": winning_amount,
-        "lucky_no_user": lucky_no_user
+        "lucky_no_user": lucky_no_user,
+        "redeemed": "no"
       }
     };
     HttpClient httpClient=new HttpClient();
