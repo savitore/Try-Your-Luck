@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "456959244509",
-    "project_id": "try-your-luck-2bd6d",
-    "storage_bucket": "try-your-luck-2bd6d.appspot.com"
+    "project_number": "256813256733",
+    "project_id": "try-your-luck-7a3f2",
+    "storage_bucket": "try-your-luck-7a3f2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:456959244509:android:22598ab1141f5794470334",
+        "mobilesdk_app_id": "1:256813256733:android:6c58cb70a5e73fb66bb6f4",
         "android_client_info": {
           "package_name": "com.example.try_your_luck"
         }
       },
       "oauth_client": [
         {
-          "client_id": "456959244509-vk9lffuvabr3gcci7hspkl9h480jrv4t.apps.googleusercontent.com",
+          "client_id": "256813256733-f8urecs1cdf7l9jincrpvkimgji81589.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCTXrik5UMfJFB_YqvH-dxmbfyJmPBdN00"
+          "current_key": "AIzaSyAFgqLQ7jNa5QrUizinkvFsmmmZZgGyyhA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "456959244509-vk9lffuvabr3gcci7hspkl9h480jrv4t.apps.googleusercontent.com",
+              "client_id": "256813256733-f8urecs1cdf7l9jincrpvkimgji81589.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

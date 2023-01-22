@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pinput/pinput.dart';
 import 'package:try_your_luck/authentication/name.dart';
-import 'package:try_your_luck/authentication/phone.dart';
-import 'package:try_your_luck/isUserAlreadyRegistered.dart';
 
 
 class Otp extends StatefulWidget {

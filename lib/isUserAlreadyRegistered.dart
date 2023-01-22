@@ -42,18 +42,28 @@ class _IsUserAlreadyRegisteredState extends State<IsUserAlreadyRegistered> {
           body: jsonEncode(body)
       );
       var data = jsonDecode(response.body);
+      print(response.body);
+      print(response.body.length);
       setState((){
-        phoneFetched=data['document']['phone_number'];
+        // if(data['document']['phone_number']!=null)
+        //   {
+        //     phoneFetched=data['document']['phone_number'];
+        //   }
       });
-      if(phoneFetched==phno.toString()){
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Home()));
-      }else{
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Name()));
-      }
+      print("hi");
+      print(phoneFetched);
+      print(phno);
+      print(response.body);
+      print(response.body.length);
+      // if(phoneFetched==phno.toString()){
+      //   Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => Home()));
+      // }else{
+      //   Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => Name()));
+      // }
       flag=1;
     }catch(e){
       print(e.toString());

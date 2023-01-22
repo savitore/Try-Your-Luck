@@ -61,73 +61,75 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 70,left: 20,right: 20),
-      child: Column(
-          children: [
-            Column(
-              children: [
-                loaded(),
-                SizedBox(height: 10,),
-                Divider(height: 1,thickness: 0.5,color: Colors.grey[500],),
-                SizedBox(height: 15,),
-                InkWell(
-                  onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context)=> Wallet()
-                    ));
-                  },
-                  child: Row(
-                    children: [
-                      Icon(Icons.account_balance_wallet_outlined),
-                      SizedBox(width: 5,),
-                      Text('My Wallet')
-                    ],
+      child: SingleChildScrollView(
+        child: Column(
+            children: [
+              Column(
+                children: [
+                  loaded(),
+                  SizedBox(height: 10,),
+                  Divider(height: 1,thickness: 0.5,color: Colors.grey[500],),
+                  SizedBox(height: 15,),
+                  InkWell(
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context)=> Wallet()
+                      ));
+                    },
+                    child: Row(
+                      children: [
+                        Icon(Icons.account_balance_wallet_outlined),
+                        SizedBox(width: 5,),
+                        Text('My Wallet')
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 15,),
-                InkWell(
-                  onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context)=> MyContests()
-                    ));
-                  },
-                  child: Row(
-                    children: [
-                      Icon(Icons.add_business_outlined),
-                      SizedBox(width: 5,),
-                      Text('My Contests')
-                    ],
+                  SizedBox(height: 15,),
+                  InkWell(
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context)=> MyContests()
+                      ));
+                    },
+                    child: Row(
+                      children: [
+                        Icon(Icons.add_business_outlined),
+                        SizedBox(width: 5,),
+                        Text('My Contests')
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 460,),
-            Divider(height: 1,thickness: 0.5,color: Colors.grey[500]),
-            SizedBox(height: 10,),
-            Column(
-              children: [
-                GestureDetector(
-                  onTap: () async {
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => Phone()),
-                            (route) => false);
-                  },
-                  child: Row(
-                    children: [
-                      Text('Log out',
-                        style: TextStyle(
-                          color: Colors.grey[700],
-                          fontSize: 15
+                ],
+              ),
+              SizedBox(height: 400,),
+              Divider(height: 1,thickness: 0.5,color: Colors.grey[500]),
+              SizedBox(height: 10,),
+              Column(
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      await FirebaseAuth.instance.signOut();
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => Phone()),
+                              (route) => false);
+                    },
+                    child: Row(
+                      children: [
+                        Text('Log out',
+                          style: TextStyle(
+                            color: Colors.grey[700],
+                            fontSize: 15
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
+                      ],
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+      ),
     );
     // );
   }
