@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../screens/home.dart';
 import 'otp.dart';
 
 class Phone extends StatefulWidget {
@@ -21,12 +19,6 @@ class _PhoneState extends State<Phone> {
   void initState() {
     super.initState();
     countrycode.text = "+91";
-    // if(FirebaseAuth.instance.currentUser!= null){
-    //
-    //   Navigator.of(context).pushReplacement(MaterialPageRoute(
-    //       builder: (context) => Home()
-    //   ));
-    // }
   }
 
   Widget build(BuildContext context) {
@@ -102,7 +94,7 @@ class _PhoneState extends State<Phone> {
                 SizedBox(height: 10,),
                 Row(
                   children: [
-                    Text('We will send a OTP for verification.',style: TextStyle(fontSize: 16,color: Colors.grey[700]),),
+                    Text('We will send an OTP for verification.',style: TextStyle(fontSize: 16,color: Colors.grey[700]),),
                   ],
                 )
               ],
@@ -131,7 +123,6 @@ class _PhoneState extends State<Phone> {
                         ));
                       }
                       else if (phone.isEmpty) {
-                        print("hi");
                         showToast();
                       }
                       else if(countrycode.text.isEmpty){

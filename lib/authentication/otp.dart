@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pinput/pinput.dart';
 import 'package:try_your_luck/authentication/name.dart';
+import 'package:try_your_luck/authentication/isUserAlreadyRegistered.dart';
 
 
 class Otp extends StatefulWidget {
@@ -120,7 +121,7 @@ class _OtpState extends State<Otp> {
                       if(FirebaseAuth.instance.currentUser!=null){
                         Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (context) => Name()),
+                            MaterialPageRoute(builder: (context) => IsUserAlreadyRegistered()),
                                 (route) => false);
                       }
                       else if(OTP!.isEmpty){
@@ -140,6 +141,7 @@ class _OtpState extends State<Otp> {
     await auth.verifyPhoneNumber(
         phoneNumber: widget.phone,
         verificationCompleted: (AuthCredential credential) async {
+          auth.signInWithCredential(credential);
           setState(() {
             authStatus = "Your account is successfully verified";
           });
@@ -168,7 +170,7 @@ class _OtpState extends State<Otp> {
     );
   }
   Future<void> signIn(String otp) async {
-     await FirebaseAuth.instance
+     await auth
         .signInWithCredential(PhoneAuthProvider.credential(
         verificationId: verificationCode,
         smsCode: OTP!

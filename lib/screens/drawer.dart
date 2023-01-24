@@ -138,7 +138,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
       return InkWell(
         onTap: (){
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context)=> Profile()
+              builder: (context)=> Profile(name)
           ));
         },
         child: Column(
