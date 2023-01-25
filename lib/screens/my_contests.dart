@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -17,9 +17,9 @@ class _MyContestsState extends State<MyContests> {
 
   String? phno="";
   List<MyContestsModel>? list=[];
-  int flag=0;
+  int flag=0,flag1=0;
   String result='',balance='',userName='';
-  String redeemed='no';
+  String Redeemed='no';
   @override
   void initState() {
     super.initState();
@@ -79,7 +79,7 @@ class _MyContestsState extends State<MyContests> {
             result=data['documents'][i]['result'];
           }
           setState(() {
-            list?.add(MyContestsModel(contest_name: data['documents'][i]['contest'], lucky_number: data['documents'][i]['lucky_no_user'], winning_amount: data['documents'][i]['winning_amount'], result: result));
+            list?.add(MyContestsModel(contest_name: data['documents'][i]['contest'], lucky_number: data['documents'][i]['lucky_no_user'], winning_amount: data['documents'][i]['winning_amount'], result: result, redeemed: data['documents'][i]['redeemed']));
           });
           result='';
         }
@@ -110,7 +110,7 @@ class _MyContestsState extends State<MyContests> {
       );
       var data = jsonDecode(response.body);
       setState((){
-        redeemed=data['document']['redeemed'].toString();
+        Redeemed=data['document']['redeemed'].toString();
       });
       // if(balance==data['document']['balance']){
       flag=1;
@@ -118,37 +118,6 @@ class _MyContestsState extends State<MyContests> {
     }catch(e){
       print(e.toString());
     }
-  }
-  Future<void> UpdateUserRedeemedOrNot(String contestName,String winning_amount, String lucky_no_user) async {
-    String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
-    final body={
-      "dataSource":"Cluster0",
-      "database":"users",
-      "collection":phno,
-      "filter":{
-        "contest":contestName,
-      },
-      "update":{
-        "contest":contestName,
-        "winning_amount": winning_amount,
-        "lucky_no_user": lucky_no_user,
-        "result":"won",
-        "redeemed":"yes"
-      }
-    };
-    HttpClient httpClient=new HttpClient();
-    HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
-    httpClientRequest.headers.set("Content-Type", "application/json");
-    httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
-    httpClientRequest.add(utf8.encode(jsonEncode(body)));
-    HttpClientResponse response=await httpClientRequest.close();
-    httpClient.close();
-    final contents = StringBuffer();
-    await for (var data in response.transform(utf8.decoder)) {
-      contents.write(data);
-    }
-    var output=jsonDecode(contents.toString());
-    print(output['insertedId']);
   }
   Future<void> updateBalance(String Balance) async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
@@ -219,7 +188,7 @@ class _MyContestsState extends State<MyContests> {
                                 Text('Lucky number: '+contests.lucky_number)
                               ],
                             ),
-                            ifWon(contests.result,contests.contest_name,contests.winning_amount,contests.lucky_number)
+                            ifWon(contests.result,contests.contest_name,contests.winning_amount,contests.lucky_number,contests.redeemed)
                           ],
                         ),
                       ),
@@ -236,24 +205,29 @@ class _MyContestsState extends State<MyContests> {
       );
     }
   }
-  Widget ifWon(String Result,String contestName,String winning_amount,String lucky_no_user){
+  Widget ifWon(String Result,String contestName,String winning_amount,String lucky_no_user, String redeemed){
     if(Result!=''){
       fetchRedeemedOrNot(contestName);
-      print("1"+redeemed);
       return Row(
         children: [
           Text(Result,style: TextStyle(fontSize: 20,color: Colors.green.shade600),),
           SizedBox(width: 10),
-          redeemedOrNot(contestName,winning_amount,lucky_no_user)
+          redeemedOrNot(contestName,winning_amount,lucky_no_user, redeemed)
         ],
       );
     }else{
-      print(redeemed);
       return Text('');
     }
   }
-  Widget redeemedOrNot(String contestName, String winning_amount, String lucky_no_user){
-    if(redeemed=="no"){
+  Widget redeemedOrNot(String contestName, String winning_amount, String lucky_no_user, String redeemed){
+    if(redeemed=="yes"){
+      return ElevatedButton(
+        onPressed: null,
+        child: Text('Redeemed'),
+        style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade200),
+      );
+    }
+    else if(redeemed=="no"){
       return SizedBox(
         child: ElevatedButton(
           onPressed: (){
@@ -282,11 +256,31 @@ class _MyContestsState extends State<MyContests> {
                   actions: [
                     ElevatedButton(
                       onPressed: (){
-                        UpdateUserRedeemedOrNot(contestName, winning_amount, lucky_no_user);
                         updateBalance((int.parse(balance)+int.parse(winning_amount)).toString());
                         Navigator.pop(context);
                         Navigator.pop(context);
                         Navigator.pop(context);
+                        showDialog(context: context, builder: (context){
+                          return Container(
+                            child: AlertDialog(
+                              title: Text('Redeemed!',style: TextStyle(fontWeight: FontWeight.normal),),
+                              content: Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('Updated balance'),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.currency_rupee,color: Colors.black,),
+                                        Text((int.parse(balance)+int.parse(winning_amount)).toString(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22),),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        });
                       },
                       child: Text('Redeem'),
                       style: ElevatedButton.styleFrom(
@@ -303,13 +297,7 @@ class _MyContestsState extends State<MyContests> {
           style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,textStyle: TextStyle(color: Colors.white)),
         ),
       );
-    } else if(redeemed=="yes"){
-      return ElevatedButton(
-        onPressed: null,
-        child: Text('Redeemed'),
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade200),
-      );
-    }else{
+    } else{
       return Text('');
     }
   }

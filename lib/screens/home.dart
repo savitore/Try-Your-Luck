@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
       return Column(
         crossAxisAlignment:CrossAxisAlignment.start ,
         children: [
-          Text('Upcoming contests',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+          Text('Live contests',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
           SizedBox(height: 10,),
           Column(
             children: list!.map((contests){

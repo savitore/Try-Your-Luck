@@ -3,5 +3,6 @@ class MyContestsModel{
   String lucky_number='';
   String winning_amount='';
   String result='';
-  MyContestsModel({required this.contest_name,required this.lucky_number, required this.winning_amount,required this.result});
+  String redeemed='';
+  MyContestsModel({required this.contest_name,required this.lucky_number, required this.winning_amount,required this.result, required this.redeemed});
 }
