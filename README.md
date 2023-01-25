@@ -10,8 +10,9 @@ Please use this app to only try your luck.
 # Sections:
 1) Authentication System
 2) Live Contests
-3) My Wallet
-4) My Profile
+3) My Contests
+4) My Wallet
+5) My Profile
 
 # Technolgies Used:
 **IDE:** Flutter
