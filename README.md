@@ -5,7 +5,7 @@ Currently, you cannot use real money. You will be given Rs 100 on sign-up, which
 
 Please use this app to only try your luck.
 
-<h4><a href="https://drive.google.com/file/d/1FZfc2vtY4RTntNfz7h4SQa0pNoQ9w1d0/view?usp=sharing">Download Android Application (Link)</a>
+<h4><a href="https://drive.google.com/file/d/1REByR5TzD-f4MyIoiEswybSw39eb4sDe/view?usp=sharing">Download Android Application (Link)</a>
 
 # Sections:
 1) Authentication System
