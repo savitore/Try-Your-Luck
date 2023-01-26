@@ -165,7 +165,7 @@ class _MyContestsState extends State<MyContests> {
           body: SafeArea(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(3.0),
                 child: Column(
                   children: list!.map((contests){
                     return Card(
@@ -185,7 +185,8 @@ class _MyContestsState extends State<MyContests> {
                                     Text(contests.winning_amount)
                                   ],
                                 ),
-                                Text('Lucky number: '+contests.lucky_number)
+                                Text('Lucky number: '+contests.lucky_number),
+                                SizedBox(height: 5,)
                               ],
                             ),
                             ifWon(contests.result,contests.contest_name,contests.winning_amount,contests.lucky_number,contests.redeemed)

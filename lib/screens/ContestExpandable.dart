@@ -292,7 +292,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
               SafeArea(
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(3.0),
                     child:loaded(),
                   ),
                 ),
