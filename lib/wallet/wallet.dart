@@ -7,8 +7,7 @@ import 'package:try_your_luck/wallet/add_money.dart';
 import 'package:http/http.dart' as http;
 
 class Wallet extends StatefulWidget {
-  late final String balance;
-  Wallet(this.balance);
+  const Wallet({Key? key}) : super(key: key);
 
   @override
   State<Wallet> createState() => _WalletState();
@@ -17,12 +16,44 @@ class Wallet extends StatefulWidget {
 class _WalletState extends State<Wallet> {
 
   String? phno="";
+  String balance='';
+  int flag=0;
 
   @override
   void initState() {
     super.initState();
     phno=FirebaseAuth.instance.currentUser?.phoneNumber;
+    fetchBalance();
   }
+  Future<void> fetchBalance() async{
+    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
+    final body={
+      "dataSource":"Cluster0",
+      "database":"db",
+      "collection":"users",
+      "filter":{
+        "phone_number": phno
+      }
+    };
+    final response;
+    try{
+      response=await http.post(Uri.parse(baseUrl),
+          headers: {'Content-Type':'application/json',
+            'Accept':'application/json',
+            'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
+            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+          body: jsonEncode(body)
+      );
+      var data = jsonDecode(response.body);
+      setState((){
+        balance=data['document']['balance'];
+      });
+      flag=1;
+    }catch(e){
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +80,7 @@ class _WalletState extends State<Wallet> {
                   onPressed: (){
                     Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => AddMoney(widget.balance.toString())));
+                        MaterialPageRoute(builder: (context) => AddMoney(balance.toString())));
                   },
                   child:Text('ADD MONEY'),
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
@@ -94,13 +125,19 @@ class _WalletState extends State<Wallet> {
     );
   }
   Widget loading_balance(){
+    if(flag==1){
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.currency_rupee,color: Colors.black,size: 20,),
-          Text(widget.balance,style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
+          Text(balance,style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
         ],
       );
+    }else{
+      return Center(child: CircularProgressIndicator(
+        color: Colors.green.shade600,
+      ));
+    }
   }
   showToast() =>
       Fluttertoast.showToast(

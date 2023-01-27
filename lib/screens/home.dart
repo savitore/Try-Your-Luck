@@ -18,13 +18,11 @@ class _HomeState extends State<Home> {
   int flag=0;
   String name="";
   String? phno="";
-  String balance='';
   @override
   void initState() {
     super.initState();
     phno=FirebaseAuth.instance.currentUser?.phoneNumber;
     fetchDataForDrawer();
-    fetchBalance();
     fetchDataContests();
   }
 
@@ -51,33 +49,6 @@ class _HomeState extends State<Home> {
       print(data.toString());
       setState((){
         name=data['document']['name'].toString();
-      });
-    }catch(e){
-      print(e.toString());
-    }
-  }
-  Future<void> fetchBalance() async{
-    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
-    final body={
-      "dataSource":"Cluster0",
-      "database":"db",
-      "collection":"users",
-      "filter":{
-        "phone_number": phno
-      }
-    };
-    final response;
-    try{
-      response=await http.post(Uri.parse(baseUrl),
-          headers: {'Content-Type':'application/json',
-            'Accept':'application/json',
-            'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
-          body: jsonEncode(body)
-      );
-      var data = jsonDecode(response.body);
-      setState((){
-        balance=data['document']['balance'];
       });
     }catch(e){
       print(e.toString());
@@ -186,7 +157,7 @@ class _HomeState extends State<Home> {
           child: Container(
             child: Column(
               children: [
-                MyHeaderDrawer(phno.toString(),name,balance)
+                MyHeaderDrawer(phno.toString(),name)
               ],
             ),
           ),

@@ -6,8 +6,8 @@ import 'package:try_your_luck/screens/my_contests.dart';
 import 'package:try_your_luck/wallet/wallet.dart';
 
 class MyHeaderDrawer extends StatefulWidget {
-  late final String phno,name,balance;
-  MyHeaderDrawer(this.phno,this.name,this.balance);
+  late final String phno,name;
+  MyHeaderDrawer(this.phno,this.name);
 
   @override
   State<MyHeaderDrawer> createState() => _MyHeaderDrawerState();
@@ -34,7 +34,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                   InkWell(
                     onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context)=> Wallet(widget.balance)
+                          builder: (context)=> Wallet()
                       ));
                     },
                     child: Row(
