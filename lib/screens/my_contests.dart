@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:try_your_luck/models/MyContestsModel.dart';
 
+import 'ContestExpandable.dart';
+
 class MyContests extends StatefulWidget {
   const MyContests({Key? key}) : super(key: key);
 
@@ -79,7 +81,7 @@ class _MyContestsState extends State<MyContests> {
             result=data['documents'][i]['result'];
           }
           setState(() {
-            list?.add(MyContestsModel(contest_name: data['documents'][i]['contest'], lucky_number: data['documents'][i]['lucky_no_user'], winning_amount: data['documents'][i]['winning_amount'], result: result, redeemed: data['documents'][i]['redeemed']));
+            list?.add(MyContestsModel(contest_name: data['documents'][i]['contest'], lucky_number: data['documents'][i]['lucky_no_user'], winning_amount: data['documents'][i]['winning_amount'], result: result, redeemed: data['documents'][i]['redeemed'], fee: data['documents'][i]['fee'], lucky_draw_no: data['documents'][i]['lucky_draw_no'], no_of_people: data['documents'][i]['no_of_people']));
           });
           result='';
         }
@@ -170,6 +172,11 @@ class _MyContestsState extends State<MyContests> {
                   children: list!.map((contests){
                     return Card(
                       child: ListTile(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.contest_name, fee: contests.fee, prize: contests.winning_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no,)));
+                        },
                         tileColor: Colors.white,
                         title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -377,7 +377,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                                 alreadyJoined=true;
                                 updateBalance();
                                 dataService.DataInsertContestUsers(userName, phno!, widget.name,alreadyJoined, context);
-                                dataService.DataInsertUserMultipleContests(widget.name, phno!, widget.prize,lucky_no_user, context);
+                                dataService.DataInsertUserMultipleContests(widget.name, phno!, widget.prize,lucky_no_user,widget.fee,widget.lucky_draw_no,widget.no_of_people, context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 showDialog(context: context, builder: (context){
