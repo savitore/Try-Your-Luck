@@ -27,7 +27,7 @@ Please use this app to only try your luck.
 
 # Screenshots
 ## Login Screens
-<img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214525630-ffd56686-83a0-4f0e-9e48-7f863b63a931.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214526221-f6022b00-9a56-4bc8-8c1f-7ba933244760.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214530504-be7def86-002f-4ccf-af3a-194596ac1ad8.png"/>
+<img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/215119126-43df760c-0f51-489a-a5f3-09148f2b38a9.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214525630-ffd56686-83a0-4f0e-9e48-7f863b63a931.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214526221-f6022b00-9a56-4bc8-8c1f-7ba933244760.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214530504-be7def86-002f-4ccf-af3a-194596ac1ad8.png"/>
 ## Sections
 <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214526580-e41dd351-b294-40c3-8de1-c94216a21f51.png"/> <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214527300-be1d1af8-3b0b-4074-80a4-873a83aab6c6.png"/>
 ## Contest
