@@ -221,83 +221,83 @@ class _ContestExpandableState extends State<ContestExpandable> {
             backgroundColor: Colors.green,
             title: Text(widget.name,style: TextStyle(color: Colors.white),),
           ),
-          body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text('Prize Pool: ',style: TextStyle(color: Colors.black,fontSize: 30),),
-                        Icon(Icons.currency_rupee,color: Colors.black,size: 27,),
-                        Text(widget.prize,style: TextStyle(color: Colors.black,fontSize: 30)),
-                      ],
-                    ),
-                    SizedBox(height: 5,),
-                    Row(
-                      children: [
-                        Text('Entry fee: ',style: TextStyle(color: Colors.black,fontSize: 20),),
-                        Icon(Icons.currency_rupee,color: Colors.black,size: 18,),
-                        Text(widget.fee,style: TextStyle(color: Colors.black,fontSize: 20)),
-                      ],
-                    ),
-                    SizedBox(height: 5,),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: new LinearPercentIndicator(
-                            width: MediaQuery.of(context).size.width-50,
-                            animation: true,
-                            lineHeight: 5.0,
-                            animationDuration: 2500,
-                            percent: (double.parse(people_joined.toString())/double.parse(widget.no_of_people)),
-                            progressColor: Colors.green,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text('Prize Pool: ',style: TextStyle(color: Colors.black,fontSize: 30),),
+                          Icon(Icons.currency_rupee,color: Colors.black,size: 27,),
+                          Text(widget.prize,style: TextStyle(color: Colors.black,fontSize: 30)),
+                        ],
+                      ),
+                      SizedBox(height: 5,),
+                      Row(
+                        children: [
+                          Text('Entry fee: ',style: TextStyle(color: Colors.black,fontSize: 20),),
+                          Icon(Icons.currency_rupee,color: Colors.black,size: 18,),
+                          Text(widget.fee,style: TextStyle(color: Colors.black,fontSize: 20)),
+                        ],
+                      ),
+                      SizedBox(height: 5,),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: new LinearPercentIndicator(
+                              width: MediaQuery.of(context).size.width-50,
+                              animation: true,
+                              lineHeight: 5.0,
+                              animationDuration: 2500,
+                              percent: (double.parse(people_joined.toString())/double.parse(widget.no_of_people)),
+                              progressColor: Colors.green,
+                            ),
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            spotsLeft(),
-                            Text( widget.no_of_people+' spots',style: TextStyle(fontSize: 18),),
-                          ],
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 20,),
-                    contestIsFullOrElse()
-                  ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              spotsLeft(),
+                              Text( widget.no_of_people+' spots',style: TextStyle(fontSize: 18),),
+                            ],
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 20,),
+                      contestIsFullOrElse()
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(height: 10,),
-              Divider(
-                height: 1,
-                thickness: 1,
-                color: Colors.grey[600],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Text('People joined:-',style: TextStyle(fontSize: 20),)
-                  ],
+                SizedBox(height: 10,),
+                Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: Colors.grey[600],
                 ),
-              ),
-              Divider(
-                height: 1,
-                thickness: 1,
-                color: Colors.grey[600],
-              ),
-              SafeArea(
-                child: SingleChildScrollView(
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text('People joined:-',style: TextStyle(fontSize: 20),)
+                    ],
+                  ),
+                ),
+                Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: Colors.grey[600],
+                ),
+                SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
                     child:loaded(),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           )
       );
     }else{
