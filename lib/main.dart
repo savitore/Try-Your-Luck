@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:try_your_luck/screens/home.dart';
-import 'authentication/phone.dart';
+import 'Intro.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +12,7 @@ void main() async{
   if (firebaseUser != null) {
     first = Home();
   } else {
-    first = Phone();
+    first = Intro();
   }
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,

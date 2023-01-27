@@ -1,61 +1,22 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:try_your_luck/Intro.dart';
 import 'package:try_your_luck/screens/profile.dart';
 import 'package:try_your_luck/screens/my_contests.dart';
 import 'package:try_your_luck/wallet/wallet.dart';
 
-import '../authentication/phone.dart';
-
 class MyHeaderDrawer extends StatefulWidget {
-  const MyHeaderDrawer({Key? key}) : super(key: key);
+  late final String phno,name,balance;
+  MyHeaderDrawer(this.phno,this.name,this.balance);
 
   @override
   State<MyHeaderDrawer> createState() => _MyHeaderDrawerState();
 }
 
 class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
-  String name="";
-  String? phno="";
-  int flag=0;
   @override
   void initState() {
     super.initState();
-    phno=FirebaseAuth.instance.currentUser?.phoneNumber;
-    fetchDataDrawer();
-  }
-  Future<void> fetchDataDrawer() async{
-    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
-    final body={
-      "dataSource":"Cluster0",
-      "database":"db",
-      "collection":"users",
-      "filter":{
-        "phone_number": phno
-      }
-    };
-    final response;
-    try{
-      response=await http.post(Uri.parse(baseUrl),
-          headers: {'Content-Type':'application/json',
-            'Accept':'application/json',
-            'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
-          body: jsonEncode(body)
-      );
-      var data = jsonDecode(response.body);
-      print(data.toString());
-      setState((){
-        name=data['document']['name'].toString();
-        if(name==data['document']['name'].toString()){
-          flag=1;
-        }
-      });
-      print(data['document']['name']);
-    }catch(e){
-      print(e.toString());
-    }
   }
   @override
   Widget build(BuildContext context) {
@@ -73,7 +34,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                   InkWell(
                     onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context)=> Wallet()
+                          builder: (context)=> Wallet(widget.balance)
                       ));
                     },
                     child: Row(
@@ -111,7 +72,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                       await FirebaseAuth.instance.signOut();
                       Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => Phone()),
+                          MaterialPageRoute(builder: (context) => Intro()),
                               (route) => false);
                     },
                     child: Row(
@@ -134,11 +95,10 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
     // );
   }
   Widget loaded(){
-    if(flag==1){
       return InkWell(
         onTap: (){
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context)=> Profile(name)
+              builder: (context)=> Profile(widget.name,widget.phno)
           ));
         },
         child: Column(
@@ -155,7 +115,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
             SizedBox(height: 10,),
             Row(
                 children: [
-                  Text(name,
+                  Text(widget.name,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -177,9 +137,5 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
           ],
         ),
       );
-    }
-    else{
-      return CircularProgressIndicator();
-    }
   }
 }

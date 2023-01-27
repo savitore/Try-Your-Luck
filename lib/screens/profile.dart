@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
-  final String name;
-  Profile(this.name);
+  final String name, phno;
+  Profile(this.name, this.phno);
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -11,13 +11,9 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
-  String? phno="";
-  String name="",phone="";
-  int flag=0;
   @override
   void initState() {
     super.initState();
-    phno=FirebaseAuth.instance.currentUser?.phoneNumber;
   }
 
   @override
@@ -50,7 +46,7 @@ class _ProfileState extends State<Profile> {
                   SizedBox(height: 10,),
                   Text('Phone number',style: TextStyle(color: Colors.grey[700],fontSize: 20),),
                   SizedBox(height: 5,),
-                  Text(phno.toString(),style: TextStyle(color: Colors.black,fontSize: 20)),
+                  Text(widget.phno,style: TextStyle(color: Colors.black,fontSize: 20)),
                 ],
               ),
             ],
