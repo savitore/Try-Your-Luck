@@ -54,7 +54,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                     },
                     child: Row(
                       children: [
-                        Icon(Icons.add_business_outlined),
+                        Icon(Icons.calendar_today),
                         SizedBox(width: 5,),
                         Text('My Contests')
                       ],
