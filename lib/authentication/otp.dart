@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pinput/pinput.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/authentication/name.dart';
 import 'package:try_your_luck/authentication/isUserAlreadyRegistered.dart';
 
@@ -119,6 +120,8 @@ class _OtpState extends State<Otp> {
                     onPressed: () async{
                       signIn(OTP!);
                       if(FirebaseAuth.instance.currentUser!=null){
+                        var prefs = await SharedPreferences.getInstance();
+                        prefs.setString("where", "name");
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) => IsUserAlreadyRegistered()),

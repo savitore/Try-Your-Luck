@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/screens/ContestExpandable.dart';
 import 'package:try_your_luck/screens/drawer.dart';
 
@@ -16,43 +17,14 @@ class _HomeState extends State<Home> {
 
   List<ContestModel>? list=[];
   int flag=0;
-  String name="";
-  String? phno="";
+  String name='';
+  String? phno='';
   @override
   void initState() {
     super.initState();
     phno=FirebaseAuth.instance.currentUser?.phoneNumber;
-    fetchDataForDrawer();
+    getData();
     fetchDataContests();
-  }
-
-  Future<void> fetchDataForDrawer() async{
-    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
-    final body={
-      "dataSource":"Cluster0",
-      "database":"db",
-      "collection":"users",
-      "filter":{
-        "phone_number": phno
-      }
-    };
-    final response;
-    try{
-      response=await http.post(Uri.parse(baseUrl),
-          headers: {'Content-Type':'application/json',
-            'Accept':'application/json',
-            'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
-          body: jsonEncode(body)
-      );
-      var data = jsonDecode(response.body);
-      print(data.toString());
-      setState((){
-        name=data['document']['name'].toString();
-      });
-    }catch(e){
-      print(e.toString());
-    }
   }
   Future<void> fetchDataContests() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/find';
@@ -114,34 +86,39 @@ class _HomeState extends State<Home> {
                               MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no,)));
                         },
                         child: Card(
-                          color: Colors.green,
-                          child: ListTile(
-                            tileColor: Colors.white,
-                            title: Text(
-                              contests.name,
-                              style: TextStyle(
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: ListTile(
+                              tileColor: Colors.white,
+                              title: Text(
+                                contests.name,
+                                style: TextStyle(
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 25
+                                ),
                               ),
-                            ),
-                            subtitle: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text('Entry fee: ',style: TextStyle(color: Colors.black),),
-                                    Icon(Icons.currency_rupee,color: Colors.black,size: 12,),
-                                    Text(contests.fee,style: TextStyle(color: Colors.black)),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text('Prize Pool: ',style: TextStyle(color: Colors.black),),
-                                    Icon(Icons.currency_rupee,color: Colors.black,size: 12,),
-                                    Text(contests.win_amount,style: TextStyle(color: Colors.black)),
-                                  ],
-                                ),
-                              ],
+                              subtitle: Column(
+                                children: [
+                                  SizedBox(height: 2,),
+                                  Row(
+                                    children: [
+                                      Text('Entry fee: ',style: TextStyle(color: Colors.black),),
+                                      Icon(Icons.currency_rupee,color: Colors.black,size: 12,),
+                                      Text(contests.fee,style: TextStyle(color: Colors.black)),
+                                    ],
+                                  ),
+                                  SizedBox(height: 1,),
+                                  Row(
+                                    children: [
+                                      Text('Prize Pool: ',style: TextStyle(color: Colors.black),),
+                                      Icon(Icons.currency_rupee,color: Colors.black,size: 12,),
+                                      Text(contests.win_amount,style: TextStyle(color: Colors.black)),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -193,7 +170,14 @@ class _HomeState extends State<Home> {
       );
     }
   }
+  void getData() async{
+    var prefs = await SharedPreferences.getInstance();
+    name =prefs.getString("name")!;
+    phno =prefs.getString("phone")!;
+
+  }
 }
+
 // Center(child: CircularProgressIndicator(
 // color: Colors.green.shade600,
 // ));

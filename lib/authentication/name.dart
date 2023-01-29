@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/data_services.dart';
 import '../screens/home.dart';
@@ -18,7 +19,6 @@ class _NameState extends State<Name> {
   @override
   void initState() {
     super.initState();
-    uid = FirebaseAuth.instance.currentUser!.uid;
     phno=FirebaseAuth.instance.currentUser?.phoneNumber;
   }
   DataService dataService=DataService();
@@ -74,7 +74,7 @@ class _NameState extends State<Name> {
                   height: 45,
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if(name.isEmpty)
                         {
                           showToastEmpty();
@@ -85,7 +85,10 @@ class _NameState extends State<Name> {
                         }
                       else
                         {
-                          print("hi");
+                          var prefs = await SharedPreferences.getInstance();
+                          prefs.setString("where", "home");
+                          prefs.setString("name", name);
+                          prefs.setString("phone", phno!);
                           _insertData(name, phno!);
                           Navigator.pushAndRemoveUntil(
                               context,

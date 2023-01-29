@@ -13,6 +13,7 @@ class Intro extends StatelessWidget {
         child: SingleChildScrollView(
           child: Container(
             child: Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
               color: Colors.white,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
