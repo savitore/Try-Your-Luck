@@ -25,6 +25,7 @@ class _NameState extends State<Name> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.fromLTRB(25, 150, 25, 40),
           child: Column(

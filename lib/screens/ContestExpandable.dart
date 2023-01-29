@@ -1,12 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:try_your_luck/wallet/add_money.dart';
-
 import '../services/data_services.dart';
 import '../models/ContestUsersModel.dart';
 
@@ -94,7 +92,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
     print(userName);
     print(phno);
     print((int.parse(balance)-int.parse(widget.fee)).toString());
-    final response;
     try{
       HttpClient httpClient=new HttpClient();
       HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
@@ -107,8 +104,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
       await for (var data in response.transform(utf8.decoder)) {
         contents.write(data);
       }
-      var output=jsonDecode(contents.toString());
-      print(output);
     }catch(e){
       print(e.toString());
     }

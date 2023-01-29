@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pinput/pinput.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:try_your_luck/authentication/name.dart';
 import 'package:try_your_luck/authentication/isUserAlreadyRegistered.dart';
 
 
@@ -53,6 +52,7 @@ class _OtpState extends State<Otp> {
     );
 
     return Scaffold(
+      backgroundColor: Colors.white,
       key: scaffoldkey,
       extendBodyBehindAppBar: true,
       appBar: AppBar(

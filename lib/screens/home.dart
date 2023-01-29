@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,12 +16,10 @@ class _HomeState extends State<Home> {
 
   List<ContestModel>? list=[];
   int flag=0;
-  String name='';
-  String? phno='';
+  String name='',phno='';
   @override
   void initState() {
     super.initState();
-    phno=FirebaseAuth.instance.currentUser?.phoneNumber;
     getData();
     fetchDataContests();
   }

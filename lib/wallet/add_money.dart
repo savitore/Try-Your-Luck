@@ -1,10 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:pay/pay.dart';
 import 'package:try_your_luck/wallet/payment_options.dart';
-
-import '../screens/home.dart';
 
 class AddMoney extends StatefulWidget {
   final String balance;
@@ -17,7 +13,6 @@ class AddMoney extends StatefulWidget {
 class _AddMoneyState extends State<AddMoney> {
   var amount="";
   TextEditingController amount_100 = TextEditingController();
-  final _paymentItem= <PaymentItem>[];
 
   @override
   void initState() {
@@ -29,6 +24,7 @@ class _AddMoneyState extends State<AddMoney> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -55,9 +51,7 @@ class _AddMoneyState extends State<AddMoney> {
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 30,
-                          // fontFamily:'Raleway'
                         ),
-
                       ),
                     ],
                   ),
@@ -156,18 +150,6 @@ class _AddMoneyState extends State<AddMoney> {
             SizedBox(
               height: 45,
               width: double.infinity,
-              // child: GooglePayButton(
-              //   paymentConfigurationAsset: 'gpay.json',
-              //   paymentItems: [PaymentItem(amount: amount)],
-              //   type: GooglePayButtonType.pay,
-              //   margin: const EdgeInsets.only(top: 15.0),
-              //   onPaymentResult: (data){
-              //     print(data);
-              //   },
-              //   loadingIndicator: const Center(
-              //     child: CircularProgressIndicator(),
-              //   ),
-              // ),
               child: ElevatedButton(
                 onPressed: () {
                   if(amount.toString()==null)

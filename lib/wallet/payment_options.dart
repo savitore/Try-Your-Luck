@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:try_your_luck/wallet/add_money.dart';
-import 'package:try_your_luck/wallet/upi.dart';
 
 class PaymentOptions extends StatefulWidget {
   final String amount,balance;
@@ -15,6 +13,7 @@ class _PaymentOptionsState extends State<PaymentOptions> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.green.shade600,
         foregroundColor: Colors.white,
@@ -94,7 +93,7 @@ class _PaymentOptionsState extends State<PaymentOptions> {
               ],
             ),
           )
-            ],
+        ],
       ),
     );
   }

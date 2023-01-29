@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'otp.dart';
@@ -23,6 +22,7 @@ class _PhoneState extends State<Phone> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Container(
         margin: EdgeInsets.fromLTRB(15, 90, 15, 20),
         child: Column(
@@ -109,14 +109,6 @@ class _PhoneState extends State<Phone> {
                         showToastIncorrect();
                       }
                       else if (countrycode.text.isNotEmpty && phone.isNotEmpty) {
-                        // await FirebaseAuth.instance.verifyPhoneNumber(
-                        //   phoneNumber: '${countrycode.text + phone}',
-                        //   verificationCompleted: (
-                        //       PhoneAuthCredential credential) {},
-                        //   verificationFailed: (FirebaseAuthException e) {},
-                        //   codeSent: (String verificationId, int? resendToken) {},
-                        //   codeAutoRetrievalTimeout: (String verificationId) {},
-                        // );
                         String phoneno=countrycode.text + phone.toString();
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context)=> Otp(phoneno)
