@@ -17,7 +17,7 @@ class _WalletState extends State<Wallet> {
 
   String? phno="";
   String balance='',result='';
-  int flag=0;
+  int flag=0,flag1=0;
   List<TranscationsModel>? list=[];
   late Text entry_paid=Text('Entry Paid',style: TextStyle(color: Colors.black,fontSize: 20),);
   late Text winnings=Text('Winnings',style: TextStyle(fontSize: 20,color: Colors.green.shade600),);
@@ -76,20 +76,16 @@ class _WalletState extends State<Wallet> {
       var data = jsonDecode(response.body);
       setState((){
         for(int i=0; i<data['documents'].length;i++){
-          print("1");
           if(data['documents'][i]['result']!=''){
             result=data['documents'][i]['result'].toString();
             list?.add(TranscationsModel(contest_name: data['documents'][i]['contest'], winning_amount: data['documents'][i]['winning_amount'], result: '', date: data['documents'][i]['date'], time: data['documents'][i]['time'], fee: data['documents'][i]['fee']));
-            print(i.toString()+" "+result);
           }
           setState(() {
-            print("hi");
-            print(i.toString()+data['documents'][i]['fee']);
             list?.add(TranscationsModel(contest_name: data['documents'][i]['contest'], winning_amount: data['documents'][i]['winning_amount'], result: result, date: data['documents'][i]['date'], time: data['documents'][i]['time'], fee: data['documents'][i]['fee']));
           });
           result='';
         }
-        flag=1;
+        flag1=1;
       });
     }catch(e){
       print(e.toString());
@@ -144,20 +140,7 @@ class _WalletState extends State<Wallet> {
                             ],
                           ),
                         ),
-                        Column(
-                          children: list!.map((contests){
-                            return Card(
-                              child: ListTile(
-                                tileColor: Colors.white,
-                                title: Column(
-                                  children: [
-                                    transcation(contests.contest_name,contests.winning_amount,contests.date,contests.time,contests.result,contests.fee),
-                                  ],
-                                )
-                              ),
-                            );
-                          }).toList(),
-                        )
+                        loading()
                       ],
                     ),
                   ),
@@ -231,6 +214,31 @@ class _WalletState extends State<Wallet> {
             ],
           ),
           entry(fee),
+        ],
+      );
+    }
+  }
+  Widget loading(){
+    if(flag1==1){
+      return Column(
+        children: list!.map((contests){
+          return Card(
+            child: ListTile(
+                tileColor: Colors.white,
+                title: Column(
+                  children: [
+                    transcation(contests.contest_name,contests.winning_amount,contests.date,contests.time,contests.result,contests.fee),
+                  ],
+                )
+            ),
+          );
+        }).toList(),
+      );
+    }else{
+      return Column(
+        children: [
+          CircularProgressIndicator(color: Colors.green.shade600,),
+          SizedBox(height: 25,)
         ],
       );
     }
