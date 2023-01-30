@@ -176,7 +176,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print("this"+e.toString());
     }
   }
-  Future<void> UpdateUserMultipleContests(String lucky_user_phone) async {
+  Future<void> UpdateUserMultipleContests(String lucky_user_phone, String lucky_draw_no, String fee, String no_of_people) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
     final body={
       "dataSource":"Cluster0",
@@ -190,6 +190,9 @@ class _ContestExpandableState extends State<ContestExpandable> {
         "winning_amount": widget.prize,
         "lucky_no_user": widget.lucky_draw_no,
         "redeemed":"no",
+        "lucky_draw_no": lucky_draw_no,
+        "fee":fee,
+        "no_of_people":no_of_people,
         "result":"won"
       }
     };
@@ -465,7 +468,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       );
     }else{
       // dataService.DataInsertUserMultipleContests(widget.name,luckyUserPhone , widget.prize, widget.lucky_draw_no, context);
-      UpdateUserMultipleContests(luckyUserPhone);
+      UpdateUserMultipleContests(luckyUserPhone,widget.lucky_draw_no,widget.fee,widget.no_of_people);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

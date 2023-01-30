@@ -69,7 +69,8 @@ class DataService{
         "redeemed": "no",
         "lucky_draw_no":lucky_draw_no,
         "fee":fee,
-        "no_of_people":no_of_people
+        "no_of_people":no_of_people,
+        "result":""
       }
     };
     HttpClient httpClient=new HttpClient();
