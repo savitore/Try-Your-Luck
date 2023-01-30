@@ -36,6 +36,5 @@ Please use this app to only try your luck.
 <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/215550203-6bbe28d2-1c32-490f-908c-c85b1795c3b1.png"/>
 ## Profile
 <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214527322-b8233104-e08b-4da9-b373-7dbd43926f58.png"/>
-
 ## Wallet
 <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/215550498-cb842d0d-9b06-4529-8b0d-3e5d4ab56162.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214527382-ed97b9ef-c9ad-4158-9ed5-67e32d80ebbf.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214527318-bee67275-1bf9-445a-a159-794b3cf1c35e.png"/>
