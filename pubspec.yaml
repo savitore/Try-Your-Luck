@@ -41,11 +41,10 @@ dependencies:
   firebase_auth: ^4.2.4
   fluttertoast: ^8.1.2
   shared_preferences: ^2.0.17
-  pay: ^1.0.11
   http: ^0.13.5
   percent_indicator: ^4.0.1
   flutter_launcher_icons: ^0.11.0
-
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

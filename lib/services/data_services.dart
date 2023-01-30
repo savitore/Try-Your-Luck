@@ -56,7 +56,7 @@ class DataService{
     var output=jsonDecode(contents.toString());
     print(output['insertedId']);
   }
-  Future DataInsertUserMultipleContests(String contestName, String phone_number,String winning_amount, String lucky_no_user,String fee, String lucky_draw_no,String no_of_people, BuildContext context) async {
+  Future DataInsertUserMultipleContests(String contestName, String phone_number,String winning_amount, String lucky_no_user,String fee, String lucky_draw_no,String no_of_people, String date, String time, BuildContext context) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/insertOne';
     final body={
       "dataSource":"Cluster0",
@@ -70,7 +70,9 @@ class DataService{
         "lucky_draw_no":lucky_draw_no,
         "fee":fee,
         "no_of_people":no_of_people,
-        "result":""
+        "result":"",
+        "date":date,
+        "time":time
       }
     };
     HttpClient httpClient=new HttpClient();
@@ -84,7 +86,7 @@ class DataService{
     await for (var data in response.transform(utf8.decoder)) {
       contents.write(data);
     }
-    var output=jsonDecode(contents.toString());
-    print(output['insertedId']);
+    // var output=jsonDecode(contents.toString());
+    // print(output['insertedId']);
   }
 }

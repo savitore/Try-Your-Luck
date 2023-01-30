@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:try_your_luck/wallet/add_money.dart';
 import '../services/data_services.dart';
@@ -31,6 +32,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
   String contestJoined='JOIN CONTEST';
   Color? button = Colors.green.shade600;
   List<ContestUsersModel>? contestUsers=[];
+  String Redeemed='';
 
   @override
   void initState() {
@@ -73,7 +75,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print(e.toString());
     }
   }
-  Future<void> updateBalance() async{
+  Future<void> updateBalance(String Balance) async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
     final body={
       "dataSource":"Cluster0",
@@ -85,7 +87,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       "update": {
         "name": userName,
         "phone_number": phno,
-        "balance": (int.parse(balance)-int.parse(widget.fee)).toString()
+        "balance": Balance
       }
     };
     print("hi");
@@ -210,8 +212,39 @@ class _ContestExpandableState extends State<ContestExpandable> {
     var output=jsonDecode(contents.toString());
     print(output['insertedId']);
   }
+  Future<void> fetchRedeemedOrNot(String contestName) async{
+    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
+    final body={
+      "dataSource":"Cluster0",
+      "database":"users",
+      "collection":phno,
+      "filter":{
+        "contest": contestName
+      }
+    };
+    final response;
+    try{
+      response=await http.post(Uri.parse(baseUrl),
+          headers: {'Content-Type':'application/json',
+            'Accept':'application/json',
+            'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
+            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+          body: jsonEncode(body)
+      );
+      var data = jsonDecode(response.body);
+      setState((){
+        Redeemed=data['document']['redeemed'].toString();
+      });
+      flag=1;
+    }catch(e){
+      print(e.toString());
+    }
+  }
   @override
   Widget build(BuildContext context) {
+    final now = new DateTime.now();
+    String date = DateFormat('yMMMd').format(now);
+    String time= DateFormat('jm').format(now);
     if(flag==1){
       return Scaffold(
           appBar: AppBar(
@@ -265,7 +298,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                         ],
                       ),
                       SizedBox(height: 20,),
-                      contestIsFullOrElse()
+                      contestIsFullOrElse(date,time)
                     ],
                   ),
                 ),
@@ -337,7 +370,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
     );
   }
 
-  Widget contestIsFullOrElse(){
+  Widget contestIsFullOrElse(String date, String time){
     if(people_joined<double.parse(widget.no_of_people)){
       return SizedBox(
         height: 45,
@@ -373,9 +406,9 @@ class _ContestExpandableState extends State<ContestExpandable> {
                           ElevatedButton(
                               onPressed: (){
                                 alreadyJoined=true;
-                                updateBalance();
+                                updateBalance((int.parse(balance)-int.parse(widget.fee)).toString());
                                 dataService.DataInsertContestUsers(userName, phno!, widget.name,alreadyJoined, context);
-                                dataService.DataInsertUserMultipleContests(widget.name, phno!, widget.prize,lucky_no_user,widget.fee,widget.lucky_draw_no,widget.no_of_people, context);
+                                dataService.DataInsertUserMultipleContests(widget.name, phno!, widget.prize,lucky_no_user,widget.fee,widget.lucky_draw_no,widget.no_of_people,date,time, context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 showDialog(context: context, builder: (context){
@@ -469,6 +502,10 @@ class _ContestExpandableState extends State<ContestExpandable> {
     }else{
       // dataService.DataInsertUserMultipleContests(widget.name,luckyUserPhone , widget.prize, widget.lucky_draw_no, context);
       UpdateUserMultipleContests(luckyUserPhone,widget.lucky_draw_no,widget.fee,widget.no_of_people);
+      fetchRedeemedOrNot(widget.name);
+      if(Redeemed=="no"){
+        updateBalance((int.parse(balance)+int.parse(widget.prize)).toString());
+      }
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
