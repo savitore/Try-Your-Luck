@@ -41,6 +41,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:256813256733:android:f91f6729fd2183a76bb6f4",
+        "android_client_info": {
+          "package_name": "com.savitore.try_your_luck"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "256813256733-f8urecs1cdf7l9jincrpvkimgji81589.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFgqLQ7jNa5QrUizinkvFsmmmZZgGyyhA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "256813256733-f8urecs1cdf7l9jincrpvkimgji81589.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
