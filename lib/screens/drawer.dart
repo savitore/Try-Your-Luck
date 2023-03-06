@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:try_your_luck/Intro.dart';
+import 'package:try_your_luck/screens/Intro.dart';
 import 'package:try_your_luck/screens/profile.dart';
 import 'package:try_your_luck/screens/my_contests.dart';
 import 'package:try_your_luck/wallet/wallet.dart';

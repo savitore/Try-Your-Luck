@@ -50,7 +50,7 @@ class _WalletState extends State<Wallet> {
       );
       var data = jsonDecode(response.body);
       setState((){
-        balance=data['document']['balance'];
+        balance=data['document']['balance'].toString();
       });
       flag=1;
     }catch(e){
@@ -76,12 +76,12 @@ class _WalletState extends State<Wallet> {
       var data = jsonDecode(response.body);
       setState((){
         for(int i=0; i<data['documents'].length;i++){
-          if(data['documents'][i]['result']!=''){
+          if(data['documents'][i]['result'].toString()!=''){
             result=data['documents'][i]['result'].toString();
-            list?.add(TranscationsModel(contest_name: data['documents'][i]['contest'], winning_amount: data['documents'][i]['winning_amount'], result: '', date: data['documents'][i]['date'], time: data['documents'][i]['time'], fee: data['documents'][i]['fee']));
+            list?.add(TranscationsModel(contest_name: data['documents'][i]['contest'].toString(), winning_amount: data['documents'][i]['winning_amount'].toString(), result: '', date: data['documents'][i]['date'].toString(), time: data['documents'][i]['time'].toString(), fee: data['documents'][i]['fee'].toString()));
           }
           setState(() {
-            list?.add(TranscationsModel(contest_name: data['documents'][i]['contest'], winning_amount: data['documents'][i]['winning_amount'], result: result, date: data['documents'][i]['date'], time: data['documents'][i]['time'], fee: data['documents'][i]['fee']));
+            list?.add(TranscationsModel(contest_name: data['documents'][i]['contest'].toString(), winning_amount: data['documents'][i]['winning_amount'].toString(), result: result, date: data['documents'][i]['date'].toString(), time: data['documents'][i]['time'].toString(), fee: data['documents'][i]['fee'].toString()));
           });
           result='';
         }
