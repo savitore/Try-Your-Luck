@@ -106,6 +106,7 @@ class _OtpState extends State<Otp> {
                     GestureDetector(
                       onTap: (){
                         verifyPhone();
+                        showToastResend();
                       },
                       child: Text('Resend OTP',style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
                     ),
@@ -192,6 +193,16 @@ class _OtpState extends State<Otp> {
   void showToastOTP() =>
       Fluttertoast.showToast(
           msg: "Please enter OTP.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.black,
+          fontSize: 16.0
+      );
+  void showToastResend() =>
+      Fluttertoast.showToast(
+          msg: "OTP Resent.",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
