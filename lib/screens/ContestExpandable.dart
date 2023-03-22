@@ -68,9 +68,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
         balance=data['document']['balance'].toString();
         userName=data['document']['name'].toString();
       });
-      // if(balance==data['document']['balance']){
         flag=1;
-      // }
     }catch(e){
       print(e.toString());
     }
