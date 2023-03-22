@@ -40,13 +40,11 @@ class _HomeState extends State<Home> {
           body: jsonEncode(body)
       );
       var data = jsonDecode(response.body);
-      print(data.toString());
       for(int i=0; i<data['documents'].length;i++){
         setState((){
           list?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount'], fee: data['documents'][i]['fee'], lucky_draw_no: data['documents'][i]['lucky_draw_no']));
         });
       }
-      print(data['documents'][0]['name']);
       flag=1;
     }catch(e){
       print(e.toString());
@@ -57,8 +55,7 @@ class _HomeState extends State<Home> {
     return loaded();
   }
   Widget loaded(){
-    if(flag==1){
-      return Scaffold(
+      return flag==1 ? Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.green.shade600,
           foregroundColor: Colors.white,
@@ -137,10 +134,7 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-      );
-    }
-    else{
-      return Scaffold(
+      ) : Scaffold(
         backgroundColor: Colors.white,
         body: Padding(
           padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
@@ -165,16 +159,10 @@ class _HomeState extends State<Home> {
           ),
         ),
       );
-    }
   }
   void getData() async{
     var prefs = await SharedPreferences.getInstance();
     name =prefs.getString("name")!;
     phno =prefs.getString("phone")!;
-
   }
 }
-
-// Center(child: CircularProgressIndicator(
-// color: Colors.green.shade600,
-// ));

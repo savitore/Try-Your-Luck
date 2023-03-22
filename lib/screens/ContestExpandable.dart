@@ -245,8 +245,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
     final now = new DateTime.now();
     String date = DateFormat('yMMMd').format(now);
     String time= DateFormat('jm').format(now);
-    if(flag==1){
-      return Scaffold(
+      return flag==1 ? Scaffold(
           appBar: AppBar(
             centerTitle: true,
             backgroundColor: Colors.green,
@@ -330,12 +329,9 @@ class _ContestExpandableState extends State<ContestExpandable> {
               ],
             ),
           )
-      );
-    }else{
-      return Scaffold(
+      ) : Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
-    }
   }
   Widget loaded(){
     return Column(

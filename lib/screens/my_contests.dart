@@ -90,8 +90,7 @@ class _MyContestsState extends State<MyContests> {
   }
   @override
   Widget build(BuildContext context) {
-    if(flag==1){
-      return Scaffold(
+      return flag==1 ? Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.green.shade600,
             foregroundColor: Colors.white,
@@ -139,12 +138,9 @@ class _MyContestsState extends State<MyContests> {
               ),
             ),
           )
-      );
-    }else{
-      return Scaffold(
-          body: Center(child: CircularProgressIndicator())
-      );
-    }
+      ) : Scaffold(
+    body: Center(child: CircularProgressIndicator())
+    );
   }
   Widget ifWon(String Result,String contestName,String winning_amount,String lucky_no_user, String redeemed){
     if(Result!=''){

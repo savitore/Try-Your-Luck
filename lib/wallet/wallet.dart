@@ -166,19 +166,15 @@ class _WalletState extends State<Wallet> {
     );
   }
   Widget loading_balance(){
-    if(flag==1){
-      return Row(
+      return flag==1 ? Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.currency_rupee,color: Colors.black,size: 20,),
           Text(balance,style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
         ],
-      );
-    }else{
-      return Center(child: CircularProgressIndicator(
+      ) : Center(child: CircularProgressIndicator(
         color: Colors.green.shade600,
       ));
-    }
   }
   Widget transcation(String contest_name, String winning_amount, String date, String time, String Result, String fee){
     if(Result=="won"){
@@ -219,8 +215,7 @@ class _WalletState extends State<Wallet> {
     }
   }
   Widget loading(){
-    if(flag1==1){
-      return Column(
+      return flag1==1 ? Column(
         children: list!.map((contests){
           return Card(
             child: ListTile(
@@ -233,15 +228,12 @@ class _WalletState extends State<Wallet> {
             ),
           );
         }).toList(),
-      );
-    }else{
-      return Column(
-        children: [
+      ) : Column(
+    children: [
           CircularProgressIndicator(color: Colors.green.shade600,),
           SizedBox(height: 25,)
-        ],
-      );
-    }
+    ],
+    );
   }
   Widget entry(String fee){
      return Row(
