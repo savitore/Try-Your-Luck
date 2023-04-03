@@ -69,6 +69,7 @@ class _IsUserAlreadyRegisteredState extends State<IsUserAlreadyRegistered> {
   }
   void getData() async{
     var prefs = await SharedPreferences.getInstance();
+    prefs.setString("where", "home");
     prefs.setString("phone", phno!);
     prefs.setString("name", name);
   }

@@ -266,7 +266,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
   }
   @override
   Widget build(BuildContext context) {
-    // balanceLeft = (int.parse(balance)-int.parse(widget.fee)).toString();
     final now = new DateTime.now();
     String date = DateFormat('yMMMd').format(now);
     String time= DateFormat('jm').format(now);
@@ -327,29 +326,34 @@ class _ContestExpandableState extends State<ContestExpandable> {
                   ),
                 ),
                 SizedBox(height: 10,),
-                Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: Colors.grey[600],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Text('People joined:-',style: TextStyle(fontSize: 20),)
-                    ],
-                  ),
-                ),
-                Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: Colors.grey[600],
-                ),
+                // Divider(
+                //   height: 0.5,
+                //   thickness: 1,
+                //   color: Colors.grey[600],
+                // ),
+                // SizedBox(height: 10,),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(
+                //     children: [
+                //       Text('People joined',style: TextStyle(fontSize: 22,color: Colors.blueAccent),)
+                //     ],
+                //   ),
+                // ),
                 SafeArea(
                   child: Card(
                     elevation: 5,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),side: BorderSide(color: Colors.green.shade600,width: 1)),
-                      child: loaded()
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                            child: Text('People Joined',style: TextStyle(fontSize: 25,color: Colors.green.shade600,fontWeight: FontWeight.bold,fontFamily: 'Raleway'),),
+                          ),
+                          loaded(),
+                        ],
+                      )
                   ),
                 ),
               ],
@@ -404,76 +408,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
             if(alreadyJoined==false){
               if(people_joined<double.parse(widget.no_of_people)){
                 if(double.parse(balance)>double.parse(widget.fee)){
-                  // showDialog(context: context, builder: (context){
-                  //   return Container(
-                  //     child: AlertDialog(
-                  //       actionsAlignment: MainAxisAlignment.center,
-                  //       title: Text('CONFIRMATION',style: TextStyle(fontWeight: FontWeight.bold),),
-                  //       content: Container(
-                  //         child: Padding(
-                  //           padding: const EdgeInsets.all(10.0),
-                  //           child: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //             children: [
-                  //               Text('To Pay'),
-                  //               Row(
-                  //                 children: [
-                  //                   Icon(Icons.currency_rupee,color: Colors.black,),
-                  //                   Text(widget.fee,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22),),
-                  //                 ],
-                  //               ),
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ),
-                  //       actions: [
-                  //         ElevatedButton(
-                  //             onPressed: (){
-                  //               alreadyJoined=true;
-                  //               updateBalance((int.parse(balance)-int.parse(widget.fee)).toString());
-                  //               dataService.DataInsertContestUsers(userName, phno!, widget.name,alreadyJoined, context);
-                  //               dataService.DataInsertUserMultipleContests(widget.name, phno!, widget.prize,lucky_no_user,widget.fee,widget.lucky_draw_no,widget.no_of_people,date,time, context);
-                  //               Navigator.pop(context);
-                  //               Navigator.pop(context);
-                  //               showDialog(context: context, builder: (context){
-                  //                 return Container(
-                  //                   child: AlertDialog(
-                  //                     title: Text('Congratulations!',style: TextStyle(fontWeight: FontWeight.normal,fontSize: 22),),
-                  //                     actions: [
-                  //                       Row(
-                  //                         mainAxisAlignment: MainAxisAlignment.center,
-                  //                         children: [
-                  //                           Text('Contest joined',style: TextStyle(fontSize: 20),),
-                  //                         ],
-                  //                       ),
-                  //                       SizedBox(height: 10,),
-                  //                       Row(
-                  //                         mainAxisAlignment: MainAxisAlignment.center,
-                  //                         children: [
-                  //                           Text('Your Lucky Number is',style: TextStyle(fontSize: 22)),
-                  //                         ],
-                  //                       ),
-                  //                       Row(
-                  //                         mainAxisAlignment: MainAxisAlignment.center,
-                  //                         children: [
-                  //                           Text(lucky_no_user,style: TextStyle(fontSize: 60,color: Colors.green.shade600),),
-                  //                         ],
-                  //                       )
-                  //                     ],
-                  //                   ),
-                  //                 );
-                  //               });
-                  //             },
-                  //             style: ElevatedButton.styleFrom(
-                  //                 elevation: 12,
-                  //                 backgroundColor: Colors.green.shade600
-                  //             ),
-                  //             child: Text('JOIN CONTEST')
-                  //         )
-                  //       ],
-                  //     ),
-                  //   );
-                  // });
                   showModalBottomSheet(
                       context: context,
                       builder: (context) => buildSheet(),

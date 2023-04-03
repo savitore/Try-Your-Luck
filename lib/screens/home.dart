@@ -23,9 +23,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    phno= FirebaseAuth.instance.currentUser?.phoneNumber;
     getData();
-    fetchDataProfile();
     fetchDataContests();
   }
   Future<void> fetchDataProfile() async{
@@ -138,6 +136,7 @@ class _HomeState extends State<Home> {
                               title: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  SizedBox(height: 5,),
                                   Text(
                                     contests.name,
                                     style: TextStyle(
@@ -256,6 +255,7 @@ class _HomeState extends State<Home> {
   void getData() async{
     var prefs = await SharedPreferences.getInstance();
     name =prefs.getString("name")!;
-    // phno =prefs.getString("phone")!;
+    phno =prefs.getString("phone")!;
+    fetchDataProfile();
   }
 }
