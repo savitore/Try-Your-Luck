@@ -382,7 +382,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
                   contestUsers.name,
                   style: TextStyle(
                       color: Colors.black,
-                      // fontWeight: FontWeight.bold,
                       fontSize: 20,
                       fontFamily: 'Merriweather'
                   ),
