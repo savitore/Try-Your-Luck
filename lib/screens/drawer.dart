@@ -20,17 +20,17 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
   }
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 70,left: 20,right: 20),
-      child: SingleChildScrollView(
-        child: Column(
-            children: [
-              Column(
+    return SingleChildScrollView(
+      child: Column(
+          children: [
+            loaded(),
+            Padding(
+              padding: const EdgeInsets.only(top: 20,left: 20,right: 20),
+              child: Column(
                 children: [
-                  loaded(),
-                  SizedBox(height: 10,),
-                  Divider(height: 1,thickness: 0.5,color: Colors.grey[500],),
-                  SizedBox(height: 15,),
+                  // SizedBox(height: 10,),
+                  // Divider(height: 1,thickness: 0.5,color: Colors.grey[500],),
+                  // SizedBox(height: 15,),
                   InkWell(
                     onTap: (){
                       Navigator.of(context).push(MaterialPageRoute(
@@ -62,79 +62,76 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                   ),
                 ],
               ),
-              SizedBox(height: 400,),
-              Divider(height: 1,thickness: 0.5,color: Colors.grey[500]),
-              SizedBox(height: 10,),
-              Column(
-                children: [
-                  GestureDetector(
-                    onTap: () async {
-                      await FirebaseAuth.instance.signOut();
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => Intro()),
-                              (route) => false);
-                    },
-                    child: Row(
-                      children: [
-                        Text('Log out',
-                          style: TextStyle(
-                            color: Colors.grey[700],
-                            fontSize: 15
-                          ),
+            ),
+            SizedBox(height: 400,),
+            Column(
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => Intro()),
+                            (route) => false);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Log out',
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500
                         ),
-                      ],
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
-      ),
+                      ),
+                      Icon(Icons.arrow_right,size: 22,color: Colors.blueAccent,weight: 10,)
+                    ],
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
     );
     // );
   }
   Widget loaded(){
-      return InkWell(
-        onTap: (){
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context)=> Profile(widget.name,widget.phno)
-          ));
-        },
-        child: Column(
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  backgroundImage: AssetImage('assets/empty_person.jpg'),
-                  // backgroundImage: NetworkImage('url'),
-                  radius: 30,
-                )
-              ],
-            ),
-            SizedBox(height: 10,),
-            Row(
+      return Container(
+        color: Colors.green.shade600,
+        padding: const EdgeInsets.fromLTRB(20, 70, 20, 15),
+        child: InkWell(
+          onTap: (){
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context)=> Profile(widget.name,widget.phno)
+            ));
+          },
+          child: Column(
+            children: [
+              Row(
                 children: [
-                  Text(widget.name,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      // fontWeight: FontWeight.bold
-                    ),
+                  CircleAvatar(
+                    backgroundImage: AssetImage('assets/empty_person.jpg'),
+                    // backgroundImage: NetworkImage('url'),
+                    radius: 30,
                   )
-                ]
-            ),
-            Row(
-              children: [
-                Text(
-                  'View profile',
-                  style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14),
-                )
-              ],
-            ),
-          ],
+                ],
+              ),
+              SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(widget.name,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        // fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    Icon(Icons.arrow_forward_ios,color: Colors.white,size: 25,)
+                  ]
+              ),
+            ],
+          ),
         ),
       );
   }

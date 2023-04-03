@@ -63,13 +63,9 @@ class _IsUserAlreadyRegisteredState extends State<IsUserAlreadyRegistered> {
 
   @override
   Widget build(BuildContext context) {
-    if(flag==1){
-      return Scaffold();
-    }else{
-      return Scaffold(
+      return flag ==1 ? Scaffold() : Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
-    }
   }
   void getData() async{
     var prefs = await SharedPreferences.getInstance();

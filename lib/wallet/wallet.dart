@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:try_your_luck/wallet/add_money.dart';
 import 'package:http/http.dart' as http;
+import 'package:try_your_luck/wallet/payment_options.dart';
 import '../models/TranscationsModel.dart';
 
 class Wallet extends StatefulWidget {
@@ -17,6 +17,8 @@ class _WalletState extends State<Wallet> {
 
   String? phno="";
   String balance='',result='';
+  var amount="";
+  TextEditingController amount_100 = TextEditingController();
   int flag=0,flag1=0;
   List<TranscationsModel>? list=[];
   late Text entry_paid=Text('Entry Paid',style: TextStyle(color: Colors.black,fontSize: 20),);
@@ -28,6 +30,8 @@ class _WalletState extends State<Wallet> {
     phno=FirebaseAuth.instance.currentUser?.phoneNumber;
     fetchBalance();
     fetchMyContests();
+    amount_100.text="100";
+    amount="100";
   }
   Future<void> fetchBalance() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
@@ -116,9 +120,19 @@ class _WalletState extends State<Wallet> {
                   SizedBox(height: 5,),
                   ElevatedButton(
                     onPressed: (){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AddMoney(balance.toString())));
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) => buildSheet(),
+                          isScrollControlled: true,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20)
+                          )
+                        )
+                      );
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(builder: (context) => AddMoney(balance.toString())));
                     },
                     child:Text('ADD MONEY'),
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
@@ -263,4 +277,128 @@ class _WalletState extends State<Wallet> {
           textColor: Colors.black,
           fontSize: 20.0
       );
+  void showToastEmpty() =>
+      Fluttertoast.showToast(
+          msg: "Please enter amount",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.black,
+          fontSize: 16.0
+      );
+  void showToastIncomplete() =>
+      Fluttertoast.showToast(
+          msg: "Amount must be Rs 1.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.black,
+          fontSize: 16.0
+      );
+
+  Widget buildSheet() => Padding(
+    padding: const EdgeInsets.fromLTRB(25, 5, 25, 20),
+    child: Container(
+      height: 400,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+              children:[
+                Container(
+                  height: 5,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                ),
+                SizedBox(height: 15,),
+                TextField(
+                  showCursor: true,
+                  controller: amount_100,
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    amount = value;
+                  },
+                  decoration: InputDecoration(
+                    prefix: Text('₹',style: TextStyle(color: Colors.black),),
+                      hintText: "Enter amount"
+                  ),
+                  style: TextStyle(fontSize: 26),
+                ),
+                SizedBox(height: 10,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        onPressed: (){
+                          amount_100.text="100";
+                          amount="100";
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.currency_rupee,color: Colors.white,),
+                            Text('100',style: TextStyle(color: Colors.white),)
+                          ],
+                        )
+                    ),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        onPressed: (){
+                          amount_100.text="500";
+                          amount="500";
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.currency_rupee,color: Colors.white,),
+                            Text('500',style: TextStyle(color: Colors.white),)
+                          ],
+                        )
+                    ),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        onPressed: (){
+                          amount_100.text="1000";
+                          amount="1000";
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.currency_rupee,color: Colors.white,),
+                            Text('1000',style: TextStyle(color: Colors.white),)
+                          ],
+                        )
+                    )
+                  ],
+                ),
+                SizedBox(height: 20,),
+              ]
+          ),
+          SizedBox(
+            height: 45,
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                if(amount.toString()==null)
+                {
+                  showToastEmpty();
+                }
+                else{
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PaymentOptions(amount: amount,balance: balance,)));
+                }
+              },
+              child: Text('Next'),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

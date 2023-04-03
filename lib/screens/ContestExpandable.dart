@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:try_your_luck/wallet/add_money.dart';
+
+import 'package:try_your_luck/wallet/wallet.dart';
 import '../services/data_services.dart';
 import '../models/ContestUsersModel.dart';
 
@@ -33,6 +34,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
   Color? button = Colors.green.shade600;
   List<ContestUsersModel>? contestUsers=[];
   String Redeemed='';
+  String balanceLeft= '';
 
   @override
   void initState() {
@@ -40,6 +42,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
     phno=FirebaseAuth.instance.currentUser?.phoneNumber;
     fetchDataProfile();
     fetchContestUsers();
+    fetchRedeemedOrNot(widget.name);
     fetchCurrentUserForAlreadyJoined();
   }
   DataService dataService=DataService();
@@ -88,10 +91,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
         "balance": Balance
       }
     };
-    print("hi");
-    print(userName);
-    print(phno);
-    print((int.parse(balance)-int.parse(widget.fee)).toString());
     try{
       HttpClient httpClient=new HttpClient();
       HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
@@ -106,6 +105,28 @@ class _ContestExpandableState extends State<ContestExpandable> {
       }
     }catch(e){
       print(e.toString());
+    }
+  }
+  Future<void> DeleteOne(String contest_name) async{
+    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/deleteOne';
+    final body={
+      "dataSource":"Cluster0",
+      "database":"db",
+      "collection":"contests",
+      "filter":{
+        "name": contest_name
+      }
+    };
+    HttpClient httpClient=new HttpClient();
+    HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
+    httpClientRequest.headers.set("Content-Type", "application/json");
+    httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+    httpClientRequest.add(utf8.encode(jsonEncode(body)));
+    HttpClientResponse response=await httpClientRequest.close();
+    httpClient.close();
+    final contents = StringBuffer();
+    await for (var data in response.transform(utf8.decoder)) {
+      contents.write(data);
     }
   }
   Future<void> fetchContestUsers() async{
@@ -132,7 +153,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
         });
       }
       people_joined=data['documents'].length;
-      print(luckyUserIfString);
       if(data['documents'].length>=int.parse(widget.lucky_draw_no)){
       luckyUserIf=int.parse(widget.lucky_draw_no);
       luckyUserIfString=(luckyUserIf-1).toString();
@@ -141,6 +161,9 @@ class _ContestExpandableState extends State<ContestExpandable> {
 
       }
       lucky_no_user=(people_joined+1).toString();
+      if(people_joined.toString()==widget.no_of_people.toString()){
+        DeleteOne(widget.name);
+      }
     }catch(e){
       print(e.toString());
     }
@@ -189,7 +212,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
         "contest":widget.name,
         "winning_amount": widget.prize,
         "lucky_no_user": widget.lucky_draw_no,
-        "redeemed":"no",
+        "redeemed":"yes",
         "lucky_draw_no": lucky_draw_no,
         "fee":fee,
         "no_of_people":no_of_people,
@@ -208,6 +231,9 @@ class _ContestExpandableState extends State<ContestExpandable> {
       contents.write(data);
     }
     var output=jsonDecode(contents.toString());
+    if(Redeemed=="no"){
+      updateBalance((int.parse(balance)+int.parse(widget.prize)).toString());
+    }
     print(output['insertedId']);
   }
   Future<void> fetchRedeemedOrNot(String contestName) async{
@@ -240,6 +266,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
   }
   @override
   Widget build(BuildContext context) {
+    // balanceLeft = (int.parse(balance)-int.parse(widget.fee)).toString();
     final now = new DateTime.now();
     String date = DateFormat('yMMMd').format(now);
     String time= DateFormat('jm').format(now);
@@ -319,9 +346,10 @@ class _ContestExpandableState extends State<ContestExpandable> {
                   color: Colors.grey[600],
                 ),
                 SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(3.0),
-                    child:loaded(),
+                  child: Card(
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),side: BorderSide(color: Colors.green.shade600,width: 1)),
+                      child: loaded()
                   ),
                 ),
               ],
@@ -334,7 +362,8 @@ class _ContestExpandableState extends State<ContestExpandable> {
   Widget loaded(){
     return Column(
       children: contestUsers!.map((contestUsers){
-        return Card(
+        return Padding(
+          padding: const EdgeInsets.all(0.0),
           child: ListTile(
             tileColor: Colors.white,
             title: Row(
@@ -344,7 +373,8 @@ class _ContestExpandableState extends State<ContestExpandable> {
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20
+                      fontSize: 30,
+                    fontFamily: 'CormorantGaramond'
                   ),
                 ),
                 SizedBox(width: 10,),
@@ -352,8 +382,9 @@ class _ContestExpandableState extends State<ContestExpandable> {
                   contestUsers.name,
                   style: TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20
+                      // fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      fontFamily: 'Merriweather'
                   ),
                 ),
               ],
@@ -374,76 +405,86 @@ class _ContestExpandableState extends State<ContestExpandable> {
             if(alreadyJoined==false){
               if(people_joined<double.parse(widget.no_of_people)){
                 if(double.parse(balance)>double.parse(widget.fee)){
-                  showDialog(context: context, builder: (context){
-                    return Container(
-                      child: AlertDialog(
-                        actionsAlignment: MainAxisAlignment.center,
-                        title: Text('CONFIRMATION',style: TextStyle(fontWeight: FontWeight.bold),),
-                        content: Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('To Pay'),
-                                Row(
-                                  children: [
-                                    Icon(Icons.currency_rupee,color: Colors.black,),
-                                    Text(widget.fee,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22),),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        actions: [
-                          ElevatedButton(
-                              onPressed: (){
-                                alreadyJoined=true;
-                                updateBalance((int.parse(balance)-int.parse(widget.fee)).toString());
-                                dataService.DataInsertContestUsers(userName, phno!, widget.name,alreadyJoined, context);
-                                dataService.DataInsertUserMultipleContests(widget.name, phno!, widget.prize,lucky_no_user,widget.fee,widget.lucky_draw_no,widget.no_of_people,date,time, context);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                showDialog(context: context, builder: (context){
-                                  return Container(
-                                    child: AlertDialog(
-                                      title: Text('Congratulations!',style: TextStyle(fontWeight: FontWeight.normal,fontSize: 22),),
-                                      actions: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text('Contest joined',style: TextStyle(fontSize: 20),),
-                                          ],
-                                        ),
-                                        SizedBox(height: 10,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text('Your Lucky Number is',style: TextStyle(fontSize: 22)),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(lucky_no_user,style: TextStyle(fontSize: 60,color: Colors.green.shade600),),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  elevation: 12,
-                                  backgroundColor: Colors.green.shade600
-                              ),
-                              child: Text('JOIN CONTEST')
+                  // showDialog(context: context, builder: (context){
+                  //   return Container(
+                  //     child: AlertDialog(
+                  //       actionsAlignment: MainAxisAlignment.center,
+                  //       title: Text('CONFIRMATION',style: TextStyle(fontWeight: FontWeight.bold),),
+                  //       content: Container(
+                  //         child: Padding(
+                  //           padding: const EdgeInsets.all(10.0),
+                  //           child: Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: [
+                  //               Text('To Pay'),
+                  //               Row(
+                  //                 children: [
+                  //                   Icon(Icons.currency_rupee,color: Colors.black,),
+                  //                   Text(widget.fee,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22),),
+                  //                 ],
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       actions: [
+                  //         ElevatedButton(
+                  //             onPressed: (){
+                  //               alreadyJoined=true;
+                  //               updateBalance((int.parse(balance)-int.parse(widget.fee)).toString());
+                  //               dataService.DataInsertContestUsers(userName, phno!, widget.name,alreadyJoined, context);
+                  //               dataService.DataInsertUserMultipleContests(widget.name, phno!, widget.prize,lucky_no_user,widget.fee,widget.lucky_draw_no,widget.no_of_people,date,time, context);
+                  //               Navigator.pop(context);
+                  //               Navigator.pop(context);
+                  //               showDialog(context: context, builder: (context){
+                  //                 return Container(
+                  //                   child: AlertDialog(
+                  //                     title: Text('Congratulations!',style: TextStyle(fontWeight: FontWeight.normal,fontSize: 22),),
+                  //                     actions: [
+                  //                       Row(
+                  //                         mainAxisAlignment: MainAxisAlignment.center,
+                  //                         children: [
+                  //                           Text('Contest joined',style: TextStyle(fontSize: 20),),
+                  //                         ],
+                  //                       ),
+                  //                       SizedBox(height: 10,),
+                  //                       Row(
+                  //                         mainAxisAlignment: MainAxisAlignment.center,
+                  //                         children: [
+                  //                           Text('Your Lucky Number is',style: TextStyle(fontSize: 22)),
+                  //                         ],
+                  //                       ),
+                  //                       Row(
+                  //                         mainAxisAlignment: MainAxisAlignment.center,
+                  //                         children: [
+                  //                           Text(lucky_no_user,style: TextStyle(fontSize: 60,color: Colors.green.shade600),),
+                  //                         ],
+                  //                       )
+                  //                     ],
+                  //                   ),
+                  //                 );
+                  //               });
+                  //             },
+                  //             style: ElevatedButton.styleFrom(
+                  //                 elevation: 12,
+                  //                 backgroundColor: Colors.green.shade600
+                  //             ),
+                  //             child: Text('JOIN CONTEST')
+                  //         )
+                  //       ],
+                  //     ),
+                  //   );
+                  // });
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) => buildSheet(),
+                      isScrollControlled: true,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20)
                           )
-                        ],
-                      ),
-                    );
-                  });
+                      )
+                  );
                 }else{
                   showDialog(context: context, builder: (context){
                     return Container(
@@ -454,7 +495,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                           ElevatedButton(
                               onPressed: (){
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context)=> AddMoney(balance)
+                                    builder: (context)=> Wallet()
                                 ));
                               },
                               style: ElevatedButton.styleFrom(
@@ -480,13 +521,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
               }
             }
             else{
-              showDialog(context: context, builder: (context){
-                return Container(
-                  child: AlertDialog(
-                    title: Text('Already joined',style: TextStyle(fontWeight: FontWeight.normal),),
-                  ),
-                );
-              });
             }
           },
           child: Text(contestJoined),
@@ -496,10 +530,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
     }else{
       // dataService.DataInsertUserMultipleContests(widget.name,luckyUserPhone , widget.prize, widget.lucky_draw_no, context);
       UpdateUserMultipleContests(luckyUserPhone,widget.lucky_draw_no,widget.fee,widget.no_of_people);
-      fetchRedeemedOrNot(widget.name);
-      if(Redeemed=="no"){
-        updateBalance((int.parse(balance)+int.parse(widget.prize)).toString());
-      }
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -530,5 +560,153 @@ class _ContestExpandableState extends State<ContestExpandable> {
     }else{
       return Text('Contest Over',style: TextStyle(fontSize: 18));
     }
+  }
+
+  Widget buildSheet() {
+    final now = new DateTime.now();
+    String date = DateFormat('yMMMd').format(now);
+    String time= DateFormat('jm').format(now);
+    balanceLeft = (int.parse(balance)-int.parse(widget.fee)).toString();
+    return
+      Padding(
+        padding: const EdgeInsets.fromLTRB(25, 5, 25, 20),
+        child: Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 5,
+                width: 40,
+                decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(20)
+                ),
+              ),
+              SizedBox(height: 30,),
+              Text('CONFIRMATION', style: TextStyle(fontSize: 25,
+                  color: Colors.green.shade600,
+                  fontWeight: FontWeight.w500),),
+              SizedBox(height: 30,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Current balance',
+                    style: TextStyle(color: Colors.black, fontSize: 20),),
+                  Row(
+                    children: [
+                      Icon(Icons.currency_rupee, color: Colors.black,),
+                      Text(balance, style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 22),),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 5,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('To Pay',
+                    style: TextStyle(color: Colors.black, fontSize: 20),),
+                  Row(
+                    children: [
+                      Text('-', style: TextStyle(color: Colors.black,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),),
+                      Icon(Icons.currency_rupee, color: Colors.black,),
+                      Text(widget.fee, style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 22),),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 5,),
+              Divider(
+                height: 10,
+                thickness: 1,
+                color: Colors.black45,
+              ),
+              SizedBox(height: 5,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Balance left',
+                    style: TextStyle(color: Colors.black, fontSize: 20),),
+                  Row(
+                    children: [
+                      Icon(Icons.currency_rupee, color: Colors.black,),
+                      Text(balanceLeft, style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 22),),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 20,),
+              ElevatedButton(
+                  onPressed: () {
+                    alreadyJoined = true;
+                    updateBalance((int.parse(balance) - int.parse(widget.fee))
+                        .toString());
+                    dataService.DataInsertContestUsers(
+                        userName, phno!, widget.name, alreadyJoined, context);
+                    dataService.DataInsertUserMultipleContests(
+                        widget.name,
+                        phno!,
+                        widget.prize,
+                        lucky_no_user,
+                        widget.fee,
+                        widget.lucky_draw_no,
+                        widget.no_of_people,
+                        date,
+                        time,
+                        context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    showDialog(context: context, builder: (context) {
+                      return Container(
+                        child: AlertDialog(
+                          title: Text('Congratulations!', style: TextStyle(
+                              fontWeight: FontWeight.normal, fontSize: 22),),
+                          actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Contest joined',
+                                  style: TextStyle(fontSize: 20),),
+                              ],
+                            ),
+                            SizedBox(height: 10,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('Your Lucky Number is',
+                                    style: TextStyle(fontSize: 22)),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(lucky_no_user, style: TextStyle(
+                                    fontSize: 60,
+                                    color: Colors.green.shade600),),
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                      shape:RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)
+                      ) ,
+                      elevation: 10,
+                      backgroundColor: Colors.green.shade600
+                  ),
+                  child: Text('JOIN CONTEST')
+              )
+            ],
+          ),
+        ),
+      );
   }
 }
