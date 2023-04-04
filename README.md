@@ -31,16 +31,16 @@ Please use this app to only try your luck.
 <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/215550450-f6065737-aad6-4540-8364-a9fdba898a11.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/215550542-c913f101-cb0b-4085-8fd5-c7dd010c19c5.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/215550521-43ecd365-4dba-4737-8483-1b70d2bbd5e0.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/215551593-0f6e4906-4fd8-4e7f-8126-aceb48e4c184.png"/>
 
 ## Sections
-<img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/215550467-a8a219e2-6eb6-40d0-87c2-a82e7726a00c.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/215550417-116d37b2-dfa7-43b3-bd6b-f02be6576bcb.png"/>
+<img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/229778867-3fc7af36-a09e-4722-9d1c-e9128878388a.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/229778920-23b0d8c0-656b-4524-8563-ae3be9e975e6.png"/>
 
 ## Contest
-<img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214526670-8b119180-8213-471b-8f86-1bccc5ca33be.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214526766-cb539998-82a5-4302-8bf3-7c34e93acac1.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214526881-741da357-2f56-4684-9a34-724281a02b71.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214526676-641ef8e0-d5e0-46af-864b-0ba4f35b0730.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214526897-97f65a67-3035-4c73-b52b-4a439de2f216.png"/>
+<img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/229779253-3c8e6e2d-5024-442e-bc79-e754b72f51d9.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/229779267-2daf4169-1561-4b4f-b38a-17b93dfff859.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/229779293-d388e5d5-69ef-4077-822b-18fe50fd0fb1.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/229779324-156959be-85be-41ff-98a7-38cbca57d6a0.png"/>
 
 ## My Contests
-<img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/215550203-6bbe28d2-1c32-490f-908c-c85b1795c3b1.png"/>
+<img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/229779815-eb78b119-e41f-4153-8dab-1d58e5cba806.png"/>
 
 ## Profile
 <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214527322-b8233104-e08b-4da9-b373-7dbd43926f58.png"/>
 
 ## Wallet
-<img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/215550498-cb842d0d-9b06-4529-8b0d-3e5d4ab56162.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214527382-ed97b9ef-c9ad-4158-9ed5-67e32d80ebbf.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/214527318-bee67275-1bf9-445a-a159-794b3cf1c35e.png"/>
+<img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/229780690-e70154ba-b4f8-4580-b9a9-d020374d13da.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/229780742-a1d2da7c-7423-4ee2-bbde-e98e28725d0b.png"/>  <img width="180" height="350" src="https://user-images.githubusercontent.com/101972358/229780721-dedb2b39-1772-491b-929c-d0212a3ffd7b.png"/>
