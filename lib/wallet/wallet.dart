@@ -168,8 +168,8 @@ class _WalletState extends State<Wallet> {
                   onPressed: () {
                     showToast();
                   },
-                  child: Text('Withdraw'),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  child: Text('WITHDRAW',style: TextStyle(fontSize: 18),),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),),
                 ),
               ),
             ],
