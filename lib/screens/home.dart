@@ -264,12 +264,14 @@ class _HomeState extends State<Home> {
           ),
         ),
         drawer: Drawer(
-          child: Container(
-            color: Colors.white,
-            child: Column(
-              children: [
-                MyHeaderDrawer(phno.toString(),name)
-              ],
+          child: SingleChildScrollView(
+            child: Container(
+              color: Colors.white,
+              child: Column(
+                children: [
+                  MyHeaderDrawer(phno.toString(),name)
+                ],
+              ),
             ),
           ),
         ),
