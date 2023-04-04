@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +19,20 @@ class _HomeState extends State<Home> {
   int flag=0,flag1=0;
   String name='',balance='';
   String? phno;
+  bool prize=false, fee = false, filter = false;
+
+  void sortByPrice(){
+    setState(() {
+      Comparator<ContestModel> sort = (a,b) => int.parse(b.win_amount).compareTo(int.parse(a.win_amount));
+      list?.sort(sort);
+    });
+  }
+  void sortByFee(){
+    setState(() {
+      Comparator<ContestModel> sort = (a,b) => int.parse(a.fee).compareTo(int.parse(b.fee));
+      list?.sort(sort);
+    });
+  }
   @override
   void initState() {
     super.initState();
@@ -86,6 +99,7 @@ class _HomeState extends State<Home> {
   }
   Widget loaded(){
       return flag==1 ? Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.green.shade600,
           foregroundColor: Colors.white,
@@ -115,8 +129,42 @@ class _HomeState extends State<Home> {
               child: Column(
                 crossAxisAlignment:CrossAxisAlignment.start ,
                 children: [
-                  Text('Live contests',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w500,color: Colors.black),),
-                  SizedBox(height: 10,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Live contests',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w500,color: Colors.black),),
+                      SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              filter= !filter;
+                            });
+                          },
+                          style: filter ? ButtonStyle(
+                              padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+                              elevation: MaterialStateProperty.all(0),
+                              backgroundColor: MaterialStateProperty.all(
+                                  Colors.green.shade600),
+                              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(60),
+                                  side: BorderSide(color: Colors.white)))) : ButtonStyle(
+                              padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+                              elevation: MaterialStateProperty.all(0),
+                              backgroundColor: MaterialStateProperty.all(
+                                  Colors.white),
+                              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(60),
+                                  side: BorderSide(color: Colors.white)))
+                          ) ,
+                          child: Icon(Icons.filter_list_rounded,
+                              color: filter ? Colors.white : Colors.green.shade600, size: 20),
+                        ),
+                      )
+                    ],
+                  ),
+                  filter ? showFilter() : SizedBox(height: 10,),
                   Column(
                     children: list!.map((contests){
                       return InkWell(
@@ -257,5 +305,38 @@ class _HomeState extends State<Home> {
     name =prefs.getString("name")!;
     phno =prefs.getString("phone")!;
     fetchDataProfile();
+  }
+
+  Widget showFilter(){
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Text('SORT BY:',style: TextStyle(color: Colors.black),),
+          SizedBox(width: 10,),
+          InkWell(
+            child: Text('PRIZE',style: TextStyle(color: prize ? Colors.blueAccent : Colors.black),),
+            onTap: (){
+              setState(() {
+                prize=true;
+                fee=false;
+                sortByPrice();
+              });
+            }
+            ),
+          SizedBox(width: 10,),
+          InkWell(
+              child: Text('JOINING FEE',style: TextStyle(color: fee ? Colors.blueAccent : Colors.black),),
+              onTap: (){
+                setState(() {
+                  fee=true;
+                  prize=false;
+                  sortByFee();
+                });
+              }
+          ),
+        ],
+      ),
+    );
   }
 }

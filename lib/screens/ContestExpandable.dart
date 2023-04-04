@@ -326,20 +326,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
                   ),
                 ),
                 SizedBox(height: 10,),
-                // Divider(
-                //   height: 0.5,
-                //   thickness: 1,
-                //   color: Colors.grey[600],
-                // ),
-                // SizedBox(height: 10,),
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: Row(
-                //     children: [
-                //       Text('People joined',style: TextStyle(fontSize: 22,color: Colors.blueAccent),)
-                //     ],
-                //   ),
-                // ),
                 SafeArea(
                   child: Card(
                     elevation: 5,
@@ -364,7 +350,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       );
   }
   Widget loaded(){
-    return Column(
+    return people_joined!=0 ? Column(
       children: contestUsers!.map((contestUsers){
         return Padding(
           padding: const EdgeInsets.all(0.0),
@@ -395,6 +381,17 @@ class _ContestExpandableState extends State<ContestExpandable> {
           ),
         );
       }).toList(),
+    ) :
+    Padding(
+      padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
+      child: Container(
+        width: double.infinity,
+        child: Column(
+          children: [
+            Text('None',style: TextStyle(fontSize: 22,color: Colors.black),)
+          ],
+        ),
+      ),
     );
   }
 
