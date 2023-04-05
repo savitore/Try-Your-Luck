@@ -134,11 +134,11 @@ class _WalletState extends State<Wallet> {
                             context: context,
                             builder: (context) => buildSheet(),
                             isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20)
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(20)
+                                )
                             )
-                          )
                         );
                         // Navigator.push(
                         //     context,
@@ -191,15 +191,15 @@ class _WalletState extends State<Wallet> {
     );
   }
   Widget loading_balance(){
-      return flag==1 ? Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.currency_rupee,color: Colors.black,size: 20,),
-          Text(balance,style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
-        ],
-      ) : Center(child: CircularProgressIndicator(
-        color: Colors.green.shade600,
-      ));
+    return flag==1 ? Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.currency_rupee,color: Colors.black,size: 20,),
+        Text(balance,style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
+      ],
+    ) : Center(child: CircularProgressIndicator(
+      color: Colors.green.shade600,
+    ));
   }
   Widget transcation(String contest_name, String winning_amount, String date, String time, String Result, String fee){
     if(Result=="won"){
@@ -240,28 +240,28 @@ class _WalletState extends State<Wallet> {
     }
   }
   Widget loading(){
-      return flag1==1 ? Column(
-        children: list!.map((contests){
-          return Card(
-            child: ListTile(
-                tileColor: Colors.white,
-                title: Column(
-                  children: [
-                    transcation(contests.contest_name,contests.winning_amount,contests.date,contests.time,contests.result,contests.fee),
-                  ],
-                )
-            ),
-          );
-        }).toList(),
-      ) : Column(
-    children: [
-          CircularProgressIndicator(color: Colors.green.shade600,),
-          SizedBox(height: 25,)
-    ],
+    return flag1==1 ? Column(
+      children: list!.map((contests){
+        return Card(
+          child: ListTile(
+              tileColor: Colors.white,
+              title: Column(
+                children: [
+                  transcation(contests.contest_name,contests.winning_amount,contests.date,contests.time,contests.result,contests.fee),
+                ],
+              )
+          ),
+        );
+      }).toList(),
+    ) : Column(
+      children: [
+        CircularProgressIndicator(color: Colors.green.shade600,),
+        SizedBox(height: 25,)
+      ],
     );
   }
   Widget entry(String fee){
-     return Row(
+    return Row(
       children: [
         Text("-",style: TextStyle(fontSize: 18),),
         Icon(Icons.currency_rupee_outlined,color: Colors.black,size: 18,),
@@ -323,8 +323,8 @@ class _WalletState extends State<Wallet> {
                   height: 5,
                   width: 40,
                   decoration: BoxDecoration(
-                    color: Colors.black54,
-                    borderRadius: BorderRadius.circular(20)
+                      color: Colors.black54,
+                      borderRadius: BorderRadius.circular(20)
                   ),
                 ),
                 SizedBox(height: 15,),
@@ -336,7 +336,7 @@ class _WalletState extends State<Wallet> {
                     amount = value;
                   },
                   decoration: InputDecoration(
-                    prefix: Text('₹',style: TextStyle(color: Colors.black),),
+                      prefix: Text('₹',style: TextStyle(color: Colors.black),),
                       hintText: "Enter amount"
                   ),
                   style: TextStyle(fontSize: 26),

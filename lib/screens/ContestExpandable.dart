@@ -271,6 +271,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
     String date = DateFormat('yMMMd').format(now);
     String time= DateFormat('jm').format(now);
       return flag==1 ? Scaffold(
+        backgroundColor: Colors.white,
           appBar: AppBar(
             centerTitle: true,
             backgroundColor: Colors.green,
