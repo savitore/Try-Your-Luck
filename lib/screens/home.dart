@@ -20,6 +20,13 @@ class _HomeState extends State<Home> {
   String name='',balance='';
   String? phno;
   bool prize=false, fee = false, filter = false;
+  final ScrollController _scrollController = ScrollController();
+  double _scrollPosition = 0;
+  _scrollListener() {
+    setState(() {
+      _scrollPosition = _scrollController.position.pixels;
+    });
+  }
 
   void sortByPrice(){
     setState(() {
@@ -38,6 +45,7 @@ class _HomeState extends State<Home> {
     super.initState();
     getData();
     fetchDataContests();
+    _scrollController.addListener(_scrollListener);
   }
   Future<void> fetchDataProfile() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
@@ -104,7 +112,7 @@ class _HomeState extends State<Home> {
           backgroundColor: Colors.green.shade600,
           foregroundColor: Colors.white,
           elevation: 0,
-          title: Text('Try Your Luck'),
+          title: _scrollPosition < 20 ? Text('Try Your Luck'): Text('Live Contests'),
           centerTitle: true,
           actions: [
             GestureDetector(
@@ -127,6 +135,7 @@ class _HomeState extends State<Home> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             child:SingleChildScrollView(
+              controller: _scrollController,
               child: Column(
                 crossAxisAlignment:CrossAxisAlignment.start ,
                 children: [

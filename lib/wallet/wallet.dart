@@ -23,6 +23,13 @@ class _WalletState extends State<Wallet> {
   List<TranscationsModel>? list=[];
   late Text entry_paid=Text('Entry Paid',style: TextStyle(color: Colors.black,fontSize: 20),);
   late Text winnings=Text('Winnings',style: TextStyle(fontSize: 20,color: Colors.green.shade600),);
+  final ScrollController _scrollController = ScrollController();
+  double _scrollPosition = 0;
+  _scrollListener() {
+    setState(() {
+      _scrollPosition = _scrollController.position.pixels;
+    });
+  }
 
   @override
   void initState() {
@@ -32,6 +39,7 @@ class _WalletState extends State<Wallet> {
     fetchMyContests();
     amount_100.text="100";
     amount="100";
+    _scrollController.addListener(_scrollListener);
   }
   Future<void> fetchBalance() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
@@ -103,79 +111,82 @@ class _WalletState extends State<Wallet> {
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: Colors.green.shade600,
-        title: Text('My Wallet'),
+        title: _scrollPosition < 145 ? Text('My Wallet') : Text('Transactions'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 8, 8, 15),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  SizedBox(height: 15,),
-                  Text('Total Balance',style: TextStyle(color: Colors.grey[600],fontSize: 15),),
-                  SizedBox(height: 5,),
-                  loading_balance(),
-                  SizedBox(height: 5,),
-                  ElevatedButton(
-                    onPressed: (){
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (context) => buildSheet(),
-                          isScrollControlled: true,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20)
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 15),
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    SizedBox(height: 15,),
+                    Text('Total Balance',style: TextStyle(color: Colors.grey[600],fontSize: 15),),
+                    SizedBox(height: 5,),
+                    loading_balance(),
+                    SizedBox(height: 5,),
+                    ElevatedButton(
+                      onPressed: (){
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (context) => buildSheet(),
+                            isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(20)
+                            )
                           )
-                        )
-                      );
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(builder: (context) => AddMoney(balance.toString())));
-                    },
-                    child:Text('ADD MONEY'),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-                  ),
-                  SizedBox(height: 10,),
-                  Card(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)
+                        );
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(builder: (context) => AddMoney(balance.toString())));
+                      },
+                      child:Text('ADD MONEY'),
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(6.0),
-                          child: Row(
-                            children: [
-                              Text('Transactions',style: TextStyle(fontSize: 23,fontWeight: FontWeight.bold)),
-                            ],
+                    SizedBox(height: 10,),
+                    Card(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5)
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Row(
+                              children: [
+                                Text('Transactions',style: TextStyle(fontSize: 23,fontWeight: FontWeight.bold)),
+                              ],
+                            ),
                           ),
-                        ),
-                        loading()
-                      ],
+                          loading()
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20,),
-              SizedBox(
-                height: 45,
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    showToast();
-                  },
-                  child: Text('WITHDRAW',style: TextStyle(fontSize: 18),),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),),
+                  ],
                 ),
-              ),
-            ],
+                SizedBox(height: 20,),
+                SizedBox(
+                  height: 45,
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      showToast();
+                    },
+                    child: Text('WITHDRAW',style: TextStyle(fontSize: 18),),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
 
+        ),
       ),
     );
   }
