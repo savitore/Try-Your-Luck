@@ -103,6 +103,7 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           backgroundColor: Colors.green.shade600,
           foregroundColor: Colors.white,
+          elevation: 0,
           title: Text('Try Your Luck'),
           centerTitle: true,
           actions: [
@@ -114,8 +115,8 @@ class _HomeState extends State<Home> {
               },
               child: Row(
                 children: [
-                  Icon(Icons.account_balance_wallet_outlined,color: Colors.white,),
-                  Text(' ₹'+ balance,style: TextStyle(fontSize: 20),)
+                  Icon(Icons.account_balance_wallet_outlined,),
+                  Text(' ₹'+ balance,style: TextStyle(fontSize: 19),)
                 ],
               ),
             ),
@@ -124,7 +125,7 @@ class _HomeState extends State<Home> {
         ),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             child:SingleChildScrollView(
               child: Column(
                 crossAxisAlignment:CrossAxisAlignment.start ,
@@ -132,7 +133,7 @@ class _HomeState extends State<Home> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Live contests',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w500,color: Colors.black),),
+                      Text('Live contests',style: TextStyle(fontSize: 30,fontWeight: FontWeight.w500,color: Colors.black),),
                       SizedBox(
                         height: 30,
                         width: 30,
@@ -264,6 +265,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         drawer: Drawer(
+          backgroundColor: Colors.white,
           child: SingleChildScrollView(
             child: Container(
               color: Colors.white,
