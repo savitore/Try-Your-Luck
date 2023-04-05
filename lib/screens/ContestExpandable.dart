@@ -9,6 +9,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:try_your_luck/wallet/wallet.dart';
 import '../services/data_services.dart';
 import '../models/ContestUsersModel.dart';
+import 'package:vibration/vibration.dart';
 
 class ContestExpandable extends StatefulWidget {
   final String name;
@@ -591,6 +592,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                         context);
                     Navigator.pop(context);
                     Navigator.pop(context);
+                    Vibration.vibrate(duration: 200);
                     showDialog(context: context, builder: (context) {
                       return Container(
                         child: AlertDialog(
