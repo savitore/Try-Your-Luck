@@ -22,6 +22,7 @@ class _HomeState extends State<Home> {
   bool prize=false, fee = false, filter = false;
   final ScrollController _scrollController = ScrollController();
   double _scrollPosition = 0;
+
   _scrollListener() {
     setState(() {
       _scrollPosition = _scrollController.position.pixels;
