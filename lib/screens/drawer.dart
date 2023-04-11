@@ -24,39 +24,51 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
         children: [
           loaded(),
           Padding(
-            padding: const EdgeInsets.only(top: 20,left: 20,right: 20),
-            child: Column(
-              children: [
-                InkWell(
-                  onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context)=> Wallet()
-                    ));
-                  },
-                  child: Row(
-                    children: [
-                      Icon(Icons.account_balance_wallet_outlined),
-                      SizedBox(width: 5,),
-                      Text('My Wallet')
-                    ],
-                  ),
+            padding: const EdgeInsets.all(10.0),
+            child: Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context)=> Wallet()
+                        ));
+                      },
+                      child: Row(
+                        children: [
+                          Icon(Icons.account_balance_wallet_outlined),
+                          SizedBox(width: 10,),
+                          Text('My Wallet')
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 5,),
+                    Divider(
+                      height: 5,
+                      thickness: 0.5,
+                      indent:40,
+                    ),
+                    SizedBox(height: 5,),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context)=> MyContests()
+                        ));
+                      },
+                      child: Row(
+                        children: [
+                          Icon(Icons.calendar_today),
+                          SizedBox(width: 10,),
+                          Text('My Contests')
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 15,),
-                InkWell(
-                  onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context)=> MyContests()
-                    ));
-                  },
-                  child: Row(
-                    children: [
-                      Icon(Icons.calendar_today),
-                      SizedBox(width: 5,),
-                      Text('My Contests')
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
           SizedBox(height: 400,),

@@ -277,15 +277,11 @@ class _HomeState extends State<Home> {
         ),
       ),
       drawer: Drawer(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[100],
         child: SingleChildScrollView(
           child: Container(
-            color: Colors.white,
-            child: Column(
-              children: [
-                MyHeaderDrawer(phno.toString(),name)
-              ],
-            ),
+            // color: Colors.white,
+            child: MyHeaderDrawer(phno.toString(),name),
           ),
         ),
       ),

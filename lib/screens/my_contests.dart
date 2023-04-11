@@ -95,6 +95,7 @@ class _MyContestsState extends State<MyContests> {
   @override
   Widget build(BuildContext context) {
       return flag==1 ? Scaffold(
+        backgroundColor: Colors.white,
           appBar: AppBar(
             backgroundColor: Colors.green.shade600,
             foregroundColor: Colors.white,
