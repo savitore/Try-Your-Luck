@@ -22,6 +22,7 @@ class _HomeState extends State<Home> {
   bool prize=false, fee = false, filter = false;
   final ScrollController _scrollController = ScrollController();
   double _scrollPosition = 0;
+  Text type = Text('');
 
   _scrollListener() {
     setState(() {
@@ -209,60 +210,64 @@ class _HomeState extends State<Home> {
                                 SizedBox(height: 5,)
                               ],
                             ),
-                            subtitle: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            subtitle: Column(
                               children: [
-                                Column(
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      children: [
-                                        SizedBox(width: 3,),
-                                        Text('Prize',style: TextStyle(color: Colors.blueAccent,fontSize: 10),),
-                                      ],
-                                    ),
-                                    SizedBox(height: 3,),
-                                    Row(
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
-                                        Text('₹'+contests.win_amount,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 20)),
+                                        Row(
+                                          children: [
+                                            SizedBox(width: 3,),
+                                            Text('Prize',style: TextStyle(color: Colors.blueAccent,fontSize: 10),),
+                                          ],
+                                        ),
+                                        SizedBox(height: 3,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Text('₹'+contests.win_amount,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 20)),
+                                          ],
+                                        ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    SizedBox(width: 15,),
-                                    Image.asset('assets/money.png',height: 55,width: 55,),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Text('Joining Fee',style: TextStyle(color: Colors.black,fontSize: 10),),
-                                    SizedBox(height: 5,),
-                                    SizedBox(
-                                      height: 25,
-                                      child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.green.shade600,
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
-                                          ),
-                                          onPressed: (){
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
-                                          },
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.currency_rupee,color: Colors.white,size: 13,),
-                                              Text(contests.fee,style: TextStyle(color: Colors.white)),
-                                            ],
-                                          )),
+                                    Row(
+                                      children: [
+                                        SizedBox(width: 15,),
+                                        Image.asset('assets/money.png',height: 55,width: 55,),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text('Joining Fee',style: TextStyle(color: Colors.black,fontSize: 10),),
+                                        SizedBox(height: 5,),
+                                        SizedBox(
+                                          height: 25,
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  backgroundColor: Colors.green.shade600,
+                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
+                                              ),
+                                              onPressed: (){
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.currency_rupee,color: Colors.white,size: 13,),
+                                                  Text(contests.fee,style: TextStyle(color: Colors.white)),
+                                                ],
+                                              )),
+                                        )
+                                      ],
                                     )
                                   ],
-                                )
+                                ),
                               ],
                             ),
                           ),
