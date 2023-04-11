@@ -39,9 +39,9 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                       },
                       child: Row(
                         children: [
-                          Icon(Icons.account_balance_wallet_outlined),
+                          Image.asset('assets/wallet.png',height: 22,width: 22,),
                           SizedBox(width: 10,),
-                          Text('My Wallet')
+                          Text('My Wallet', style: TextStyle(fontSize: 17))
                         ],
                       ),
                     ),
@@ -49,7 +49,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                     Divider(
                       height: 5,
                       thickness: 0.5,
-                      indent:40,
+                      indent: 35,
                     ),
                     SizedBox(height: 5,),
                     GestureDetector(
@@ -60,9 +60,9 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                       },
                       child: Row(
                         children: [
-                          Icon(Icons.calendar_today),
+                          Image.asset('assets/trophy.png',height: 22,width: 22,),
                           SizedBox(width: 10,),
-                          Text('My Contests')
+                          Text('My Contests',style: TextStyle(fontSize: 17),)
                         ],
                       ),
                     ),

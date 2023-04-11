@@ -15,14 +15,13 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  List<ContestModel>? list=[];
+  List<ContestModel>? list=[], _head=[], _teen=[], _ten=[], _mega=[];
   int flag=0;
   String name='',balance='';
   String? phno;
-  bool prize=false, fee = false, filter = false;
+  bool prize=false, fee = false, filter = false,head=false, teen=false, ten=false, mega=false, all= true;
   final ScrollController _scrollController = ScrollController();
   double _scrollPosition = 0;
-  Text type = Text('');
 
   _scrollListener() {
     setState(() {
@@ -34,12 +33,20 @@ class _HomeState extends State<Home> {
     setState(() {
       Comparator<ContestModel> sort = (a,b) => int.parse(b.win_amount).compareTo(int.parse(a.win_amount));
       list?.sort(sort);
+      _head?.sort(sort);
+      _teen?.sort(sort);
+      _ten?.sort(sort);
+      _mega?.sort(sort);
     });
   }
   void sortByFee(){
     setState(() {
       Comparator<ContestModel> sort = (a,b) => int.parse(a.fee).compareTo(int.parse(b.fee));
       list?.sort(sort);
+      _head?.sort(sort);
+      _teen?.sort(sort);
+      _ten?.sort(sort);
+      _mega?.sort(sort);
     });
   }
   @override
@@ -96,6 +103,15 @@ class _HomeState extends State<Home> {
       for(int i=0; i<data['documents'].length;i++){
         setState((){
           list?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount'], fee: data['documents'][i]['fee'], lucky_draw_no: data['documents'][i]['lucky_draw_no']));
+          if(int.parse(data['documents'][i]['no_of_people']) == 2){
+            _head?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount'], fee: data['documents'][i]['fee'], lucky_draw_no: data['documents'][i]['lucky_draw_no']));
+          } else if(int.parse(data['documents'][i]['no_of_people']) == 3){
+            _teen?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount'], fee: data['documents'][i]['fee'], lucky_draw_no: data['documents'][i]['lucky_draw_no']));
+          } else if(int.parse(data['documents'][i]['no_of_people']) == 10){
+            _ten?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount'], fee: data['documents'][i]['fee'], lucky_draw_no: data['documents'][i]['lucky_draw_no']));
+          } else{
+            _mega?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount'], fee: data['documents'][i]['fee'], lucky_draw_no: data['documents'][i]['lucky_draw_no']));
+          }
         });
       }
       fetchDataProfile();
@@ -179,103 +195,7 @@ class _HomeState extends State<Home> {
                   ],
                 ),
                 filter ? showFilter() : SizedBox(height: 10,),
-                Column(
-                  children: list!.map((contests){
-                    return InkWell(
-                      onTap: (){
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
-                      },
-                      child: Card(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),side: BorderSide(color: Colors.green.shade600)),
-                        color: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 3),
-                          child: ListTile(
-                            tileColor: Colors.white,
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 5,),
-                                Text(
-                                  contests.name,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25
-                                  ),
-                                ),
-                                SizedBox(height: 5,)
-                              ],
-                            ),
-                            subtitle: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            SizedBox(width: 3,),
-                                            Text('Prize',style: TextStyle(color: Colors.blueAccent,fontSize: 10),),
-                                          ],
-                                        ),
-                                        SizedBox(height: 3,),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Text('₹'+contests.win_amount,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 20)),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        SizedBox(width: 15,),
-                                        Image.asset('assets/money.png',height: 55,width: 55,),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text('Joining Fee',style: TextStyle(color: Colors.black,fontSize: 10),),
-                                        SizedBox(height: 5,),
-                                        SizedBox(
-                                          height: 25,
-                                          child: ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  backgroundColor: Colors.green.shade600,
-                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
-                                              ),
-                                              onPressed: (){
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Icon(Icons.currency_rupee,color: Colors.white,size: 13,),
-                                                  Text(contests.fee,style: TextStyle(color: Colors.white)),
-                                                ],
-                                              )),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
+                filtered(),
               ],
             ),
           ),
@@ -320,33 +240,658 @@ class _HomeState extends State<Home> {
   Widget showFilter(){
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
+      child: Column(
         children: [
-          Text('SORT BY:',style: TextStyle(color: Colors.black),),
-          SizedBox(width: 10,),
-          InkWell(
-            child: Text('PRIZE',style: TextStyle(color: prize ? Colors.blueAccent : Colors.black),),
-            onTap: (){
-              setState(() {
-                prize=true;
-                fee=false;
-                sortByPrice();
-              });
-            }
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                ElevatedButton(
+                  onPressed: (){
+                    setState(() {
+                      all = true;
+                      head=false;
+                      teen=false;
+                      ten=false;
+                      mega=false;
+                    });
+                  },
+                  child: Text('ALL'),
+                  style: all ? ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),side: BorderSide(width: 1,color: Colors.white)),
+                      backgroundColor: Colors.green.shade600,
+                      foregroundColor: Colors.white,
+                      elevation: 0
+                  ) : ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),side: BorderSide(width: 1,color: Colors.green.shade600)),
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.black,
+                      elevation: 0
+                  ),
+                ),
+                SizedBox(width: 5,),
+                ElevatedButton(
+                    onPressed: (){
+                      setState(() {
+                        head = true;
+                        teen=false;
+                        ten=false;
+                        mega=false;
+                        all=false;
+                      });
+                      },
+                    child: Text('HEAD TO HEAD'),
+                  style: head ? ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),side: BorderSide(width: 1,color: Colors.white)),
+                    backgroundColor: Colors.green.shade600,
+                    foregroundColor: Colors.white,
+                    elevation: 0
+                  ) : ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),side: BorderSide(width: 1,color: Colors.green.shade600)),
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.black,
+                      elevation: 0
+                  ),
+                ),
+                SizedBox(width: 5,),
+                ElevatedButton(
+                  onPressed: (){
+                    setState(() {
+                      teen = true;
+                      head=false;
+                      ten=false;
+                      mega=false;
+                      all=false;
+                    });
+                  },
+                  child: Text('TEEN'),
+                  style: teen ? ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),side: BorderSide(width: 1,color: Colors.white)),
+                      backgroundColor: Colors.green.shade600,
+                      foregroundColor: Colors.white,
+                      elevation: 0
+                  ) : ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),side: BorderSide(width: 1,color: Colors.green.shade600)),
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.black,
+                      elevation: 0
+                  ),
+                ),
+                SizedBox(width: 5,),
+                ElevatedButton(
+                  onPressed: (){
+                    setState(() {
+                      ten = true;
+                      head=false;
+                      teen=false;
+                      mega=false;
+                      all=false;
+                    });
+                  },
+                  child: Text('10 KA DUM'),
+                  style: ten ? ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),side: BorderSide(width: 1,color: Colors.white)),
+                      backgroundColor: Colors.green.shade600,
+                      foregroundColor: Colors.white,
+                      elevation: 0
+                  ) : ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),side: BorderSide(width: 1,color: Colors.green.shade600)),
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.black,
+                      elevation: 0
+                  ),
+                ),
+                SizedBox(width: 5,),
+                ElevatedButton(
+                  onPressed: (){
+                    setState(() {
+                      mega = true;
+                      head=false;
+                      teen=false;
+                      ten=false;
+                      all=false;
+                    });
+                  },
+                  child: Text('MEGA'),
+                  style: mega ? ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),side: BorderSide(width: 1,color: Colors.white)),
+                      backgroundColor: Colors.green.shade600,
+                      foregroundColor: Colors.white,
+                      elevation: 0
+                  ) : ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),side: BorderSide(width: 1,color: Colors.green.shade600)),
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: Colors.black,
+                      elevation: 0
+                  ),
+                ),
+              ],
             ),
-          SizedBox(width: 10,),
-          InkWell(
-              child: Text('JOINING FEE',style: TextStyle(color: fee ? Colors.blueAccent : Colors.black),),
-              onTap: (){
-                setState(() {
-                  fee=true;
-                  prize=false;
-                  sortByFee();
-                });
-              }
+          ),
+          SizedBox(height: 5,),
+          Row(
+            children: [
+              Text('SORT BY:',style: TextStyle(color: Colors.black),),
+              SizedBox(width: 10,),
+              InkWell(
+                child: Text('PRIZE',style: TextStyle(color: prize ? Colors.blueAccent : Colors.black),),
+                onTap: (){
+                  setState(() {
+                    prize=true;
+                    fee=false;
+                    sortByPrice();
+                  });
+                }
+                ),
+              SizedBox(width: 10,),
+              InkWell(
+                  child: Text('JOINING FEE',style: TextStyle(color: fee ? Colors.blueAccent : Colors.black),),
+                  onTap: (){
+                    setState(() {
+                      fee=true;
+                      prize=false;
+                      sortByFee();
+                    });
+                  }
+              ),
+            ],
           ),
         ],
       ),
     );
   }
+
+   Widget filtered(){
+    if(head){
+      return Column(
+        children: _head!.map((contests){
+          return InkWell(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+            },
+            child: Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),side: BorderSide(color: Colors.green.shade600)),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 3),
+                child: ListTile(
+                  tileColor: Colors.white,
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 5,),
+                      Text(
+                        contests.name,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25
+                        ),
+                      ),
+                      SizedBox(height: 5,)
+                    ],
+                  ),
+                  subtitle: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  SizedBox(width: 3,),
+                                  Text('Prize',style: TextStyle(color: Colors.blueAccent,fontSize: 10),),
+                                ],
+                              ),
+                              SizedBox(height: 3,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text('₹'+contests.win_amount,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 20)),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(width: 15,),
+                              Image.asset('assets/money.png',height: 55,width: 55,),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text('Joining Fee',style: TextStyle(color: Colors.black,fontSize: 10),),
+                              SizedBox(height: 5,),
+                              SizedBox(
+                                height: 25,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.green.shade600,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
+                                    ),
+                                    onPressed: (){
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.currency_rupee,color: Colors.white,size: 13,),
+                                        Text(contests.fee,style: TextStyle(color: Colors.white)),
+                                      ],
+                                    )),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      );
+    } else if(teen){
+      return Column(
+        children: _teen!.map((contests){
+          return InkWell(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+            },
+            child: Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),side: BorderSide(color: Colors.green.shade600)),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 3),
+                child: ListTile(
+                  tileColor: Colors.white,
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 5,),
+                      Text(
+                        contests.name,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25
+                        ),
+                      ),
+                      SizedBox(height: 5,)
+                    ],
+                  ),
+                  subtitle: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  SizedBox(width: 3,),
+                                  Text('Prize',style: TextStyle(color: Colors.blueAccent,fontSize: 10),),
+                                ],
+                              ),
+                              SizedBox(height: 3,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text('₹'+contests.win_amount,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 20)),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(width: 15,),
+                              Image.asset('assets/money.png',height: 55,width: 55,),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text('Joining Fee',style: TextStyle(color: Colors.black,fontSize: 10),),
+                              SizedBox(height: 5,),
+                              SizedBox(
+                                height: 25,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.green.shade600,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
+                                    ),
+                                    onPressed: (){
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.currency_rupee,color: Colors.white,size: 13,),
+                                        Text(contests.fee,style: TextStyle(color: Colors.white)),
+                                      ],
+                                    )),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      );
+    } else if(ten){
+      return Column(
+        children: _ten!.map((contests){
+          return InkWell(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+            },
+            child: Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),side: BorderSide(color: Colors.green.shade600)),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 3),
+                child: ListTile(
+                  tileColor: Colors.white,
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 5,),
+                      Text(
+                        contests.name,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25
+                        ),
+                      ),
+                      SizedBox(height: 5,)
+                    ],
+                  ),
+                  subtitle: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  SizedBox(width: 3,),
+                                  Text('Prize',style: TextStyle(color: Colors.blueAccent,fontSize: 10),),
+                                ],
+                              ),
+                              SizedBox(height: 3,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text('₹'+contests.win_amount,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 20)),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(width: 15,),
+                              Image.asset('assets/money.png',height: 55,width: 55,),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text('Joining Fee',style: TextStyle(color: Colors.black,fontSize: 10),),
+                              SizedBox(height: 5,),
+                              SizedBox(
+                                height: 25,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.green.shade600,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
+                                    ),
+                                    onPressed: (){
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.currency_rupee,color: Colors.white,size: 13,),
+                                        Text(contests.fee,style: TextStyle(color: Colors.white)),
+                                      ],
+                                    )),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      );
+    } else if(mega){
+      return Column(
+        children: _mega!.map((contests){
+          return InkWell(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+            },
+            child: Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),side: BorderSide(color: Colors.green.shade600)),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 3),
+                child: ListTile(
+                  tileColor: Colors.white,
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 5,),
+                      Text(
+                        contests.name,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25
+                        ),
+                      ),
+                      SizedBox(height: 5,)
+                    ],
+                  ),
+                  subtitle: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  SizedBox(width: 3,),
+                                  Text('Prize',style: TextStyle(color: Colors.blueAccent,fontSize: 10),),
+                                ],
+                              ),
+                              SizedBox(height: 3,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text('₹'+contests.win_amount,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 20)),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(width: 15,),
+                              Image.asset('assets/money.png',height: 55,width: 55,),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text('Joining Fee',style: TextStyle(color: Colors.black,fontSize: 10),),
+                              SizedBox(height: 5,),
+                              SizedBox(
+                                height: 25,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.green.shade600,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
+                                    ),
+                                    onPressed: (){
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.currency_rupee,color: Colors.white,size: 13,),
+                                        Text(contests.fee,style: TextStyle(color: Colors.white)),
+                                      ],
+                                    )),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      );
+    } else{
+      return Column(
+        children: list!.map((contests){
+          return InkWell(
+            onTap: (){
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+            },
+            child: Card(
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),side: BorderSide(color: Colors.green.shade600)),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 3),
+                child: ListTile(
+                  tileColor: Colors.white,
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 5,),
+                      Text(
+                        contests.name,
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25
+                        ),
+                      ),
+                      SizedBox(height: 5,)
+                    ],
+                  ),
+                  subtitle: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  SizedBox(width: 3,),
+                                  Text('Prize',style: TextStyle(color: Colors.blueAccent,fontSize: 10),),
+                                ],
+                              ),
+                              SizedBox(height: 3,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text('₹'+contests.win_amount,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 20)),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(width: 15,),
+                              Image.asset('assets/money.png',height: 55,width: 55,),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text('Joining Fee',style: TextStyle(color: Colors.black,fontSize: 10),),
+                              SizedBox(height: 5,),
+                              SizedBox(
+                                height: 25,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.green.shade600,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
+                                    ),
+                                    onPressed: (){
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.currency_rupee,color: Colors.white,size: 13,),
+                                        Text(contests.fee,style: TextStyle(color: Colors.white)),
+                                      ],
+                                    )),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      );
+    }
+   }
 }
