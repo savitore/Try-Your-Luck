@@ -94,128 +94,128 @@ class _MyContestsState extends State<MyContests> {
   }
   @override
   Widget build(BuildContext context) {
-      return flag==1 ? Scaffold(
+    return flag==1 ? Scaffold(
         backgroundColor: Colors.white,
-          appBar: AppBar(
-            backgroundColor: Colors.green.shade600,
-            foregroundColor: Colors.white,
-            title: Text('My Contests'),
-          ),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ifWon(),
-                  Column(
-                    children: list!.map((contests){
-                      return InkWell(
-                        onTap: (){
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.contest_name, fee: contests.fee, prize: contests.winning_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
-                        },
-                        child: Card(
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),side: BorderSide(color: Colors.green.shade600)),
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 3),
-                            child: ListTile(
-                              tileColor: Colors.white,
-                              title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    contests.contest_name,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25
+        appBar: AppBar(
+          backgroundColor: Colors.green.shade600,
+          foregroundColor: Colors.white,
+          title: Text('My Contests'),
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ifWon(),
+                Column(
+                  children: list!.map((contests){
+                    return InkWell(
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.contest_name, fee: contests.fee, prize: contests.winning_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+                      },
+                      child: Card(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),side: BorderSide(color: Colors.green.shade600)),
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 3),
+                          child: ListTile(
+                            tileColor: Colors.white,
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  contests.contest_name,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25
+                                  ),
+                                ),
+                                SizedBox(height: 5,)
+                              ],
+                            ),
+                            subtitle: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            SizedBox(width: 3,),
+                                            Text('Prize',style: TextStyle(color: Colors.blueAccent,fontSize: 10),),
+                                          ],
+                                        ),
+                                        SizedBox(height: 3,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Text('₹'+contests.winning_amount,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 20)),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  SizedBox(height: 5,)
-                                ],
-                              ),
-                              subtitle: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              SizedBox(width: 3,),
-                                              Text('Prize',style: TextStyle(color: Colors.blueAccent,fontSize: 10),),
-                                            ],
-                                          ),
-                                          SizedBox(height: 3,),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              Text('₹'+contests.winning_amount,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 20)),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          SizedBox(width: 15,),
-                                          Image.asset('assets/money.png',height: 55,width: 55,),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text('Lucky Number',style: TextStyle(color: Colors.black,fontSize: 10),),
-                                          SizedBox(height: 5,),
-                                          SizedBox(
-                                            height: 25,
-                                            child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    backgroundColor: Colors.green.shade600,
-                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
-                                                ),
-                                                onPressed: (){
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.contest_name, fee: contests.fee, prize: contests.winning_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
-                                                },
-                                                child: Row(
-                                                  children: [
-                                                    Text(contests.lucky_number,style: TextStyle(color: Colors.white)),
-                                                  ],
-                                                )),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text('Entry fee:',style: TextStyle(color: Colors.blueAccent),),
-                                      SizedBox(width: 5,),
-                                      Text('₹'+contests.fee,style: TextStyle(color: Colors.black),)
-                                    ],
-                                  )
-                                ],
-                              ),
+                                    Row(
+                                      children: [
+                                        SizedBox(width: 15,),
+                                        Image.asset('assets/money.png',height: 55,width: 55,),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text('Lucky Number',style: TextStyle(color: Colors.black,fontSize: 10),),
+                                        SizedBox(height: 5,),
+                                        SizedBox(
+                                          height: 25,
+                                          child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                  backgroundColor: Colors.green.shade600,
+                                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
+                                              ),
+                                              onPressed: (){
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.contest_name, fee: contests.fee, prize: contests.winning_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  Text(contests.lucky_number,style: TextStyle(color: Colors.white)),
+                                                ],
+                                              )),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text('Entry fee:',style: TextStyle(color: Colors.blueAccent),),
+                                    SizedBox(width: 5,),
+                                    Text('₹'+contests.fee,style: TextStyle(color: Colors.black),)
+                                  ],
+                                )
+                              ],
                             ),
                           ),
                         ),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(height: 10,)
-                ],
-              ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(height: 10,)
+              ],
             ),
-          )
-      ) : Scaffold(
-                    body: Center(child: CircularProgressIndicator())
+          ),
+        )
+    ) : Scaffold(
+        body: Center(child: CircularProgressIndicator())
     );
   }
   Widget ifWon(){

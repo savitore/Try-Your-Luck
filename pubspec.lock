@@ -472,6 +472,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  shimmer:
+    dependency: "direct main"
+    description:
+      name: shimmer
+      sha256: cf3a663a5a9ef2c9603f28b1b57c52e456a55d262728ddf86bfdcaf5aa5309f7
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.2"
   sky_engine:
     dependency: transitive
     description: flutter
