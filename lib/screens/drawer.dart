@@ -21,83 +21,84 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          loaded(),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context)=> Wallet()
-                        ));
-                      },
-                      child: Row(
-                        children: [
-                          Image.asset('assets/wallet.png',height: 22,width: 22,),
-                          SizedBox(width: 10,),
-                          Text('My Wallet', style: TextStyle(fontSize: 17))
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 10,),
-                    Divider(
-                      height: 5,
-                      thickness: 0.5,
-                      indent: 35,
-                    ),
-                    SizedBox(height: 10,),
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context)=> MyContests()
-                        ));
-                      },
-                      child: Row(
-                        children: [
-                          Image.asset('assets/trophy.png',height: 22,width: 22,),
-                          SizedBox(width: 10,),
-                          Text('My Contests',style: TextStyle(fontSize: 17),)
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: 400,),
           Column(
             children: [
-              GestureDetector(
-                onTap: () async {
-                  await FirebaseAuth.instance.signOut();
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => Intro()),
-                          (route) => false);
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Log out',
-                      style: TextStyle(
-                        color: Colors.blueAccent,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500
-                      ),
+              loaded(),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Card(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context)=> Wallet()
+                            ));
+                          },
+                          child: Row(
+                            children: [
+                              Image.asset('assets/wallet.png',height: 22,width: 22,),
+                              SizedBox(width: 10,),
+                              Text('My Wallet', style: TextStyle(fontSize: 17))
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10,),
+                        Divider(
+                          height: 5,
+                          thickness: 0.5,
+                          indent: 35,
+                        ),
+                        SizedBox(height: 10,),
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context)=> MyContests()
+                            ));
+                          },
+                          child: Row(
+                            children: [
+                              Image.asset('assets/trophy.png',height: 22,width: 22,),
+                              SizedBox(width: 10,),
+                              Text('My Contests',style: TextStyle(fontSize: 17),)
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    Icon(Icons.arrow_right,size: 22,color: Colors.blueAccent,weight: 10,)
-                  ],
+                  ),
                 ),
-              )
+              ),
             ],
+          ),
+          // SizedBox(height: 400,),
+          GestureDetector(
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Intro()),
+                      (route) => false);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Log out',
+                  style: TextStyle(
+                    color: Colors.blueAccent,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500
+                  ),
+                ),
+                Icon(Icons.arrow_right,size: 22,color: Colors.blueAccent,weight: 10,)
+              ],
+            ),
           )
         ],
       );

@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/services/data_services.dart';
+import 'package:vibration/vibration.dart';
 import '../models/TranscationsModel.dart';
 
 class Wallet extends StatefulWidget {
@@ -60,6 +61,7 @@ class _WalletState extends State<Wallet> {
     name =prefs.getString("name")!;
   }
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    Vibration.vibrate(duration: 50);
     updateBalance((int.parse(balance) + int.parse(amount)).toString());
     dataService.AmountAdded(phno!, amount, response.paymentId!, context);
     Navigator.pop(context);

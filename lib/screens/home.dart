@@ -204,10 +204,7 @@ class _HomeState extends State<Home> {
       drawer: Drawer(
         backgroundColor: Colors.grey[100],
         child: SingleChildScrollView(
-          child: Container(
-            // color: Colors.white,
-            child: MyHeaderDrawer(phno.toString(),name),
-          ),
+          child: MyHeaderDrawer(phno.toString(),name),
         ),
       ),
     ) : Scaffold(
