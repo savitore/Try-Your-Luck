@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:try_your_luck/models/DepositsModel.dart';
 import 'package:try_your_luck/services/data_services.dart';
 import 'package:vibration/vibration.dart';
 import '../models/TranscationsModel.dart';
@@ -23,8 +26,9 @@ class _WalletState extends State<Wallet> {
   String balance='',result='', name='';
   var amount="";
   TextEditingController amount_100 = TextEditingController();
-  int flag=0,flag1=0;
+  int flag=0,flag1=0,flag2=0;
   List<TranscationsModel>? list=[];
+  List<DepositModel>? deposits=[];
   late Text entry_paid=Text('Entry Paid',style: TextStyle(color: Colors.black,fontSize: 20),);
   late Text winnings=Text('Winnings',style: TextStyle(fontSize: 20,color: Colors.green.shade600),);
   final ScrollController _scrollController = ScrollController();
@@ -43,6 +47,7 @@ class _WalletState extends State<Wallet> {
     phno=FirebaseAuth.instance.currentUser?.phoneNumber;
     fetchBalance();
     fetchMyContests();
+    fetchMyDeposits();
     amount_100.text="100";
     amount="100";
     getData();
@@ -62,9 +67,14 @@ class _WalletState extends State<Wallet> {
   }
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     Vibration.vibrate(duration: 50);
+    final now = new DateTime.now();
+    String date = DateFormat('yMMMd').format(now);
+    String time= DateFormat('jm').format(now);
     updateBalance((int.parse(balance) + int.parse(amount)).toString());
-    dataService.AmountAdded(phno!, amount, response.paymentId!, context);
-    Navigator.pop(context);
+    dataService.AmountAdded(phno!, amount, response.paymentId!, date, time, context);
+    setState(() {
+      balance=(int.parse(balance) + int.parse(amount)).toString();
+    });
     Navigator.pop(context);
   }
 
@@ -139,6 +149,35 @@ class _WalletState extends State<Wallet> {
       print(e.toString());
     }
   }
+  Future<void> fetchMyDeposits() async{
+    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/find';
+    final body={
+      "dataSource":"Cluster0",
+      "database":"transcations",
+      "collection":phno!
+    };
+    final response;
+    try{
+      response=await http.post(Uri.parse(baseUrl),
+          headers: {'Content-Type':'application/json',
+            'Accept':'application/json',
+            'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
+            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+          body: jsonEncode(body)
+      );
+      var data = jsonDecode(response.body);
+      setState((){
+        for(int i=0; i<data['documents'].length;i++){
+          setState(() {
+            deposits?.add(DepositModel(payment_id: data['documents'][i]['payment_id'].toString(), date: data['documents'][i]['date'].toString(), time: data['documents'][i]['time'].toString(), amount_added: data['documents'][i]['amount_added'].toString()));
+          });
+          flag2=1;
+        }
+      });
+    }catch(e){
+      print(e.toString());
+    }
+  }
   Future<void> updateBalance(String Balance) async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
     final body={
@@ -194,24 +233,46 @@ class _WalletState extends State<Wallet> {
                     SizedBox(height: 5,),
                     loading_balance(),
                     SizedBox(height: 5,),
-                    ElevatedButton(
-                      onPressed: (){
-                        showModalBottomSheet(
-                            context: context,
-                            builder: (context) => buildSheet(),
-                            isScrollControlled: true,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: (){
+                            showModalBottomSheet(
+                                context: context,
+                                builder: (context) => buildSheet(),
+                                isScrollControlled: true,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(20)
+                                    )
                                 )
-                            )
-                        );
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(builder: (context) => AddMoney(balance.toString())));
-                      },
-                      child:Text('ADD MONEY'),
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+                            );
+                          },
+                          child:Row(
+                            children: [
+                              Image.asset('assets/add.png',width: 20,height: 20,color: Colors.white,),
+                              SizedBox(width: 10,),
+                              Text('ADD MONEY'),
+                            ],
+                          ),
+                          style: ElevatedButton.styleFrom(backgroundColor: Colors.green[700],shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+                        ),
+                        SizedBox(width: 10,),
+                        ElevatedButton(
+                          onPressed: (){
+                            showToast();
+                          },
+                          child:Row(
+                            children: [
+                              Image.asset('assets/withdraw.png',width: 20,height: 20,color: Colors.white,),
+                              SizedBox(width: 10,),
+                              Text('WITHDRAW'),
+                            ],
+                          ),
+                          style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[700],shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 10,),
                     Card(
@@ -230,23 +291,11 @@ class _WalletState extends State<Wallet> {
                               ],
                             ),
                           ),
-                          loading()
+                          contests()
                         ],
                       ),
                     ),
                   ],
-                ),
-                SizedBox(height: 20,),
-                SizedBox(
-                  height: 45,
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      showToast();
-                    },
-                    child: Text('WITHDRAW',style: TextStyle(fontSize: 18),),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),),
-                  ),
                 ),
               ],
             ),
@@ -263,9 +312,7 @@ class _WalletState extends State<Wallet> {
         Icon(Icons.currency_rupee,color: Colors.black,size: 20,),
         Text(balance,style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
       ],
-    ) : Center(child: CircularProgressIndicator(
-      color: Colors.green.shade600,
-    ));
+    ) : Center(child: LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50));
   }
   Widget transcation(String contest_name, String winning_amount, String date, String time, String Result, String fee){
     if(Result=="won"){
@@ -305,7 +352,7 @@ class _WalletState extends State<Wallet> {
       );
     }
   }
-  Widget loading(){
+  Widget contests(){
     return flag1==1 ? Column(
       children: list!.map((contests){
         return Card(
@@ -321,7 +368,7 @@ class _WalletState extends State<Wallet> {
       }).toList(),
     ) : Column(
       children: [
-        CircularProgressIndicator(color: Colors.green.shade600,),
+        LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50),
         SizedBox(height: 25,)
       ],
     );
@@ -483,7 +530,7 @@ class _WalletState extends State<Wallet> {
                   //     MaterialPageRoute(builder: (context) => PaymentOptions(amount: amount,balance: balance,)));
                 }
               },
-              child: Text('Next'),
+              child: Text('PAY',style: TextStyle(fontSize: 20),),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
             ),
           ),
@@ -491,4 +538,52 @@ class _WalletState extends State<Wallet> {
       ),
     ),
   );
+
+  Widget Deposits(){
+    return flag2==1 ? Column(
+      children: deposits!.map((_deposits){
+        return Card(
+          child: ListTile(
+              tileColor: Colors.white,
+              title: Column(
+                children: [
+                Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                Text('Amount Added',style: TextStyle(color: Colors.black,fontSize: 20),),
+                      Row(
+                        children: [
+                          Text(_deposits.date+" | "),
+                          Text(_deposits.time)
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text("+",style: TextStyle(fontSize: 18),),
+                      Icon(Icons.currency_rupee_outlined,color: Colors.black,size: 18,),
+                      Text(_deposits.amount_added,style: TextStyle(fontSize: 18),),
+                    ],
+                  ),
+                ],
+              )
+                ],
+              )
+          ),
+        );
+      }).toList(),
+    ) : Column(
+      children: [
+        LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50),
+        SizedBox(height: 25,)
+      ],
+    );
+  }
+  Widget withdrawals(){
+    return Container();
+  }
 }

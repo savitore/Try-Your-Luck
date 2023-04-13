@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:try_your_luck/models/MyContestsModel.dart';
 import 'ContestExpandable.dart';
 
@@ -215,7 +216,7 @@ class _MyContestsState extends State<MyContests> {
           ),
         )
     ) : Scaffold(
-        body: Center(child: CircularProgressIndicator())
+        body: Center(child: LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50))
     );
   }
   Widget ifWon(){

@@ -88,7 +88,7 @@ class DataService{
     // var output=jsonDecode(contents.toString());
     // print(output['insertedId']);
   }
-  Future AmountAdded(String phone_number, String balance, String paymentid, BuildContext context) async {
+  Future AmountAdded(String phone_number, String balance, String paymentid, String date, String time, BuildContext context) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/insertOne';
     final body={
       "dataSource":"Cluster0",
@@ -97,6 +97,8 @@ class DataService{
       "document":{
         "amount_added": balance,
         'payment_id': paymentid,
+        'date': date,
+        'time': time
       }
     };
     HttpClient httpClient=new HttpClient();
