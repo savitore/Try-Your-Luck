@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
-import 'package:try_your_luck/wallet/payment_options.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:try_your_luck/services/data_services.dart';
 import '../models/TranscationsModel.dart';
 
 class Wallet extends StatefulWidget {
@@ -16,7 +19,7 @@ class Wallet extends StatefulWidget {
 class _WalletState extends State<Wallet> {
 
   String? phno="";
-  String balance='',result='';
+  String balance='',result='', name='';
   var amount="";
   TextEditingController amount_100 = TextEditingController();
   int flag=0,flag1=0;
@@ -25,22 +28,53 @@ class _WalletState extends State<Wallet> {
   late Text winnings=Text('Winnings',style: TextStyle(fontSize: 20,color: Colors.green.shade600),);
   final ScrollController _scrollController = ScrollController();
   double _scrollPosition = 0;
+  Razorpay _razorpay = Razorpay();
   _scrollListener() {
     setState(() {
       _scrollPosition = _scrollController.position.pixels;
     });
   }
+  DataService dataService = DataService();
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     phno=FirebaseAuth.instance.currentUser?.phoneNumber;
     fetchBalance();
     fetchMyContests();
     amount_100.text="100";
     amount="100";
+    getData();
     _scrollController.addListener(_scrollListener);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
+  @override
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
+  }
+  void getData() async{
+    var prefs = await SharedPreferences.getInstance();
+    name =prefs.getString("name")!;
+  }
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    updateBalance((int.parse(balance) + int.parse(amount)).toString());
+    dataService.AmountAdded(phno!, amount, response.paymentId!, context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Do something when payment fails
+    print('failed');
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Do something when an external wallet is selected
+  }
+
   Future<void> fetchBalance() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
     final body={
@@ -103,7 +137,37 @@ class _WalletState extends State<Wallet> {
       print(e.toString());
     }
   }
-
+  Future<void> updateBalance(String Balance) async{
+    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
+    final body={
+      "dataSource":"Cluster0",
+      "database":"db",
+      "collection":"users",
+      "filter":{
+        "phone_number": phno
+      },
+      "update": {
+        "name": name,
+        "phone_number": phno,
+        "balance": Balance
+      }
+    };
+    try{
+      HttpClient httpClient=new HttpClient();
+      HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
+      httpClientRequest.headers.set("Content-Type", "application/json");
+      httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+      httpClientRequest.add(utf8.encode(jsonEncode(body)));
+      HttpClientResponse response=await httpClientRequest.close();
+      httpClient.close();
+      final contents = StringBuffer();
+      await for (var data in response.transform(utf8.decoder)) {
+        contents.write(data);
+      }
+    }catch(e){
+      print(e.toString());
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -399,9 +463,22 @@ class _WalletState extends State<Wallet> {
                   showToastEmpty();
                 }
                 else{
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PaymentOptions(amount: amount,balance: balance,)));
+                  var options = {
+                    'key': 'rzp_live_xUZZSGR8ZMnBZj',
+                    'amount': (int.parse(amount)*100).toString(), //in the smallest currency sub-unit.
+                    'name': 'Try Your Luck',
+                    // 'order_id': 'order_EMBFqjDHEEn80l', // Generate order_id using Orders API
+                    'description': 'Add Amount',
+                    'timeout': 300, // in seconds
+                    'prefill': {
+                      'name': name,
+                      'contact': phno,
+                    }
+                  };
+                  _razorpay.open(options);
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(builder: (context) => PaymentOptions(amount: amount,balance: balance,)));
                 }
               },
               child: Text('Next'),

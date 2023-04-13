@@ -26,7 +26,8 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+              elevation: 2,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
                 child: Column(
@@ -45,13 +46,13 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 5,),
+                    SizedBox(height: 10,),
                     Divider(
                       height: 5,
                       thickness: 0.5,
                       indent: 35,
                     ),
-                    SizedBox(height: 5,),
+                    SizedBox(height: 10,),
                     GestureDetector(
                       onTap: (){
                         Navigator.of(context).push(MaterialPageRoute(

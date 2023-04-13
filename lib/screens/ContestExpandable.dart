@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import 'package:try_your_luck/wallet/wallet.dart';
@@ -270,14 +271,14 @@ class _ContestExpandableState extends State<ContestExpandable> {
     final now = new DateTime.now();
     String date = DateFormat('yMMMd').format(now);
     String time= DateFormat('jm').format(now);
-      return flag==1 ? Scaffold(
+      return Scaffold(
         backgroundColor: Colors.white,
           appBar: AppBar(
             centerTitle: true,
             backgroundColor: Colors.green,
             title: Text(widget.name,style: TextStyle(color: Colors.white),),
           ),
-          body: SingleChildScrollView(
+          body: flag==1 ? SingleChildScrollView(
             child: Column(
               children: [
                 Padding(
@@ -346,9 +347,9 @@ class _ContestExpandableState extends State<ContestExpandable> {
                 ),
               ],
             ),
+          ) : Container(
+            child: Center(child: LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50)),
           )
-      ) : Scaffold(
-        body: Center(child: CircularProgressIndicator()),
       );
   }
   Widget loaded(){
@@ -576,8 +577,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
               ElevatedButton(
                   onPressed: () {
                     alreadyJoined = true;
-                    updateBalance((int.parse(balance) - int.parse(widget.fee))
-                        .toString());
+                    updateBalance((int.parse(balance) - int.parse(widget.fee)).toString());
                     dataService.DataInsertContestUsers(
                         userName, phno!, widget.name, alreadyJoined, context);
                     dataService.DataInsertUserMultipleContests(
