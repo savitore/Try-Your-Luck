@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -17,16 +18,22 @@ class _HomeState extends State<Home> {
 
   List<ContestModel>? list=[], _head=[], _teen=[], _ten=[], _mega=[];
   int flag=0;
-  String name='',balance='';
+  String name='',balance='',_balance='';
   String? phno;
   bool prize=false, fee = false, filter = false,head=false, teen=false, ten=false, mega=false, all= true;
   final ScrollController _scrollController = ScrollController();
   double _scrollPosition = 0;
+  Timer? timer;
 
   _scrollListener() {
     setState(() {
       _scrollPosition = _scrollController.position.pixels;
     });
+  }
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   void sortByPrice(){
@@ -54,6 +61,7 @@ class _HomeState extends State<Home> {
     super.initState();
     getData();
     _scrollController.addListener(_scrollListener);
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => getBalance());
   }
   Future<void> fetchDataProfile() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
@@ -78,6 +86,9 @@ class _HomeState extends State<Home> {
       setState((){
         balance=data['document']['balance'].toString();
       });
+      var prefs = await SharedPreferences.getInstance();
+      prefs.setString("balance", balance);
+      getBalance();
       flag=1;
     }catch(e){
       print(e.toString());
@@ -125,6 +136,10 @@ class _HomeState extends State<Home> {
     phno =prefs.getString("phone")!;
     fetchDataContests();
   }
+  Future<void> getBalance() async {
+    var prefs = await SharedPreferences.getInstance();
+    _balance =prefs.getString("balance")!;
+  }
   @override
   Widget build(BuildContext context) {
     return flag==1 ? Scaffold(
@@ -144,7 +159,7 @@ class _HomeState extends State<Home> {
             child: Row(
               children: [
                 Icon(Icons.account_balance_wallet_outlined,),
-                Text(' ₹'+ balance,style: TextStyle(fontSize: 19),)
+                Text(' ₹'+ _balance,style: TextStyle(fontSize: 19),)
               ],
             ),
           ),

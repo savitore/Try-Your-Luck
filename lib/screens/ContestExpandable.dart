@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:try_your_luck/wallet/wallet.dart';
 import '../services/data_services.dart';
@@ -26,7 +27,7 @@ class ContestExpandable extends StatefulWidget {
 
 class _ContestExpandableState extends State<ContestExpandable> {
   String? phno="";
-  String balance='',userName='',luckyUserPhone='',luckyUserIfString='';
+  String userName='',luckyUserPhone='',luckyUserIfString='',_balance='';
   int flag=0,luckyUserIf=0;
   var people_joined=0;
   var lucky=0;
@@ -49,34 +50,16 @@ class _ContestExpandableState extends State<ContestExpandable> {
   }
   DataService dataService=DataService();
 
+  Future<void> setBalance(String Balance) async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString("balance", Balance);
+  }
   Future<void> fetchDataProfile() async{
-    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
-    final body={
-      "dataSource":"Cluster0",
-      "database":"db",
-      "collection":"users",
-      "filter":{
-        "phone_number": phno
-      }
-    };
-    final response;
-    try{
-      response=await http.post(Uri.parse(baseUrl),
-          headers: {'Content-Type':'application/json',
-            'Accept':'application/json',
-            'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
-          body: jsonEncode(body)
-      );
-      var data = jsonDecode(response.body);
-      setState((){
-        balance=data['document']['balance'].toString();
-        userName=data['document']['name'].toString();
+    var prefs = await SharedPreferences.getInstance();
+      setState(() {
+        _balance=prefs.getString("balance")!;
+        userName=prefs.getString("name")!;
       });
-        flag=1;
-    }catch(e){
-      print(e.toString());
-    }
   }
   Future<void> updateBalance(String Balance) async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
@@ -105,6 +88,9 @@ class _ContestExpandableState extends State<ContestExpandable> {
       await for (var data in response.transform(utf8.decoder)) {
         contents.write(data);
       }
+      setState(() {
+        setBalance(Balance);
+      });
     }catch(e){
       print(e.toString());
     }
@@ -166,6 +152,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       if(people_joined.toString()==widget.no_of_people.toString()){
         DeleteOne(widget.name);
       }
+      flag=1;
     }catch(e){
       print(e.toString());
     }
@@ -234,7 +221,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
     }
     var output=jsonDecode(contents.toString());
     if(Redeemed=="no"){
-      updateBalance((int.parse(balance)+int.parse(widget.prize)).toString());
+      updateBalance((int.parse(_balance)+int.parse(widget.prize)).toString());
     }
     print(output['insertedId']);
   }
@@ -407,7 +394,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
           onPressed: () {
             if(alreadyJoined==false){
               if(people_joined<double.parse(widget.no_of_people)){
-                if(double.parse(balance)>double.parse(widget.fee)){
+                if(double.parse(_balance)>double.parse(widget.fee)){
                   showModalBottomSheet(
                       context: context,
                       builder: (context) => buildSheet(),
@@ -499,7 +486,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
     final now = new DateTime.now();
     String date = DateFormat('yMMMd').format(now);
     String time= DateFormat('jm').format(now);
-    balanceLeft = (int.parse(balance)-int.parse(widget.fee)).toString();
+    balanceLeft = (int.parse(_balance)-int.parse(widget.fee)).toString();
     return
       Padding(
         padding: const EdgeInsets.fromLTRB(25, 5, 25, 20),
@@ -528,7 +515,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                   Row(
                     children: [
                       Icon(Icons.currency_rupee, color: Colors.black,),
-                      Text(balance, style: TextStyle(
+                      Text(_balance, style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 22),),
                     ],
                   ),
@@ -577,7 +564,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
               ElevatedButton(
                   onPressed: () {
                     alreadyJoined = true;
-                    updateBalance((int.parse(balance) - int.parse(widget.fee)).toString());
+                    updateBalance((int.parse(_balance) - int.parse(widget.fee)).toString());
                     dataService.DataInsertContestUsers(
                         userName, phno!, widget.name, alreadyJoined, context);
                     dataService.DataInsertUserMultipleContests(

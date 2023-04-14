@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -23,10 +24,10 @@ class Wallet extends StatefulWidget {
 class _WalletState extends State<Wallet> {
 
   String? phno="";
-  String balance='',result='', name='';
+  String result='', name='',_balance='';
   var amount="";
   TextEditingController amount_100 = TextEditingController();
-  int flag=0,flag1=0,flag2=0;
+  int flag1=0,flag2=0;
   List<TranscationsModel>? list=[];
   List<DepositModel>? deposits=[];
   late Text entry_paid=Text('Entry Paid',style: TextStyle(color: Colors.black,fontSize: 20),);
@@ -40,12 +41,13 @@ class _WalletState extends State<Wallet> {
     });
   }
   DataService dataService = DataService();
+  Timer? timer;
 
   @override
   void initState(){
     super.initState();
     phno=FirebaseAuth.instance.currentUser?.phoneNumber;
-    fetchBalance();
+    getBalance();
     fetchMyContests();
     fetchMyDeposits();
     amount_100.text="100";
@@ -55,11 +57,17 @@ class _WalletState extends State<Wallet> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => getBalance());
   }
   @override
   void dispose() {
     super.dispose();
     _razorpay.clear();
+    timer?.cancel();
+  }
+  Future<void> getBalance() async {
+    var prefs = await SharedPreferences.getInstance();
+    _balance =prefs.getString("balance")!;
   }
   void getData() async{
     var prefs = await SharedPreferences.getInstance();
@@ -70,14 +78,18 @@ class _WalletState extends State<Wallet> {
     final now = new DateTime.now();
     String date = DateFormat('yMMMd').format(now);
     String time= DateFormat('jm').format(now);
-    updateBalance((int.parse(balance) + int.parse(amount)).toString());
+    updateBalance((int.parse(_balance) + int.parse(amount)).toString());
     dataService.AmountAdded(phno!, amount, response.paymentId!, date, time, context);
     setState(() {
-      balance=(int.parse(balance) + int.parse(amount)).toString();
+      _balance=(int.parse(_balance) + int.parse(amount)).toString();
+      setBalance();
     });
     Navigator.pop(context);
   }
-
+  Future<void> setBalance() async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString("balance", _balance);
+  }
   void _handlePaymentError(PaymentFailureResponse response) {
     // Do something when payment fails
     print('failed');
@@ -87,34 +99,6 @@ class _WalletState extends State<Wallet> {
     // Do something when an external wallet is selected
   }
 
-  Future<void> fetchBalance() async{
-    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
-    final body={
-      "dataSource":"Cluster0",
-      "database":"db",
-      "collection":"users",
-      "filter":{
-        "phone_number": phno
-      }
-    };
-    final response;
-    try{
-      response=await http.post(Uri.parse(baseUrl),
-          headers: {'Content-Type':'application/json',
-            'Accept':'application/json',
-            'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
-          body: jsonEncode(body)
-      );
-      var data = jsonDecode(response.body);
-      setState((){
-        balance=data['document']['balance'].toString();
-      });
-      flag=1;
-    }catch(e){
-      print(e.toString());
-    }
-  }
   Future<void> fetchMyContests() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/find';
     final body={
@@ -306,13 +290,13 @@ class _WalletState extends State<Wallet> {
     );
   }
   Widget loading_balance(){
-    return flag==1 ? Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(Icons.currency_rupee,color: Colors.black,size: 20,),
-        Text(balance,style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
+        Text(_balance,style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
       ],
-    ) : Center(child: LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50));
+    );
   }
   Widget transcation(String contest_name, String winning_amount, String date, String time, String Result, String fee){
     if(Result=="won"){

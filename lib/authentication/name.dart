@@ -90,6 +90,7 @@ class _NameState extends State<Name> {
                           prefs.setString("where", "home");
                           prefs.setString("name", name);
                           prefs.setString("phone", phno!);
+                          prefs.setString("balance", "0");
                           _insertData(name, phno!);
                           Navigator.pushAndRemoveUntil(
                               context,
