@@ -67,7 +67,9 @@ class _WalletState extends State<Wallet> {
   }
   Future<void> getBalance() async {
     var prefs = await SharedPreferences.getInstance();
-    _balance =prefs.getString("balance")!;
+    setState(() {
+      _balance =prefs.getString("balance")!;
+    });
   }
   void getData() async{
     var prefs = await SharedPreferences.getInstance();
@@ -82,13 +84,13 @@ class _WalletState extends State<Wallet> {
     dataService.AmountAdded(phno!, amount, response.paymentId!, date, time, context);
     setState(() {
       _balance=(int.parse(_balance) + int.parse(amount)).toString();
-      setBalance();
+      setBalance(_balance);
     });
     Navigator.pop(context);
   }
-  Future<void> setBalance() async {
+  Future<void> setBalance(String balance) async {
     var prefs = await SharedPreferences.getInstance();
-    prefs.setString("balance", _balance);
+    prefs.setString("balance", balance);
   }
   void _handlePaymentError(PaymentFailureResponse response) {
     // Do something when payment fails
@@ -509,9 +511,6 @@ class _WalletState extends State<Wallet> {
                     }
                   };
                   _razorpay.open(options);
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(builder: (context) => PaymentOptions(amount: amount,balance: balance,)));
                 }
               },
               child: Text('PAY',style: TextStyle(fontSize: 20),),

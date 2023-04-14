@@ -43,7 +43,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
   void initState() {
     super.initState();
     phno=FirebaseAuth.instance.currentUser?.phoneNumber;
-    fetchDataProfile();
+    getData();
     fetchContestUsers();
     fetchRedeemedOrNot(widget.name);
     fetchCurrentUserForAlreadyJoined();
@@ -54,7 +54,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
     var prefs = await SharedPreferences.getInstance();
     prefs.setString("balance", Balance);
   }
-  Future<void> fetchDataProfile() async{
+  Future<void> getData() async{
     var prefs = await SharedPreferences.getInstance();
       setState(() {
         _balance=prefs.getString("balance")!;
@@ -88,9 +88,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
       await for (var data in response.transform(utf8.decoder)) {
         contents.write(data);
       }
-      setState(() {
-        setBalance(Balance);
-      });
     }catch(e){
       print(e.toString());
     }
@@ -222,6 +219,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
     var output=jsonDecode(contents.toString());
     if(Redeemed=="no"){
       updateBalance((int.parse(_balance)+int.parse(widget.prize)).toString());
+      setBalance((int.parse(_balance)+int.parse(widget.prize)).toString());
     }
     print(output['insertedId']);
   }
@@ -565,6 +563,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                   onPressed: () {
                     alreadyJoined = true;
                     updateBalance((int.parse(_balance) - int.parse(widget.fee)).toString());
+                    setBalance((int.parse(_balance) - int.parse(widget.fee)).toString());
                     dataService.DataInsertContestUsers(
                         userName, phno!, widget.name, alreadyJoined, context);
                     dataService.DataInsertUserMultipleContests(

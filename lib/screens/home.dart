@@ -138,7 +138,9 @@ class _HomeState extends State<Home> {
   }
   Future<void> getBalance() async {
     var prefs = await SharedPreferences.getInstance();
-    _balance =prefs.getString("balance")!;
+    setState(() {
+      _balance =prefs.getString("balance")!;
+    });
   }
   @override
   Widget build(BuildContext context) {
