@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/screens/ContestExpandable.dart';
 import 'package:try_your_luck/screens/drawer.dart';
-import 'package:try_your_luck/wallet/wallet.dart';
+import 'package:try_your_luck/screens/wallet.dart';
 
 import '../models/ContestModel.dart';
 

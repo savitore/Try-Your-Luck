@@ -8,7 +8,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:try_your_luck/wallet/wallet.dart';
+import 'package:try_your_luck/screens/wallet.dart';
 import '../services/data_services.dart';
 import '../models/ContestUsersModel.dart';
 import 'package:vibration/vibration.dart';

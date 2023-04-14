@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:try_your_luck/screens/Intro.dart';
 import 'package:try_your_luck/screens/profile.dart';
 import 'package:try_your_luck/screens/my_contests.dart';
-import 'package:try_your_luck/wallet/wallet.dart';
+import 'package:try_your_luck/screens/wallet.dart';
 
 class MyHeaderDrawer extends StatefulWidget {
   late final String phno,name;
