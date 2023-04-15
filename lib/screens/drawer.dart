@@ -58,9 +58,6 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                         SizedBox(height: 10,),
                         GestureDetector(
                           onTap: (){
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context)=> MyContests()
-                            ));
                           },
                           child: Row(
                             children: [

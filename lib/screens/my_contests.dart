@@ -4,8 +4,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/models/MyContestsModel.dart';
 import 'ContestExpandable.dart';
+import 'drawer.dart';
 
 class MyContests extends StatefulWidget {
   const MyContests({Key? key}) : super(key: key);
@@ -25,36 +27,15 @@ class _MyContestsState extends State<MyContests> {
     super.initState();
     phno=FirebaseAuth.instance.currentUser?.phoneNumber;
     fetchMyContests();
-    fetchDataProfile();
+    getData();
   }
 
-  Future<void> fetchDataProfile() async{
-    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
-    final body={
-      "dataSource":"Cluster0",
-      "database":"db",
-      "collection":"users",
-      "filter":{
-        "phone_number": phno
-      }
-    };
-    final response;
-    try{
-      response=await http.post(Uri.parse(baseUrl),
-          headers: {'Content-Type':'application/json',
-            'Accept':'application/json',
-            'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
-          body: jsonEncode(body)
-      );
-      var data = jsonDecode(response.body);
-      setState((){
-        balance=data['document']['balance'].toString();
-        userName=data['document']['name'].toString();
+  Future<void> getData() async{
+      var prefs = await SharedPreferences.getInstance();
+      setState(() {
+        balance =prefs.getString("balance")!;
+        userName=prefs.getString("name")!;
       });
-    }catch(e){
-      print(e.toString());
-    }
   }
   Future<void> fetchMyContests() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/find';
@@ -95,14 +76,21 @@ class _MyContestsState extends State<MyContests> {
   }
   @override
   Widget build(BuildContext context) {
-    return flag==1 ? Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          centerTitle: true,
           backgroundColor: Colors.green.shade600,
           foregroundColor: Colors.white,
           title: Text('My Contests'),
         ),
-        body: SafeArea(
+        drawer:  Drawer(
+          backgroundColor: Colors.grey[100],
+          child: SingleChildScrollView(
+            child: MyHeaderDrawer(phno.toString(),userName),
+          ),
+        ),
+        body: flag==1 ? SafeArea(
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,9 +202,10 @@ class _MyContestsState extends State<MyContests> {
               ],
             ),
           ),
-        )
-    ) : Scaffold(
-        body: Center(child: LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50))
+        ) :
+         Scaffold(
+          body: Center(child: LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50))
+              )
     );
   }
   Widget ifWon(){

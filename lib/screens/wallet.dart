@@ -277,7 +277,8 @@ class _WalletState extends State<Wallet> {
                               ],
                             ),
                           ),
-                          contests()
+                          contests(),
+                          Deposits()
                         ],
                       ),
                     ),
@@ -536,7 +537,7 @@ class _WalletState extends State<Wallet> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                Text('Amount Added',style: TextStyle(color: Colors.black,fontSize: 20),),
+                Text('Amount Added',style: TextStyle(color: Colors.blueAccent,fontSize: 20),),
                       Row(
                         children: [
                           Text(_deposits.date+" | "),
@@ -547,9 +548,9 @@ class _WalletState extends State<Wallet> {
                   ),
                   Row(
                     children: [
-                      Text("+",style: TextStyle(fontSize: 18),),
-                      Icon(Icons.currency_rupee_outlined,color: Colors.black,size: 18,),
-                      Text(_deposits.amount_added,style: TextStyle(fontSize: 18),),
+                      Text("+",style: TextStyle(fontSize: 18,color: Colors.blueAccent),),
+                      Icon(Icons.currency_rupee_outlined,color: Colors.blueAccent,size: 18,),
+                      Text(_deposits.amount_added,style: TextStyle(fontSize: 18,color: Colors.blueAccent),),
                     ],
                   ),
                 ],
