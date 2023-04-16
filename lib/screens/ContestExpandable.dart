@@ -323,7 +323,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                            child: Text('People Joined',style: TextStyle(fontSize: 25,color: Colors.green.shade600,fontWeight: FontWeight.bold,fontFamily: 'Raleway'),),
+                              child: Text('People Joined',style: TextStyle(fontSize: 25,color: Colors.green.shade600,fontWeight: FontWeight.bold,fontFamily: 'Raleway'),),
                           ),
                           loaded(),
                         ],

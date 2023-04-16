@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/models/WinnersModel.dart';
 import 'package:try_your_luck/screens/wallet.dart';
 
+import 'ContestExpandable.dart';
 import 'drawer.dart';
 
 class Winners extends StatefulWidget {
@@ -70,7 +71,7 @@ class _WinnersState extends State<Winners> {
       var data = jsonDecode(response.body);
       for(int i=0; i<data['documents'].length;i++){
         setState((){
-          list?.add(WinnersModel(name: data['documents'][i]['name'], contest_name: data['documents'][i]['contest_name'], prize: data['documents'][i]['prize'], lucky_no: data['documents'][i]['lucky_no']));
+          list?.add(WinnersModel(name: data['documents'][i]['name'], contest_name: data['documents'][i]['contest_name'], prize: data['documents'][i]['prize'], lucky_no: data['documents'][i]['lucky_no'], date: data['documents'][i]['date'], fee: data['documents'][i]['fee'], no_of_people: data['documents'][i]['no_of_people']));
         });
       }
       flag=1;
@@ -112,58 +113,71 @@ class _WinnersState extends State<Winners> {
               child: Column(
                 crossAxisAlignment:CrossAxisAlignment.start,
                 children: list!.map((winners){
-                  return Card(
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),side: BorderSide(color: Colors.black26,width: .5)),
-                    color: Colors.white,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      tileColor: Colors.white,
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
-                            child: Text(winners.contest_name,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 25),),
-                          ),
-                          Divider(
-                            thickness: .5,
-                            color: Colors.black26,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
-                            child: Row(
-                              children: [
-                                Text(winners.name,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 25),),
-                              ],
+                  return InkWell(
+                    onTap: (){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ContestExpandable(name: winners.contest_name, fee: winners.fee, prize: winners.prize, no_of_people: winners.no_of_people, lucky_draw_no: winners.lucky_no)));
+                    },
+                    child: Card(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),side: BorderSide(color: Colors.black26,width: .5)),
+                      color: Colors.white,
+                      child: ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        tileColor: Colors.white,
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(winners.contest_name,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18),),
+                                  Text(winners.date,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18))
+                                ],
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 13, 10, 3),
-                            child: Row(
-                              children: [
-                                Image.asset('assets/trophy.png',width: 50,height: 50,),
-                                SizedBox(width: 10,),
-                                Text('Won',style: TextStyle(fontFamily: 'Raleway',color: Colors.blueAccent,fontWeight: FontWeight.bold,fontSize: 22),),
-                                SizedBox(width: 5,),
-                                Text('₹'+winners.prize,style: TextStyle(fontFamily: 'Raleway',color: Colors.blueAccent,fontWeight: FontWeight.bold,fontSize: 22),),
-                              ],
+                            Divider(
+                              thickness: .5,
+                              color: Colors.black26,
                             ),
-                          ),
-                          Divider(
-                            thickness: .5,
-                            color: Colors.black26,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 3),
-                            child: Row(
-                              children: [
-                                Text('Lucky Number: ',style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 22),),
-                                Text(winners.lucky_no,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 22)),
-                              ],
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
+                              child: Row(
+                                children: [
+                                  Text(winners.name,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 25),),
+                                ],
+                              ),
                             ),
-                          )
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 13, 10, 3),
+                              child: Row(
+                                children: [
+                                  Image.asset('assets/trophy.png',width: 50,height: 50,),
+                                  SizedBox(width: 10,),
+                                  Text('Won',style: TextStyle(fontFamily: 'Raleway',color: Colors.blueAccent,fontWeight: FontWeight.bold,fontSize: 22),),
+                                  SizedBox(width: 5,),
+                                  Text('₹'+winners.prize,style: TextStyle(fontFamily: 'Raleway',color: Colors.blueAccent,fontWeight: FontWeight.bold,fontSize: 22),),
+                                ],
+                              ),
+                            ),
+                            Divider(
+                              thickness: .5,
+                              color: Colors.black26,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 3),
+                              child: Row(
+                                children: [
+                                  Text('Lucky Number: ',style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 22),),
+                                  Text(winners.lucky_no,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 22)),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   );
