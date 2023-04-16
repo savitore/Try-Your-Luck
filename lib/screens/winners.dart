@@ -142,7 +142,7 @@ class _WinnersState extends State<Winners> {
                             padding: const EdgeInsets.fromLTRB(10, 13, 10, 3),
                             child: Row(
                               children: [
-                                Image.asset('assets/trophy.png',width: 40,height: 40,),
+                                Image.asset('assets/trophy.png',width: 50,height: 50,),
                                 SizedBox(width: 10,),
                                 Text('Won',style: TextStyle(fontFamily: 'Raleway',color: Colors.blueAccent,fontWeight: FontWeight.bold,fontSize: 22),),
                                 SizedBox(width: 5,),
