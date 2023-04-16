@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:try_your_luck/screens/live_contests.dart';
 import 'package:try_your_luck/screens/my_contests.dart';
+import 'package:try_your_luck/screens/winners.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -52,8 +53,6 @@ class _HomeState extends State<Home> {
   static const List<Widget> _pages = <Widget>[
     LiveContests(),
     MyContests(),
-    Center(
-      child: Text('Coming Soon'),
-    )
+    Winners()
   ];
 }
