@@ -448,6 +448,8 @@ class _ContestExpandableState extends State<ContestExpandable> {
     }else{
       // dataService.DataInsertUserMultipleContests(widget.name,luckyUserPhone , widget.prize, widget.lucky_draw_no, context);
       UpdateUserMultipleContests(luckyUserPhone,widget.lucky_draw_no,widget.fee,widget.no_of_people);
+      dataService.DataInsertWinners(luckyUser, widget.name, widget.prize, widget.lucky_draw_no, date, widget.fee, widget.no_of_people, context);
+      Vibration.vibrate(duration: 50);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

@@ -427,7 +427,13 @@ class _WalletState extends State<Wallet> {
                       borderRadius: BorderRadius.circular(20)
                   ),
                 ),
-                SizedBox(height: 15,),
+                SizedBox(height: 25,),
+                Row(
+                  children: [
+                    Text('Enter Amount (Min 1)',style: TextStyle(fontSize: 18),),
+                  ],
+                ),
+                SizedBox(height: 5,),
                 TextField(
                   showCursor: true,
                   controller: amount_100,
@@ -441,46 +447,61 @@ class _WalletState extends State<Wallet> {
                   ),
                   style: TextStyle(fontSize: 26),
                 ),
+                SizedBox(height: 20,),
+                Row(
+                  children: [
+                    Text('Instant',style: TextStyle(fontSize: 18),),
+                  ],
+                ),
                 SizedBox(height: 10,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.grey[300],shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),elevation: 0),
                         onPressed: (){
                           amount_100.text="100";
                           amount="100";
                         },
                         child: Row(
                           children: [
-                            Icon(Icons.currency_rupee,color: Colors.white,),
-                            Text('100',style: TextStyle(color: Colors.white),)
+                            Text(' ₹100 ',style: TextStyle(color: Colors.black),)
                           ],
                         )
                     ),
                     ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.grey[300],shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),elevation: 0),
                         onPressed: (){
+                        amount_100.text="200";
+                        amount="200";
+                    },
+                        child: Row(
+                          children: [
+                            Text(' ₹200 ',style: TextStyle(color: Colors.black),)
+                          ],
+                        )
+                    ),
+                    ElevatedButton(
+                          style: ElevatedButton.styleFrom(backgroundColor: Colors.grey[300],elevation: 0,shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+                          onPressed: (){
                           amount_100.text="500";
                           amount="500";
                         },
                         child: Row(
                           children: [
-                            Icon(Icons.currency_rupee,color: Colors.white,),
-                            Text('500',style: TextStyle(color: Colors.white),)
+                            Text(' ₹500 ',style: TextStyle(color: Colors.black),)
                           ],
                         )
                     ),
                     ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.grey[300],shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),elevation: 0),
                         onPressed: (){
                           amount_100.text="1000";
                           amount="1000";
                         },
                         child: Row(
                           children: [
-                            Icon(Icons.currency_rupee,color: Colors.white,),
-                            Text('1000',style: TextStyle(color: Colors.white),)
+                            Text(' ₹1000 ',style: TextStyle(color: Colors.black),)
                           ],
                         )
                     )

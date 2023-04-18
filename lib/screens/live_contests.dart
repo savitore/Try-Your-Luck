@@ -19,11 +19,11 @@ class LiveContests extends StatefulWidget {
 
 class _LiveContestsState extends State<LiveContests> {
 
-  List<ContestModel>? list=[], _head=[], _teen=[], _ten=[], _mega=[];
+  List<ContestModel>? list=[], _head=[], _five=[], _ten=[], _mega=[];
   int flag=0;
   String name='',balance='',_balance='';
   String? phno;
-  bool prize=false, fee = false, filter = false,head=false, teen=false, ten=false, mega=false, all= true;
+  bool prize=false, fee = false, filter = false,head=false, five=false, ten=false, mega=false, all= true;
   final ScrollController _scrollController = ScrollController();
   double _scrollPosition = 0;
   Timer? timer;
@@ -44,7 +44,7 @@ class _LiveContestsState extends State<LiveContests> {
       Comparator<ContestModel> sort = (a,b) => int.parse(b.win_amount).compareTo(int.parse(a.win_amount));
       list?.sort(sort);
       _head?.sort(sort);
-      _teen?.sort(sort);
+      _five?.sort(sort);
       _ten?.sort(sort);
       _mega?.sort(sort);
     });
@@ -54,7 +54,7 @@ class _LiveContestsState extends State<LiveContests> {
       Comparator<ContestModel> sort = (a,b) => int.parse(a.fee).compareTo(int.parse(b.fee));
       list?.sort(sort);
       _head?.sort(sort);
-      _teen?.sort(sort);
+      _five?.sort(sort);
       _ten?.sort(sort);
       _mega?.sort(sort);
     });
@@ -119,8 +119,8 @@ class _LiveContestsState extends State<LiveContests> {
           list?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount'], fee: data['documents'][i]['fee'], lucky_draw_no: data['documents'][i]['lucky_draw_no']));
           if(int.parse(data['documents'][i]['no_of_people']) == 2){
             _head?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount'], fee: data['documents'][i]['fee'], lucky_draw_no: data['documents'][i]['lucky_draw_no']));
-          } else if(int.parse(data['documents'][i]['no_of_people']) == 3){
-            _teen?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount'], fee: data['documents'][i]['fee'], lucky_draw_no: data['documents'][i]['lucky_draw_no']));
+          } else if(int.parse(data['documents'][i]['no_of_people']) == 5){
+            _five?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount'], fee: data['documents'][i]['fee'], lucky_draw_no: data['documents'][i]['lucky_draw_no']));
           } else if(int.parse(data['documents'][i]['no_of_people']) == 10){
             _ten?.add(ContestModel(name: data['documents'][i]['name'], no_of_people: data['documents'][i]['no_of_people'], win_amount: data['documents'][i]['winning_amount'], fee: data['documents'][i]['fee'], lucky_draw_no: data['documents'][i]['lucky_draw_no']));
           } else{
@@ -247,7 +247,7 @@ class _LiveContestsState extends State<LiveContests> {
                     setState(() {
                       all = true;
                       head=false;
-                      teen=false;
+                      five=false;
                       ten=false;
                       mega=false;
                     });
@@ -270,7 +270,7 @@ class _LiveContestsState extends State<LiveContests> {
                   onPressed: (){
                     setState(() {
                       head = true;
-                      teen=false;
+                      five=false;
                       ten=false;
                       mega=false;
                       all=false;
@@ -293,15 +293,15 @@ class _LiveContestsState extends State<LiveContests> {
                 ElevatedButton(
                   onPressed: (){
                     setState(() {
-                      teen = true;
+                      five = true;
                       head=false;
                       ten=false;
                       mega=false;
                       all=false;
                     });
                   },
-                  child: Text('TEEN'),
-                  style: teen ? ElevatedButton.styleFrom(
+                  child: Text('PANCH'),
+                  style: five ? ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),side: BorderSide(width: 1,color: Colors.white)),
                       backgroundColor: Colors.green.shade600,
                       foregroundColor: Colors.white,
@@ -319,7 +319,7 @@ class _LiveContestsState extends State<LiveContests> {
                     setState(() {
                       ten = true;
                       head=false;
-                      teen=false;
+                      five=false;
                       mega=false;
                       all=false;
                     });
@@ -343,7 +343,7 @@ class _LiveContestsState extends State<LiveContests> {
                     setState(() {
                       mega = true;
                       head=false;
-                      teen=false;
+                      five=false;
                       ten=false;
                       all=false;
                     });
@@ -496,9 +496,9 @@ class _LiveContestsState extends State<LiveContests> {
           );
         }).toList(),
       );
-    } else if(teen){
+    } else if(five){
       return Column(
-        children: _teen!.map((contests){
+        children: _five!.map((contests){
           return InkWell(
             onTap: (){
               Navigator.push(

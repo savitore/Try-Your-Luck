@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/models/MyContestsModel.dart';
+import 'package:try_your_luck/screens/wallet.dart';
 import 'ContestExpandable.dart';
 import 'drawer.dart';
 
@@ -83,6 +84,22 @@ class _MyContestsState extends State<MyContests> {
           backgroundColor: Colors.green.shade600,
           foregroundColor: Colors.white,
           title: Text('My Contests'),
+          actions: [
+            GestureDetector(
+              onTap: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Wallet()));
+              },
+              child: Row(
+                children: [
+                  Icon(Icons.account_balance_wallet_outlined,),
+                  Text(' ₹'+ balance,style: TextStyle(fontSize: 19),)
+                ],
+              ),
+            ),
+            SizedBox(width: 8,),
+          ],
         ),
         drawer:  Drawer(
           backgroundColor: Colors.grey[100],

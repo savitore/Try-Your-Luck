@@ -23,6 +23,8 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
+        selectedFontSize: 15,
+        unselectedFontSize: 15,
         backgroundColor: Colors.white,
         selectedIconTheme: IconThemeData(color: Colors.green.shade600, size: 30),
         selectedItemColor: Colors.green.shade600,
@@ -38,7 +40,7 @@ class _HomeState extends State<Home> {
           ),
           BottomNavigationBarItem(
               icon: ImageIcon(AssetImage('assets/winners.png')),
-              label: 'Rewards'
+              label: 'Winners'
           )
         ],
         currentIndex: _selectedIndex, //New
