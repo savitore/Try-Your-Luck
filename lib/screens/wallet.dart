@@ -430,7 +430,7 @@ class _WalletState extends State<Wallet> {
                 SizedBox(height: 25,),
                 Row(
                   children: [
-                    Text('Enter Amount (Min 1)',style: TextStyle(fontSize: 18),),
+                    Text('Enter Amount (Min ₹1)',style: TextStyle(fontSize: 18),),
                   ],
                 ),
                 SizedBox(height: 5,),
