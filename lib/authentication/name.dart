@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:try_your_luck/authentication/image.dart';
 
 import '../services/data_services.dart';
-import '../screens/home.dart';
 
 class Name extends StatefulWidget {
   const Name({Key? key}) : super(key: key);
@@ -87,14 +87,13 @@ class _NameState extends State<Name> {
                       else
                         {
                           var prefs = await SharedPreferences.getInstance();
-                          prefs.setString("where", "home");
+                          prefs.setString("where", "image");
                           prefs.setString("name", name);
                           prefs.setString("phone", phno!);
                           prefs.setString("balance", "0");
-                          _insertData(name, phno!);
                           Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (context) => Home()),
+                              MaterialPageRoute(builder: (context) => ImageView(name:name, phone: phno!,)),
                                   (route) => false);
                         }
                     },
@@ -128,7 +127,4 @@ class _NameState extends State<Name> {
           textColor: Colors.black,
           fontSize: 16.0
       );
-  Future<void> _insertData(String name, String phoneno) async{
-    dataService.DataInsertUsers(name,phoneno,"100",context);
-  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   final String name, phno;
@@ -10,11 +11,17 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
+  String avatar='';
   @override
   void initState() {
     super.initState();
+    getImage();
   }
 
+  void getImage() async{
+    var prefs = await SharedPreferences.getInstance();
+    avatar = prefs.getString("image")!;
+  }
   @override
   Widget build(BuildContext context) {
       return Scaffold(
@@ -27,11 +34,26 @@ class _ProfileState extends State<Profile> {
         body: Padding(
           padding: const EdgeInsets.fromLTRB(15, 15, 8, 10),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                backgroundImage: AssetImage('assets/empty_person.jpg'),
-                // backgroundImage: NetworkImage('url'),
-                radius: 50,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    backgroundImage: AssetImage(avatar),
+                    // backgroundImage: NetworkImage('url'),
+                    radius: 50,
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Icon(Icons.edit),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,

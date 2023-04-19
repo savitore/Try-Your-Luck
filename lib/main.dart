@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:try_your_luck/authentication/image.dart';
 import 'package:try_your_luck/screens/home.dart';
 import 'screens/Intro.dart';
 import 'authentication/name.dart';
@@ -16,7 +17,9 @@ void main() async{
   if (firebaseUser != null) {
     if(where=="name"){
       first=Name();
-    }else{
+    } else if(where=="image"){
+      first = ImageView();
+    } else{
       first = Home();
     }
   } else {

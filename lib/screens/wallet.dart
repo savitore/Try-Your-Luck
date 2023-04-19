@@ -222,41 +222,49 @@ class _WalletState extends State<Wallet> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                          onPressed: (){
-                            showModalBottomSheet(
-                                context: context,
-                                builder: (context) => buildSheet(),
-                                isScrollControlled: true,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(20)
-                                    )
-                                )
-                            );
-                          },
-                          child:Row(
-                            children: [
-                              Image.asset('assets/add.png',width: 20,height: 20,color: Colors.white,),
-                              SizedBox(width: 10,),
-                              Text('ADD MONEY'),
-                            ],
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width*0.4,
+                          child: ElevatedButton(
+                            onPressed: (){
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => buildSheet(),
+                                  isScrollControlled: true,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(20)
+                                      )
+                                  )
+                              );
+                            },
+                            child:Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/add.png',width: 20,height: 20,color: Colors.white,),
+                                SizedBox(width: 10,),
+                                Text('ADD MONEY'),
+                              ],
+                            ),
+                            style: ElevatedButton.styleFrom(backgroundColor: Colors.green[700],shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                           ),
-                          style: ElevatedButton.styleFrom(backgroundColor: Colors.green[700],shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                         ),
                         SizedBox(width: 10,),
-                        ElevatedButton(
-                          onPressed: (){
-                            showToast();
-                          },
-                          child:Row(
-                            children: [
-                              Image.asset('assets/withdraw.png',width: 20,height: 20,color: Colors.white,),
-                              SizedBox(width: 10,),
-                              Text('WITHDRAW'),
-                            ],
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width*0.4,
+                          child: ElevatedButton(
+                            onPressed: (){
+                              showToast();
+                            },
+                            child:Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/withdraw.png',width: 20,height: 20,color: Colors.white,),
+                                SizedBox(width: 10,),
+                                Text('WITHDRAW'),
+                              ],
+                            ),
+                            style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[700],shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                           ),
-                          style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[700],shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                         ),
                       ],
                     ),
@@ -296,8 +304,8 @@ class _WalletState extends State<Wallet> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(Icons.currency_rupee,color: Colors.black,size: 20,),
-        Text(_balance,style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),)
+        Icon(Icons.currency_rupee,color: Colors.black,size: 25,),
+        Text(_balance,style: TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.bold),)
       ],
     );
   }

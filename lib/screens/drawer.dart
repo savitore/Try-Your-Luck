@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/screens/Intro.dart';
 import 'package:try_your_luck/screens/profile.dart';
 import 'package:try_your_luck/screens/my_contests.dart';
@@ -14,9 +15,16 @@ class MyHeaderDrawer extends StatefulWidget {
 }
 
 class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
+
+  String avatar='';
   @override
   void initState() {
     super.initState();
+    getImage();
+  }
+  void getImage() async{
+    var prefs = await SharedPreferences.getInstance();
+    avatar = prefs.getString("image")!;
   }
   @override
   Widget build(BuildContext context) {
@@ -116,7 +124,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
               Row(
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage('assets/empty_person.jpg'),
+                    backgroundImage: AssetImage(avatar),
                     // backgroundImage: NetworkImage('url'),
                     radius: 30,
                   )

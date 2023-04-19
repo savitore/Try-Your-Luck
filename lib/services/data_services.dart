@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class DataService{
-  Future DataInsertUsers(String name, String phone_number, String balance, BuildContext context) async {
+  Future DataInsertUsers(String name, String phone_number, String balance, String image, BuildContext context) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/insertOne';
     final body={
       "dataSource":"Cluster0",
@@ -12,7 +12,8 @@ class DataService{
       "document":{
         "name":name,
         "phone_number":phone_number,
-        "balance": balance
+        "balance": balance,
+        "image" : image
       }
     };
     HttpClient httpClient=new HttpClient();
