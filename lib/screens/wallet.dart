@@ -567,6 +567,7 @@ class _WalletState extends State<Wallet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                 Text('Amount Added',style: TextStyle(color: Colors.blueAccent,fontSize: 20),),
+                      Text(_deposits.payment_id),
                       Row(
                         children: [
                           Text(_deposits.date+" | "),
