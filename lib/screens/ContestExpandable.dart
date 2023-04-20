@@ -251,6 +251,40 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print(e.toString());
     }
   }
+  Future<void> updateContest(String people) async{
+    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
+    final body={
+      "dataSource":"Cluster0",
+      "database":"db",
+      "collection":"contests",
+      "filter":{
+        "name": widget.name
+      },
+      "update": {
+        "name": widget.name,
+        "no_of_people": widget.no_of_people,
+        "winning_amount": widget.prize,
+        "fee": widget.fee,
+        "lucky_draw_no": widget.lucky_draw_no,
+        "current_people": people
+      }
+    };
+    try{
+      HttpClient httpClient=new HttpClient();
+      HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
+      httpClientRequest.headers.set("Content-Type", "application/json");
+      httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+      httpClientRequest.add(utf8.encode(jsonEncode(body)));
+      HttpClientResponse response=await httpClientRequest.close();
+      httpClient.close();
+      final contents = StringBuffer();
+      await for (var data in response.transform(utf8.decoder)) {
+        contents.write(data);
+      }
+    }catch(e){
+      print(e.toString());
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final now = new DateTime.now();
@@ -579,6 +613,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                         date,
                         time,
                         context);
+                    updateContest(lucky_no_user);
                     Navigator.pop(context);
                     Navigator.pop(context);
                     Vibration.vibrate(duration: 200);

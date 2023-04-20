@@ -159,8 +159,7 @@ class _ImageViewState extends State<ImageView> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if(avatar){
-                      var prefs = await SharedPreferences.getInstance();
-                      prefs.setString("image", _avatar );
+                    //
                     }
                     var prefs = await SharedPreferences.getInstance();
                     prefs.setString("where", "home");

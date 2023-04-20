@@ -11,17 +11,11 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
-  String avatar='';
   @override
   void initState() {
     super.initState();
-    getImage();
   }
 
-  void getImage() async{
-    var prefs = await SharedPreferences.getInstance();
-    avatar = prefs.getString("image")!;
-  }
   @override
   Widget build(BuildContext context) {
       return Scaffold(
@@ -41,7 +35,7 @@ class _ProfileState extends State<Profile> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage(avatar),
+                    backgroundImage: AssetImage('assets/empty_person.jpg'),
                     // backgroundImage: NetworkImage('url'),
                     radius: 50,
                     child: Stack(

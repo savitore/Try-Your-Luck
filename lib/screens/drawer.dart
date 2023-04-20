@@ -16,15 +16,9 @@ class MyHeaderDrawer extends StatefulWidget {
 
 class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
 
-  String avatar='';
   @override
   void initState() {
     super.initState();
-    getImage();
-  }
-  void getImage() async{
-    var prefs = await SharedPreferences.getInstance();
-    avatar = prefs.getString("image")!;
   }
   @override
   Widget build(BuildContext context) {
@@ -113,7 +107,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
               Row(
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage(avatar),
+                    backgroundImage: AssetImage('assets/empty_person.jpg'),
                     // backgroundImage: NetworkImage('url'),
                     radius: 30,
                   )
