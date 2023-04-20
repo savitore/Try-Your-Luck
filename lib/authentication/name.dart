@@ -87,7 +87,7 @@ class _NameState extends State<Name> {
                       else
                         {
                           var prefs = await SharedPreferences.getInstance();
-                          prefs.setString("where", "image");
+                          prefs.setString("where", "name");
                           prefs.setString("name", name);
                           prefs.setString("phone", phno!);
                           prefs.setString("balance", "0");

@@ -17,8 +17,6 @@ void main() async{
   if (firebaseUser != null) {
     if(where=="name"){
       first=Name();
-    } else if(where=="image"){
-      first = ImageView();
     } else{
       first = Home();
     }

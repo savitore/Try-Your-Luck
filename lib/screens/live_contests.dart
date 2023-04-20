@@ -496,7 +496,8 @@ class _LiveContestsState extends State<LiveContests> {
           );
         }).toList(),
       );
-    } else if(five){
+    } else if(five)
+    {
       return Column(
         children: _five!.map((contests){
           return InkWell(
@@ -594,7 +595,8 @@ class _LiveContestsState extends State<LiveContests> {
           );
         }).toList(),
       );
-    } else if(ten){
+    } else if(ten)
+    {
       return Column(
         children: _ten!.map((contests){
           return InkWell(

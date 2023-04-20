@@ -57,24 +57,13 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 10,),
-                        Divider(
-                          height: 5,
-                          thickness: 0.5,
-                          indent: 35,
-                        ),
-                        SizedBox(height: 10,),
-                        GestureDetector(
-                          onTap: (){
-                          },
-                          child: Row(
-                            children: [
-                              Image.asset('assets/trophy.png',height: 22,width: 22,),
-                              SizedBox(width: 10,),
-                              Text('My Contests',style: TextStyle(fontSize: 17),)
-                            ],
-                          ),
-                        ),
+                        // SizedBox(height: 10,),
+                        // Divider(
+                        //   height: 5,
+                        //   thickness: 0.5,
+                        //   indent: 35,
+                        // ),
+                        // SizedBox(height: 10,),
                       ],
                     ),
                   ),
