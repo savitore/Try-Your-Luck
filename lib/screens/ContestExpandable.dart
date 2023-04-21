@@ -185,7 +185,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print("this"+e.toString());
     }
   }
-  Future<void> UpdateUserMultipleContests(String lucky_user_phone, String lucky_draw_no, String fee, String no_of_people) async {
+  Future<void> UpdateUserMultipleContests(String lucky_user_phone, String lucky_draw_no, String fee, String no_of_people, String date) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
     final body={
       "dataSource":"Cluster0",
@@ -220,6 +220,8 @@ class _ContestExpandableState extends State<ContestExpandable> {
     if(Redeemed=="no"){
       updateBalance((int.parse(_balance)+int.parse(widget.prize)).toString());
       setBalance((int.parse(_balance)+int.parse(widget.prize)).toString());
+      dataService.DataInsertWinners(luckyUser, widget.name, widget.prize, widget.lucky_draw_no, date, widget.fee, widget.no_of_people, context);
+      Vibration.vibrate(duration: 50);
     }
     print(output['insertedId']);
   }
@@ -481,9 +483,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       );
     }else{
       // dataService.DataInsertUserMultipleContests(widget.name,luckyUserPhone , widget.prize, widget.lucky_draw_no, context);
-      UpdateUserMultipleContests(luckyUserPhone,widget.lucky_draw_no,widget.fee,widget.no_of_people);
-      dataService.DataInsertWinners(luckyUser, widget.name, widget.prize, widget.lucky_draw_no, date, widget.fee, widget.no_of_people, context);
-      Vibration.vibrate(duration: 50);
+      UpdateUserMultipleContests(luckyUserPhone,widget.lucky_draw_no,widget.fee,widget.no_of_people,date);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

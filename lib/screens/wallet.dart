@@ -202,7 +202,7 @@ class _WalletState extends State<Wallet> {
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: Colors.green.shade600,
-        title: _scrollPosition < 145 ? Text('My Wallet') : Text('Transactions'),
+        title: _scrollPosition < 161 ? Text('My Wallet') : Text('Transactions'),
       ),
       body: SafeArea(
         child: Padding(
