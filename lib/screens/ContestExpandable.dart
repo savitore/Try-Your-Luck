@@ -185,7 +185,43 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print("this"+e.toString());
     }
   }
-  Future<void> UpdateUserMultipleContests(String lucky_user_phone, String lucky_draw_no, String fee, String no_of_people, String date) async {
+  // Future<void> insertLuckyWinner(String date) async{
+  //   String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/find';
+  //   final body={
+  //     "dataSource":"Cluster0",
+  //     "database":"contests",
+  //     "collection":"winners",
+  //   };
+  //   final response;
+  //   try{
+  //     response=await http.post(Uri.parse(baseUrl),
+  //         headers: {'Content-Type':'application/json',
+  //           'Accept':'application/json',
+  //           'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
+  //           'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+  //         body: jsonEncode(body)
+  //     );
+  //     print('hi '+response.statusCode.toString());
+  //     var c=0;
+  //     var data = jsonDecode(response.body);
+  //     for(int i=0; i<data['documents'].length;i++){
+  //       setState((){
+  //         if(data['documents'][i]['contest_name']== widget.name){
+  //           c=1;
+  //         }
+  //       });
+  //     }
+  //     if(c==0){
+  //       setState(() {
+  //         dataService.DataInsertWinners(luckyUser, widget.name, widget.prize, widget.lucky_draw_no, date, widget.fee, widget.no_of_people, context);
+  //         Vibration.vibrate(duration: 50);
+  //       });
+  //     }
+  //   }catch(e){
+  //     print(e.toString());
+  //   }
+  // }
+  Future<void> UpdateUserMultipleContests(String lucky_user_phone, String lucky_draw_no, String fee, String no_of_people) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
     final body={
       "dataSource":"Cluster0",
@@ -220,8 +256,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
     if(Redeemed=="no"){
       updateBalance((int.parse(_balance)+int.parse(widget.prize)).toString());
       setBalance((int.parse(_balance)+int.parse(widget.prize)).toString());
-      dataService.DataInsertWinners(luckyUser, widget.name, widget.prize, widget.lucky_draw_no, date, widget.fee, widget.no_of_people, context);
-      Vibration.vibrate(duration: 50);
     }
     print(output['insertedId']);
   }
@@ -483,7 +517,8 @@ class _ContestExpandableState extends State<ContestExpandable> {
       );
     }else{
       // dataService.DataInsertUserMultipleContests(widget.name,luckyUserPhone , widget.prize, widget.lucky_draw_no, context);
-      UpdateUserMultipleContests(luckyUserPhone,widget.lucky_draw_no,widget.fee,widget.no_of_people,date);
+      UpdateUserMultipleContests(luckyUserPhone,widget.lucky_draw_no,widget.fee,widget.no_of_people);
+      // insertLuckyWinner(date);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -494,13 +529,19 @@ class _ContestExpandableState extends State<ContestExpandable> {
           SizedBox(height: 10,),
           Text('Lucky draw number',style: TextStyle(fontSize: 20)),
           Text(widget.lucky_draw_no.toString(),style: TextStyle(fontSize: 60,color: Colors.green.shade600),),
-          Row(
+          luckyUser == userName ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('YOU',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+              Text(' are the winner',style: TextStyle(fontSize: 20),),
+            ],
+          ) : Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('Winner is ',style: TextStyle(fontSize: 20),),
               Text(luckyUser.toString(),style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)
             ],
-          ),
+          ) ,
         ],
       );
     }
