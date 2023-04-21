@@ -276,9 +276,8 @@ class _MyContestsState extends State<MyContests> {
             ),
           ),
         ) :
-         Scaffold(
-          body: Center(child: LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50))
-              )
+          Center(child: LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50))
+
     );
   }
   Widget ifWon(){
