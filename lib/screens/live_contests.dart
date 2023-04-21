@@ -27,6 +27,9 @@ class _LiveContestsState extends State<LiveContests> {
   final ScrollController _scrollController = ScrollController();
   double _scrollPosition = 0;
   Timer? timer;
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  new GlobalKey<RefreshIndicatorState>();
 
   _scrollListener() {
     setState(() {
@@ -153,11 +156,45 @@ class _LiveContestsState extends State<LiveContests> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.green.shade600,
         foregroundColor: Colors.white,
-        title: _scrollPosition < 20 ? Text('Try Your Luck'): Text('Live Contests'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GestureDetector(onTap: (){scaffoldKey.currentState?.openDrawer();}, child: Icon(Icons.menu)),
+            SizedBox(width: 8,),
+            Stack(
+              alignment: Alignment.topLeft,
+              children: [
+                GestureDetector(
+                  onTap: (){
+                    scaffoldKey.currentState?.openDrawer();
+                  },
+                  child: CircleAvatar(
+                                radius: 18,
+                                backgroundImage: AssetImage('assets/empty_person.jpg'),
+                              ),
+                ),
+                Positioned(
+                    top: 12,
+                    right: 10.0,
+                    width: 10.0,
+                    height: 10.0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle
+                      ),
+                    )
+                )
+              ],
+            ),
+            Expanded(child: Center(child: _scrollPosition < 28 ? Text('Try Your Luck'): Text('Live Contests'),))
+          ],
+        ),
         centerTitle: true,
         actions: [
           GestureDetector(
@@ -175,53 +212,70 @@ class _LiveContestsState extends State<LiveContests> {
           ),
           SizedBox(width: 8,),
         ],
+        automaticallyImplyLeading: false,
       ),
-      body:  flag ==1 ? SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-          child:SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(
-              crossAxisAlignment:CrossAxisAlignment.start ,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Live contests',style: TextStyle(fontSize: 30,fontWeight: FontWeight.w500,color: Colors.black),),
-                    SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            filter= !filter;
-                          });
-                        },
-                        style: filter ? ButtonStyle(
-                            padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-                            elevation: MaterialStateProperty.all(0),
-                            backgroundColor: MaterialStateProperty.all(
-                                Colors.green.shade600),
-                            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(60),
-                                side: BorderSide(color: Colors.white)))) : ButtonStyle(
-                            padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
-                            elevation: MaterialStateProperty.all(0),
-                            backgroundColor: MaterialStateProperty.all(
-                                Colors.white),
-                            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(60),
-                                side: BorderSide(color: Colors.white)))
-                        ) ,
-                        child: Icon(Icons.filter_list_rounded,
-                            color: filter ? Colors.white : Colors.green.shade600, size: 20),
-                      ),
-                    )
-                  ],
-                ),
-                filter ? showFilter() : SizedBox(height: 10,),
-                filtered(),
-              ],
+      body:  flag ==1 ? 
+      RefreshIndicator(
+        key: _refreshIndicatorKey,
+        color: Colors.green.shade600,
+        onRefresh: (){
+          return Future.delayed(
+            Duration(seconds: 1),
+              (){
+              setState(() {
+                list?.clear();
+                fetchDataContests();
+              });
+              }
+          );
+        },
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            child:SingleChildScrollView(
+              controller: _scrollController,
+              child: Column(
+                crossAxisAlignment:CrossAxisAlignment.start ,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Live contests',style: TextStyle(fontSize: 30,fontWeight: FontWeight.w500,color: Colors.black),),
+                      SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              filter= !filter;
+                            });
+                          },
+                          style: filter ? ButtonStyle(
+                              padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+                              elevation: MaterialStateProperty.all(0),
+                              backgroundColor: MaterialStateProperty.all(
+                                  Colors.green.shade600),
+                              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(60),
+                                  side: BorderSide(color: Colors.white)))) : ButtonStyle(
+                              padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+                              elevation: MaterialStateProperty.all(0),
+                              backgroundColor: MaterialStateProperty.all(
+                                  Colors.white),
+                              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(60),
+                                  side: BorderSide(color: Colors.white)))
+                          ) ,
+                          child: Icon(Icons.filter_list_rounded,
+                              color: filter ? Colors.white : Colors.green.shade600, size: 20),
+                        ),
+                      )
+                    ],
+                  ),
+                  filter ? showFilter() : SizedBox(height: 10,),
+                  filtered(),
+                ],
+              ),
             ),
           ),
         ),

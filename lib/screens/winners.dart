@@ -24,6 +24,9 @@ class _WinnersState extends State<Winners> {
   Timer? timer;
   int flag=0;
   List<WinnersModel> list = [];
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  new GlobalKey<RefreshIndicatorState>();
 
   Future<void> getBalance() async {
     var prefs = await SharedPreferences.getInstance();
@@ -83,12 +86,47 @@ class _WinnersState extends State<Winners> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Winners'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GestureDetector(onTap: (){scaffoldKey.currentState?.openDrawer();}, child: Icon(Icons.menu)),
+            SizedBox(width: 8,),
+            Stack(
+              alignment: Alignment.topLeft,
+              children: [
+                GestureDetector(
+                  onTap: (){
+                    scaffoldKey.currentState?.openDrawer();
+                  },
+                  child: CircleAvatar(
+                    radius: 18,
+                    backgroundImage: AssetImage('assets/empty_person.jpg'),
+                  ),
+                ),
+                Positioned(
+                    top: 12,
+                    right: 10.0,
+                    width: 10.0,
+                    height: 10.0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle
+                      ),
+                    )
+                )
+              ],
+            ),
+            Expanded(child: Center(child:  Text('Winners')))
+          ],
+        ),
         centerTitle: true,
         backgroundColor: Colors.green.shade600,
         foregroundColor: Colors.white,
+        automaticallyImplyLeading: false,
         actions: [
           GestureDetector(
             onTap: (){
@@ -106,85 +144,101 @@ class _WinnersState extends State<Winners> {
           SizedBox(width: 8,),
         ],
       ),
-      body: flag==1? SafeArea(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment:CrossAxisAlignment.start,
-                children: list!.map((winners){
-                  return InkWell(
-                    onTap: (){
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ContestExpandable(name: winners.contest_name, fee: winners.fee, prize: winners.prize, no_of_people: winners.no_of_people, lucky_draw_no: winners.lucky_no)));
-                    },
-                    child: Card(
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),side: BorderSide(color: Colors.black26,width: .5)),
-                      color: Colors.white,
-                      child: ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        tileColor: Colors.white,
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(winners.contest_name,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18),),
-                                  Text(winners.date,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18))
-                                ],
+      body: flag==1?
+      RefreshIndicator(
+        key: _refreshIndicatorKey,
+        color: Colors.green.shade600,
+        onRefresh: (){
+          return Future.delayed(
+              Duration(seconds: 1),
+                  (){
+                setState(() {
+                  list?.clear();
+                  fetchWinners();
+                });
+              }
+          );
+        },
+        child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment:CrossAxisAlignment.start,
+                  children: list!.map((winners){
+                    return InkWell(
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ContestExpandable(name: winners.contest_name, fee: winners.fee, prize: winners.prize, no_of_people: winners.no_of_people, lucky_draw_no: winners.lucky_no)));
+                      },
+                      child: Card(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5),side: BorderSide(color: Colors.black26,width: .5)),
+                        color: Colors.white,
+                        child: ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          tileColor: Colors.white,
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(winners.contest_name,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18),),
+                                    Text(winners.date,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18))
+                                  ],
+                                ),
                               ),
-                            ),
-                            Divider(
-                              thickness: .5,
-                              color: Colors.black26,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
-                              child: Row(
-                                children: [
-                                  Text(winners.name,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 25),),
-                                ],
+                              Divider(
+                                thickness: .5,
+                                color: Colors.black26,
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 13, 10, 3),
-                              child: Row(
-                                children: [
-                                  Image.asset('assets/trophy.png',width: 50,height: 50,),
-                                  SizedBox(width: 10,),
-                                  Text('Won',style: TextStyle(fontFamily: 'Raleway',color: Colors.blueAccent,fontWeight: FontWeight.bold,fontSize: 22),),
-                                  SizedBox(width: 5,),
-                                  Text('₹'+winners.prize,style: TextStyle(fontFamily: 'Raleway',color: Colors.blueAccent,fontWeight: FontWeight.bold,fontSize: 22),),
-                                ],
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
+                                child: Row(
+                                  children: [
+                                    Text(winners.name,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 25),),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Divider(
-                              thickness: .5,
-                              color: Colors.black26,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 3),
-                              child: Row(
-                                children: [
-                                  Text('Lucky Number: ',style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 22),),
-                                  Text(winners.lucky_no,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 22)),
-                                ],
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10, 13, 10, 3),
+                                child: Row(
+                                  children: [
+                                    Image.asset('assets/trophy.png',width: 50,height: 50,),
+                                    SizedBox(width: 10,),
+                                    Text('Won',style: TextStyle(fontFamily: 'Raleway',color: Colors.blueAccent,fontWeight: FontWeight.bold,fontSize: 22),),
+                                    SizedBox(width: 5,),
+                                    Text('₹'+winners.prize,style: TextStyle(fontFamily: 'Raleway',color: Colors.blueAccent,fontWeight: FontWeight.bold,fontSize: 22),),
+                                  ],
+                                ),
                               ),
-                            )
-                          ],
+                              Divider(
+                                thickness: .5,
+                                color: Colors.black26,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10, 0, 10, 3),
+                                child: Row(
+                                  children: [
+                                    Text('Lucky Number: ',style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 22),),
+                                    Text(winners.lucky_no,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 22)),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }).toList(),
+                    );
+                  }).toList(),
+                ),
               ),
-            ),
-          )
+            )
+        ),
       ): Center(
         child: LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50),
       ),
