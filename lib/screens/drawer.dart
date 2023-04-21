@@ -6,6 +6,8 @@ import 'package:try_your_luck/screens/profile.dart';
 import 'package:try_your_luck/screens/my_contests.dart';
 import 'package:try_your_luck/screens/wallet.dart';
 
+import '../widgets/custom_page_route.dart';
+
 class MyHeaderDrawer extends StatefulWidget {
   late final String phno,name;
   MyHeaderDrawer(this.phno,this.name);
@@ -39,9 +41,8 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                       children: [
                         GestureDetector(
                           onTap: (){
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context)=> Wallet()
-                            ));
+                            Navigator.of(context).push(
+                                CustomPageRoute(child :Wallet()));
                           },
                           child: Row(
                             children: [

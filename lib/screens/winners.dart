@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/models/WinnersModel.dart';
 import 'package:try_your_luck/screens/wallet.dart';
 
+import '../widgets/custom_page_route.dart';
 import 'ContestExpandable.dart';
 import 'drawer.dart';
 
@@ -130,9 +131,8 @@ class _WinnersState extends State<Winners> {
         actions: [
           GestureDetector(
             onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Wallet()));
+              Navigator.of(context).push(
+                  CustomPageRoute(child :Wallet()));
             },
             child: Row(
               children: [
@@ -168,9 +168,8 @@ class _WinnersState extends State<Winners> {
                   children: list!.map((winners){
                     return InkWell(
                       onTap: (){
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ContestExpandable(name: winners.contest_name, fee: winners.fee, prize: winners.prize, no_of_people: winners.no_of_people, lucky_draw_no: winners.lucky_no)));
+                        Navigator.of(context).push(
+                            CustomPageRoute(child: ContestExpandable(name: winners.contest_name, fee: winners.fee, prize: winners.prize, no_of_people: winners.no_of_people, lucky_draw_no: winners.lucky_no)));
                       },
                       child: Card(
                         elevation: 0,

@@ -9,6 +9,7 @@ import 'package:try_your_luck/screens/drawer.dart';
 import 'package:try_your_luck/screens/wallet.dart';
 
 import '../models/ContestModel.dart';
+import '../widgets/custom_page_route.dart';
 
 class LiveContests extends StatefulWidget {
   const LiveContests({Key? key}) : super(key: key);
@@ -199,9 +200,8 @@ class _LiveContestsState extends State<LiveContests> {
         actions: [
           GestureDetector(
             onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Wallet()));
+              Navigator.of(context).push(
+                  CustomPageRoute(child :Wallet()));
             },
             child: Row(
               children: [
@@ -461,9 +461,8 @@ class _LiveContestsState extends State<LiveContests> {
         children: _head!.map((contests){
           return InkWell(
             onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+              Navigator.of(context).push(
+                  CustomPageRoute(child: ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
             },
             child: Card(
               elevation: 0,
@@ -589,9 +588,8 @@ class _LiveContestsState extends State<LiveContests> {
         children: _five!.map((contests){
           return InkWell(
             onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+              Navigator.of(context).push(
+                  CustomPageRoute(child: ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
             },
             child: Card(
               elevation: 0,
@@ -717,9 +715,8 @@ class _LiveContestsState extends State<LiveContests> {
         children: _ten!.map((contests){
           return InkWell(
             onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+              Navigator.of(context).push(
+                  CustomPageRoute(child: ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
             },
             child: Card(
               elevation: 0,
@@ -844,9 +841,8 @@ class _LiveContestsState extends State<LiveContests> {
         children: _mega!.map((contests){
           return InkWell(
             onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+              Navigator.of(context).push(
+                  CustomPageRoute(child: ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
             },
             child: Card(
               elevation: 0,
@@ -971,9 +967,8 @@ class _LiveContestsState extends State<LiveContests> {
         children: list!.map((contests){
           return InkWell(
             onTap: (){
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+              Navigator.of(context).push(
+                  CustomPageRoute(child: ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
             },
             child: Card(
               elevation: 0,
