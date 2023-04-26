@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class CustomPageRoute extends PageRouteBuilder{
@@ -18,6 +17,5 @@ class CustomPageRoute extends PageRouteBuilder{
     ).animate(animation),
     child: child,
   );
-
 
 }
