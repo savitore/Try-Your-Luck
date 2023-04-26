@@ -156,6 +156,11 @@ class _WalletState extends State<Wallet> {
       var data = jsonDecode(response.body);
       setState((){
         no_of_dw=data['documents'].length;
+        if(no_of_dw==0){
+          setState(() {
+            flag2=1;
+          });
+        }
         for(int i=0; i<data['documents'].length;i++){
           setState(() {
             deposits?.add(DepositModel(payment_id: data['documents'][i]['payment_id'].toString(), date: data['documents'][i]['date'].toString(), time: data['documents'][i]['time'].toString(), amount_added: data['documents'][i]['amount_added'].toString()));

@@ -68,11 +68,11 @@ class _ContestExpandableState extends State<ContestExpandable> {
       "database":"db",
       "collection":"users",
       "filter":{
-        "phone_number": phno
+        "phone_number": luckyUserPhone
       },
       "update": {
-        "name": userName,
-        "phone_number": phno,
+        "name": luckyUser,
+        "phone_number": luckyUserPhone,
         "balance": Balance
       }
     };
@@ -228,7 +228,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
     final body={
       "dataSource":"Cluster0",
       "database":"users",
-      "collection":phno,
+      "collection":luckyUserPhone,
       "filter":{
         "contest": contestName
       }
@@ -481,7 +481,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       );
     }else{
       // dataService.DataInsertUserMultipleContests(widget.name,luckyUserPhone , widget.prize, widget.lucky_draw_no, context);
-      // UpdateUserMultipleContests(luckyUserPhone,widget.lucky_draw_no,widget.fee,widget.no_of_people,date);
+      UpdateUserMultipleContests(luckyUserPhone,widget.lucky_draw_no,widget.fee,widget.no_of_people,date);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
