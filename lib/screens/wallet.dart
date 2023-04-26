@@ -27,7 +27,8 @@ class _WalletState extends State<Wallet> {
   String result='', name='',_balance='';
   var amount="";
   TextEditingController amount_100 = TextEditingController();
-  int flag1=0,flag2=0;
+  int flag1=0,flag2=0, no_of_contests=0, no_of_dw=0;
+  bool cont =true, dw=false;
   List<TranscationsModel>? list=[];
   List<DepositModel>? deposits=[];
   late Text entry_paid=Text('Entry Paid',style: TextStyle(color: Colors.black,fontSize: 20),);
@@ -119,6 +120,7 @@ class _WalletState extends State<Wallet> {
       );
       var data = jsonDecode(response.body);
       setState((){
+        no_of_contests=data['documents'].length;
         for(int i=0; i<data['documents'].length;i++){
           if(data['documents'][i]['result'].toString()!=''){
             result=data['documents'][i]['result'].toString();
@@ -153,6 +155,7 @@ class _WalletState extends State<Wallet> {
       );
       var data = jsonDecode(response.body);
       setState((){
+        no_of_dw=data['documents'].length;
         for(int i=0; i<data['documents'].length;i++){
           setState(() {
             deposits?.add(DepositModel(payment_id: data['documents'][i]['payment_id'].toString(), date: data['documents'][i]['date'].toString(), time: data['documents'][i]['time'].toString(), amount_added: data['documents'][i]['amount_added'].toString()));
@@ -285,8 +288,46 @@ class _WalletState extends State<Wallet> {
                               ],
                             ),
                           ),
-                          contests(),
-                          Deposits()
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            child: Row(
+                              children: [
+                                InkWell(
+                                  onTap: (){
+                                    setState(() {
+                                      cont=true;
+                                      dw=false;
+                                    });
+                                  },
+                                    child: Text('Contests',style: TextStyle(fontSize: 18,color: cont ? Colors.blueAccent : Colors.black),)
+                                ),
+                                SizedBox(width: 20,),
+                                InkWell(
+                                    onTap: (){
+                                      setState(() {
+                                        cont=false;
+                                        dw=true;
+                                      });
+                                    },
+                                    child: Text('Deposits & Withdrawals',style: TextStyle(fontSize: 18,color: dw ? Colors.blueAccent : Colors.black),)
+                                )
+                              ],
+                            ),
+                          ),
+                           cont ? Divider(
+                            height: 10,
+                            thickness: 2,
+                            color: Colors.blueAccent,
+                             indent: 10,
+                             endIndent: 285,
+                          ) : Divider(
+                             height: 10,
+                             thickness: 2,
+                             color: Colors.blueAccent,
+                             indent: 100,
+                             endIndent: 75,
+                           ),
+                          cont ? contests() : Deposits()
                         ],
                       ),
                     ),
@@ -295,7 +336,6 @@ class _WalletState extends State<Wallet> {
               ],
             ),
           ),
-
         ),
       ),
     );
@@ -336,8 +376,8 @@ class _WalletState extends State<Wallet> {
               Text(contest_name,style: TextStyle(color: Colors.black,fontSize: 17)),
               Row(
                 children: [
-                  Text(date+" | "),
-                  Text(time)
+                  Text(date+" | ",style: TextStyle(color: Colors.grey[600]),),
+                  Text(time,style: TextStyle(color: Colors.grey[600]))
                 ],
               ),
             ],
@@ -348,7 +388,10 @@ class _WalletState extends State<Wallet> {
     }
   }
   Widget contests(){
-    return flag1==1 ? Column(
+    return  flag1==1 ? no_of_contests ==0 ? Container(
+      height: MediaQuery.of(context).size.height*0.6,
+      child: Center(child: Text('No contests joined!',style: TextStyle(fontSize: 20),))
+    ) : Column(
       children: list!.map((contests){
         return Card(
           child: ListTile(
@@ -356,6 +399,54 @@ class _WalletState extends State<Wallet> {
               title: Column(
                 children: [
                   transcation(contests.contest_name,contests.winning_amount,contests.date,contests.time,contests.result,contests.fee),
+                ],
+              )
+          ),
+        );
+      }).toList(),
+    ) : Column(
+      children: [
+        LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50),
+        SizedBox(height: 25,)
+      ],
+    );
+  }
+  Widget Deposits(){
+    return flag2==1 ? no_of_dw ==0 ? Container(
+        height: MediaQuery.of(context).size.height*0.6,
+        child: Center(child: Text('No transcations yet!',style: TextStyle(fontSize: 20),))
+    ) : Column(
+      children: deposits!.map((_deposits){
+        return Card(
+          child: ListTile(
+              tileColor: Colors.white,
+              title: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Amount Added',style: TextStyle(color: Colors.black,fontSize: 20),),
+                          Text(_deposits.payment_id),
+                          Row(
+                            children: [
+                              Text(_deposits.date+" | ",style: TextStyle(color: Colors.grey[600])),
+                              Text(_deposits.time,style: TextStyle(color: Colors.grey[600]))
+                            ],
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text("+",style: TextStyle(fontSize: 18,color: Colors.black),),
+                          Icon(Icons.currency_rupee_outlined,color: Colors.black,size: 18,),
+                          Text(_deposits.amount_added,style: TextStyle(fontSize: 18,color: Colors.black),),
+                        ],
+                      ),
+                    ],
+                  )
                 ],
               )
           ),
@@ -416,7 +507,6 @@ class _WalletState extends State<Wallet> {
           textColor: Colors.black,
           fontSize: 16.0
       );
-
   Widget buildSheet() => Padding(
     padding: const EdgeInsets.fromLTRB(25, 5, 25, 20),
     child: Container(
@@ -552,52 +642,4 @@ class _WalletState extends State<Wallet> {
     ),
   );
 
-  Widget Deposits(){
-    return flag2==1 ? Column(
-      children: deposits!.map((_deposits){
-        return Card(
-          child: ListTile(
-              tileColor: Colors.white,
-              title: Column(
-                children: [
-                Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                Text('Amount Added',style: TextStyle(color: Colors.blueAccent,fontSize: 20),),
-                      Text(_deposits.payment_id),
-                      Row(
-                        children: [
-                          Text(_deposits.date+" | "),
-                          Text(_deposits.time)
-                        ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text("+",style: TextStyle(fontSize: 18,color: Colors.blueAccent),),
-                      Icon(Icons.currency_rupee_outlined,color: Colors.blueAccent,size: 18,),
-                      Text(_deposits.amount_added,style: TextStyle(fontSize: 18,color: Colors.blueAccent),),
-                    ],
-                  ),
-                ],
-              )
-                ],
-              )
-          ),
-        );
-      }).toList(),
-    ) : Column(
-      children: [
-        LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50),
-        SizedBox(height: 25,)
-      ],
-    );
-  }
-  Widget withdrawals(){
-    return Container();
-  }
 }
