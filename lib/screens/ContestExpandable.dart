@@ -185,42 +185,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print("this"+e.toString());
     }
   }
-  // Future<void> insertLuckyWinner(String date) async{
-  //   String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/find';
-  //   final body={
-  //     "dataSource":"Cluster0",
-  //     "database":"contests",
-  //     "collection":"winners",
-  //   };
-  //   final response;
-  //   try{
-  //     response=await http.post(Uri.parse(baseUrl),
-  //         headers: {'Content-Type':'application/json',
-  //           'Accept':'application/json',
-  //           'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-  //           'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
-  //         body: jsonEncode(body)
-  //     );
-  //     print('hi '+response.statusCode.toString());
-  //     var c=0;
-  //     var data = jsonDecode(response.body);
-  //     for(int i=0; i<data['documents'].length;i++){
-  //       setState((){
-  //         if(data['documents'][i]['contest_name']== widget.name){
-  //           c=1;
-  //         }
-  //       });
-  //     }
-  //     if(c==0){
-  //       setState(() {
-  //         dataService.DataInsertWinners(luckyUser, widget.name, widget.prize, widget.lucky_draw_no, date, widget.fee, widget.no_of_people, context);
-  //         Vibration.vibrate(duration: 50);
-  //       });
-  //     }
-  //   }catch(e){
-  //     print(e.toString());
-  //   }
-  // }
   Future<void> UpdateUserMultipleContests(String lucky_user_phone, String lucky_draw_no, String fee, String no_of_people) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
     final body={
@@ -518,7 +482,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
     }else{
       // dataService.DataInsertUserMultipleContests(widget.name,luckyUserPhone , widget.prize, widget.lucky_draw_no, context);
       UpdateUserMultipleContests(luckyUserPhone,widget.lucky_draw_no,widget.fee,widget.no_of_people);
-      // insertLuckyWinner(date);
+      insertWinners(date);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -705,5 +669,13 @@ class _ContestExpandableState extends State<ContestExpandable> {
           ),
         ),
       );
+  }
+  Future<void> insertWinners(String date) async {
+    var prefs = await SharedPreferences.getInstance();
+    if(prefs.getString(widget.name)!="added"){
+      prefs.setString(widget.name, "added");
+      dataService.DataInsertWinners(luckyUser, widget.name, widget.prize, widget.lucky_draw_no, date, widget.fee, widget.no_of_people, context);
+      Vibration.vibrate(duration: 50);
+    }
   }
 }

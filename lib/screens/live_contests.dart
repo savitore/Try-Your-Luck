@@ -966,7 +966,7 @@ class _LiveContestsState extends State<LiveContests> {
       return Column(
         children: list!.map((contests){
           return InkWell(
-            onTap: (){
+            onTap: () async {
               Navigator.of(context).push(
                   CustomPageRoute(child: ContestExpandable(name: contests.name, fee: contests.fee, prize: contests.win_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
             },
