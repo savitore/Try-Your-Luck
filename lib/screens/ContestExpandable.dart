@@ -27,8 +27,8 @@ class ContestExpandable extends StatefulWidget {
 
 class _ContestExpandableState extends State<ContestExpandable> {
   String? phno="";
-  String userName='',luckyUserPhone='',luckyUserIfString='',_balance='';
-  int flag=0,luckyUserIf=0;
+  String userName='',luckyUserPhone='',luckyUserIfString='',_balance='',balanceLuckyUser='';
+  int flag=0,flag1=0,luckyUserIf=0;
   var people_joined=0;
   var lucky=0;
   String lucky_no_user='',luckyUser='';
@@ -45,7 +45,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
     phno=FirebaseAuth.instance.currentUser?.phoneNumber;
     getData();
     fetchContestUsers();
-    fetchRedeemedOrNot(widget.name);
     fetchCurrentUserForAlreadyJoined();
   }
   DataService dataService=DataService();
@@ -61,7 +60,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
         userName=prefs.getString("name")!;
       });
   }
-  Future<void> updateBalance(String Balance) async{
+  Future<void> updateBalanceLuckyUser(String Balance) async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
     final body={
       "dataSource":"Cluster0",
@@ -73,6 +72,37 @@ class _ContestExpandableState extends State<ContestExpandable> {
       "update": {
         "name": luckyUser,
         "phone_number": luckyUserPhone,
+        "balance": Balance
+      }
+    };
+    try{
+      HttpClient httpClient=new HttpClient();
+      HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
+      httpClientRequest.headers.set("Content-Type", "application/json");
+      httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+      httpClientRequest.add(utf8.encode(jsonEncode(body)));
+      HttpClientResponse response=await httpClientRequest.close();
+      httpClient.close();
+      final contents = StringBuffer();
+      await for (var data in response.transform(utf8.decoder)) {
+        contents.write(data);
+      }
+    }catch(e){
+      print(e.toString());
+    }
+  }
+  Future<void> updateBalanceCurrentUser(String Balance) async{
+    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
+    final body={
+      "dataSource":"Cluster0",
+      "database":"db",
+      "collection":"users",
+      "filter":{
+        "phone_number": phno
+      },
+      "update": {
+        "name": userName,
+        "phone_number": phno,
         "balance": Balance
       }
     };
@@ -143,13 +173,17 @@ class _ContestExpandableState extends State<ContestExpandable> {
       luckyUserIfString=(luckyUserIf-1).toString();
         luckyUser=data['documents'][int.parse(luckyUserIfString)]['name'];
       luckyUserPhone=data['documents'][int.parse(luckyUserIfString)]['phone_number'];
-
       }
       lucky_no_user=(people_joined+1).toString();
       if(people_joined.toString()==widget.no_of_people.toString()){
         DeleteOne(widget.name);
+        fetchRedeemedOrNot(widget.name);
+        fetchBalanceLuckyUser();
       }
       flag=1;
+      setState(() {
+
+      });
     }catch(e){
       print(e.toString());
     }
@@ -185,6 +219,33 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print("this"+e.toString());
     }
   }
+  Future<void> fetchBalanceLuckyUser() async{
+    String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
+    final body={
+      "dataSource":"Cluster0",
+      "database":"db",
+      "collection":"users",
+      "filter":{
+        "phone_number": luckyUserPhone
+      },
+    };
+    final response;
+    try{
+      response=await http.post(Uri.parse(baseUrl),
+          headers: {'Content-Type':'application/json',
+            'Accept':'application/json',
+            'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
+            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+          body: jsonEncode(body)
+      );
+      var data = jsonDecode(response.body);
+      setState((){
+        balanceLuckyUser=data['document']['balance'];
+      });
+    }catch(e){
+      print(e.toString());
+    }
+  }
   Future<void> UpdateUserMultipleContests(String lucky_user_phone, String lucky_draw_no, String fee, String no_of_people, String date) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
     final body={
@@ -218,8 +279,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
     }
     var output=jsonDecode(contents.toString());
     if(Redeemed=="no"){
-      updateBalance((int.parse(_balance)+int.parse(widget.prize)).toString());
-      setBalance((int.parse(_balance)+int.parse(widget.prize)).toString());
+      updateBalanceLuckyUser((int.parse(balanceLuckyUser)+int.parse(widget.prize)).toString());
       insertWinners(date);
     }
   }
@@ -246,7 +306,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
       setState((){
         Redeemed=data['document']['redeemed'].toString();
       });
-      flag=1;
     }catch(e){
       print(e.toString());
     }
@@ -602,7 +661,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
               ElevatedButton(
                   onPressed: () {
                     alreadyJoined = true;
-                    updateBalance((int.parse(_balance) - int.parse(widget.fee)).toString());
+                    updateBalanceCurrentUser((int.parse(_balance) - int.parse(widget.fee)).toString());
                     setBalance((int.parse(_balance) - int.parse(widget.fee)).toString());
                     dataService.DataInsertContestUsers(
                         userName, phno!, widget.name, alreadyJoined, context);
