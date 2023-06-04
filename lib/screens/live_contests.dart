@@ -10,6 +10,7 @@ import 'package:try_your_luck/screens/wallet.dart';
 
 import '../models/ContestModel.dart';
 import '../widgets/custom_page_route.dart';
+import '../widgets/shimmer.dart';
 
 class LiveContests extends StatefulWidget {
   const LiveContests({Key? key}) : super(key: key);
@@ -217,7 +218,7 @@ class _LiveContestsState extends State<LiveContests> {
         ],
         automaticallyImplyLeading: false,
       ),
-      body:  flag ==1 ? 
+      body:  flag ==1 ?
       RefreshIndicator(
         key: _refreshIndicatorKey,
         color: Colors.green.shade600,
@@ -285,9 +286,31 @@ class _LiveContestsState extends State<LiveContests> {
           ),
         ),
       )
-          : Center(
-             child: LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50),
-      ),
+          : Padding(
+            padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShimmerEffect().shimmer(Container(
+                      height: 40,
+                      width: 150,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey))),
+                  SizedBox(height: 10,),
+                  ShimmerEffect().shimmerListTile(),
+                  ShimmerEffect().shimmerListTile(),
+                  ShimmerEffect().shimmerListTile(),
+                  ShimmerEffect().shimmerListTile(),
+                  ShimmerEffect().shimmerListTile(),
+                  ShimmerEffect().shimmerListTile(),
+                  ShimmerEffect().shimmerListTile(),
+                ],
+              ),
+            ),
+          ),
       drawer: Drawer(
         backgroundColor: Colors.grey[100],
         child: SingleChildScrollView(

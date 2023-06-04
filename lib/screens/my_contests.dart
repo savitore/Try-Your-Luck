@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/models/MyContestsModel.dart';
+import 'package:try_your_luck/widgets/shimmer.dart';
 import '../widgets/custom_page_route.dart';
 import 'ContestExpandable.dart';
 
@@ -220,7 +221,26 @@ class _MyContestsState extends State<MyContests> {
             ),
           ),
         ) :
-          Center(child: LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50))
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShimmerEffect().shimmerListTileMyContests(),
+                  ShimmerEffect().shimmerListTileMyContests(),
+                  ShimmerEffect().shimmerListTileMyContests(),
+                  ShimmerEffect().shimmerListTileMyContests(),
+                  ShimmerEffect().shimmerListTileMyContests(),
+                  ShimmerEffect().shimmerListTileMyContests(),
+                  ShimmerEffect().shimmerListTileMyContests(),
+                  ShimmerEffect().shimmerListTileMyContests(),
+
+                ],
+              ),
+            ),
+          )
 
     );
   }

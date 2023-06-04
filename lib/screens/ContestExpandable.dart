@@ -9,6 +9,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:try_your_luck/screens/wallet.dart';
+import 'package:try_your_luck/widgets/shimmer.dart';
 import '../services/data_services.dart';
 import '../models/ContestUsersModel.dart';
 import 'package:vibration/vibration.dart';
@@ -369,21 +370,20 @@ class _ContestExpandableState extends State<ContestExpandable> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('₹'+widget.prize,style: TextStyle(color: Colors.blueAccent,fontWeight: FontWeight.w400,fontSize: 40)),
+                          Text('₹'+widget.prize,overflow: TextOverflow.visible,style: TextStyle(color: Colors.blueAccent,fontWeight: FontWeight.w400,fontSize: 40)),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Prize Pool',style: TextStyle(color: Colors.black,fontSize: 20),),
+                          Text('Prize Pool',overflow: TextOverflow.visible,style: TextStyle(color: Colors.black,fontSize: 20),),
                         ],
                       ),
                       SizedBox(height: 15,),
                       Row(
                         children: [
-                          Text('Entry fee: ',style: TextStyle(color: Colors.black,fontSize: 20),),
-                          Icon(Icons.currency_rupee,color: Colors.black,size: 18,),
-                          Text(widget.fee,style: TextStyle(color: Colors.black,fontSize: 20)),
+                          Text('Entry fee: ',style: TextStyle(color: Colors.black,fontSize: 20),overflow: TextOverflow.visible,),
+                          Text('₹'+widget.fee,style: TextStyle(color: Colors.black,fontSize: 20),overflow: TextOverflow.visible,),
                         ],
                       ),
                       SizedBox(height: 5,),
@@ -404,7 +404,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               spotsLeft(),
-                              Text( widget.no_of_people+' spots',style: TextStyle(fontSize: 18),),
+                              Text( widget.no_of_people+' spots',style: TextStyle(fontSize: 18),overflow: TextOverflow.visible),
                             ],
                           )
                         ],
@@ -424,7 +424,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                              child: Text('People Joined',style: TextStyle(fontSize: 25,color: Colors.green.shade600,fontWeight: FontWeight.bold,fontFamily: 'Raleway'),),
+                              child: Text('People Joined',style: TextStyle(fontSize: 25,color: Colors.green.shade600,fontWeight: FontWeight.bold,fontFamily: 'Raleway'),overflow: TextOverflow.visible),
                           ),
                           loaded(),
                         ],
@@ -433,8 +433,68 @@ class _ContestExpandableState extends State<ContestExpandable> {
                 ),
               ],
             ),
-          ) : Container(
-            child: Center(child: LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50)),
+          ) :
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10,10,10,0),
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ShimmerEffect().shimmer(Container(
+                              height: 50,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.grey))),
+                        ],
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ShimmerEffect().shimmer(Container(
+                          height: 15,
+                          width: 100,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey))),
+                    ],
+                  ),
+                  SizedBox(height: 20,),
+                  ShimmerEffect().shimmer(Container(
+                      height: 15,
+                      width: 130,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey))),
+                  SizedBox(height: 15,),
+                  ShimmerEffect().shimmer(Container(
+                      height: 65,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey))),
+                  SizedBox(height: 20,),
+                  ShimmerEffect().shimmer(Container(
+                      height: 45,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey))),
+                  SizedBox(height: 20,),
+                  ShimmerEffect().shimmer(Container(
+                      height: 250,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey))),
+                ],
+              ),
+            ),
           )
       );
   }
@@ -453,6 +513,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
               children: [
                 Text(
                   contestUsers.name,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
@@ -481,7 +542,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
         width: double.infinity,
         child: Column(
           children: [
-            Text('None',style: TextStyle(fontSize: 22,color: Colors.black),)
+            Text('None',overflow: TextOverflow.visible,style: TextStyle(fontSize: 22,color: Colors.black),)
           ],
         ),
       ),
@@ -614,14 +675,16 @@ class _ContestExpandableState extends State<ContestExpandable> {
               const SizedBox(height: 30,),
               Text('CONFIRMATION', style: TextStyle(fontSize: 25,
                   color: Colors.green.shade600,
-                  fontWeight: FontWeight.w500),),
+                  fontWeight: FontWeight.w500),
+                  overflow: TextOverflow.visible),
               const SizedBox(height: 30,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Current balance',
-                    style: TextStyle(color: Colors.black, fontSize: 20),),
-                  Row(
+                    style: TextStyle(color: Colors.black, fontSize: 20),
+                    overflow: TextOverflow.visible),
+                Row(
                     children: [
                       Icon(Icons.currency_rupee, color: Colors.black,),
                       Text(_balance, style: TextStyle(
@@ -635,6 +698,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('To Pay',
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(color: Colors.black, fontSize: 20),),
                   Row(
                     children: [
@@ -659,6 +723,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Balance left',
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(color: Colors.black, fontSize: 20),),
                   Row(
                     children: [
@@ -695,13 +760,14 @@ class _ContestExpandableState extends State<ContestExpandable> {
                     showDialog(context: context, builder: (context) {
                       return Container(
                         child: AlertDialog(
-                          title: Text('Congratulations!', style: TextStyle(
+                          title: Text('Congratulations!', overflow: TextOverflow.visible,style: TextStyle(
                               fontWeight: FontWeight.normal, fontSize: 22),),
                           actions: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text('Contest joined',
+                                  overflow: TextOverflow.visible,
                                   style: TextStyle(fontSize: 20),),
                               ],
                             ),
@@ -710,6 +776,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text('Your Lucky Number is',
+                                    overflow: TextOverflow.visible,
                                     style: TextStyle(fontSize: 22)),
                               ],
                             ),
