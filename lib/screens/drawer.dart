@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/screens/Intro.dart';
 import 'package:try_your_luck/screens/profile.dart';
 import 'package:try_your_luck/screens/my_contests.dart';
 import 'package:try_your_luck/screens/wallet.dart';
+import 'package:try_your_luck/screens/winners.dart';
 
 import '../widgets/custom_page_route.dart';
 
 class MyHeaderDrawer extends StatefulWidget {
-  late final String phno,name;
-  MyHeaderDrawer(this.phno,this.name);
+  late final String phno,name,image;
+  MyHeaderDrawer(this.phno,this.name,this.image);
 
   @override
   State<MyHeaderDrawer> createState() => _MyHeaderDrawerState();
@@ -42,23 +42,56 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                         GestureDetector(
                           onTap: (){
                             Navigator.of(context).push(
-                                CustomPageRoute(child :Wallet()));
+                                CustomPageRoute(child :Wallet(widget.image)));
                           },
                           child: Row(
                             children: [
                               Image.asset('assets/wallet.png',height: 22,width: 22,),
                               SizedBox(width: 10,),
-                              Text('My Wallet', style: TextStyle(fontSize: 17))
+                              Text('My Wallet',overflow: TextOverflow.visible, style: TextStyle(fontSize: 17))
                             ],
                           ),
                         ),
-                        // SizedBox(height: 10,),
-                        // Divider(
-                        //   height: 5,
-                        //   thickness: 0.5,
-                        //   indent: 35,
-                        // ),
-                        // SizedBox(height: 10,),
+                        SizedBox(height: 10,),
+                        Divider(
+                          height: 5,
+                          thickness: 0.5,
+                          indent: 35,
+                        ),
+                        SizedBox(height: 10,),
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.of(context).push(
+                                CustomPageRoute(child :MyContests(widget.image)));
+                          },
+                          child: Row(
+                            children: [
+                              Image.asset('assets/trophy.png',height: 22,width: 22,),
+                              SizedBox(width: 10,),
+                              Text('My Contests',overflow: TextOverflow.visible, style: TextStyle(fontSize: 17))
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10,),
+                        Divider(
+                          height: 5,
+                          thickness: 0.5,
+                          indent: 35,
+                        ),
+                        SizedBox(height: 10,),
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.of(context).push(
+                                CustomPageRoute(child :Winners()));
+                          },
+                          child: Row(
+                            children: [
+                              Image.asset('assets/winners.png',height: 22,width: 22,color: Colors.green.shade600,),
+                              SizedBox(width: 10,),
+                              Text('Winners', overflow: TextOverflow.visible,style: TextStyle(fontSize: 17))
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -84,6 +117,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                     fontSize: 15,
                     fontWeight: FontWeight.w500
                   ),
+                  overflow: TextOverflow.visible,
                 ),
                 Icon(Icons.arrow_right,size: 22,color: Colors.blueAccent,weight: 10,)
               ],
@@ -100,7 +134,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
         child: InkWell(
           onTap: (){
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context)=> Profile(widget.name,widget.phno)
+                builder: (context)=> Profile(widget.name,widget.phno,widget.image)
             ));
           },
           child: Column(
@@ -108,7 +142,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
               Row(
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage('assets/empty_person.jpg'),
+                    backgroundImage: AssetImage(widget.image),
                     // backgroundImage: NetworkImage('url'),
                     radius: 30,
                   )
@@ -124,6 +158,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                         fontSize: 20,
                         // fontWeight: FontWeight.bold
                       ),
+                      overflow: TextOverflow.visible,
                     ),
                     Icon(Icons.arrow_forward_ios,color: Colors.white,size: 25,)
                   ]

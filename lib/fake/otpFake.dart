@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pinput/pinput.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:try_your_luck/screens/home.dart';
+import 'package:try_your_luck/screens/live_contests.dart';
 
 
 class otpFake extends StatefulWidget {
@@ -87,7 +87,7 @@ class _otpFakeState extends State<otpFake> {
                     prefs.setString("phone", widget.phone);
                     Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => Home()),
+                        MaterialPageRoute(builder: (context) => LiveContests()),
                             (route) => false);
                   }
                   else if(OTP!.isEmpty){

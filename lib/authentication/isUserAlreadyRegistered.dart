@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/authentication/name.dart';
-import 'package:try_your_luck/screens/home.dart';
 import 'package:http/http.dart' as http;
+import 'package:try_your_luck/screens/live_contests.dart';
 
 class IsUserAlreadyRegistered extends StatefulWidget {
   const IsUserAlreadyRegistered({Key? key}) : super(key: key);
@@ -52,7 +52,7 @@ class _IsUserAlreadyRegisteredState extends State<IsUserAlreadyRegistered> {
         else {
           name=data['document']['name'];
           getData();
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => LiveContests()));
         }
       });
       flag=1;

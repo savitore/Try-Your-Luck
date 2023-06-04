@@ -30,7 +30,7 @@ class DataService{
     var output=jsonDecode(contents.toString());
     print(output['insertedId']);
   }
-  Future DataInsertContestUsers(String name, String phone_number, String contest_name, bool alreadyJoined, BuildContext context) async {
+  Future DataInsertContestUsers(String name, String phone_number, String contest_name, bool alreadyJoined, String image, BuildContext context) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/insertOne';
     final body={
       "dataSource":"Cluster0",
@@ -40,6 +40,7 @@ class DataService{
         "name":name,
         "phone_number":phone_number,
         "already_joined": alreadyJoined,
+        "image": image
       }
     };
     HttpClient httpClient=new HttpClient();

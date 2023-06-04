@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
-  final String name, phno;
-  Profile(this.name, this.phno);
+  final String name, phno,image;
+  Profile(this.name, this.phno,this.image);
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -35,7 +34,7 @@ class _ProfileState extends State<Profile> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage('assets/empty_person.jpg'),
+                    backgroundImage: AssetImage(widget.image),
                     // backgroundImage: NetworkImage('url'),
                     radius: 50,
                     child: Stack(

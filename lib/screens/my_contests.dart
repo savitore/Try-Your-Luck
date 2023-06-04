@@ -6,13 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/models/MyContestsModel.dart';
-import 'package:try_your_luck/screens/wallet.dart';
 import '../widgets/custom_page_route.dart';
 import 'ContestExpandable.dart';
-import 'drawer.dart';
 
 class MyContests extends StatefulWidget {
-  const MyContests({Key? key}) : super(key: key);
+  final String image;
+  MyContests(this.image);
 
   @override
   State<MyContests> createState() => _MyContestsState();
@@ -89,62 +88,7 @@ class _MyContestsState extends State<MyContests> {
           centerTitle: true,
           backgroundColor: Colors.green.shade600,
           foregroundColor: Colors.white,
-          title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GestureDetector(onTap: (){scaffoldKey.currentState?.openDrawer();}, child: Icon(Icons.menu)),
-            SizedBox(width: 8,),
-            Stack(
-              alignment: Alignment.topLeft,
-              children: [
-                GestureDetector(
-                  onTap: (){
-                    scaffoldKey.currentState?.openDrawer();
-                  },
-                  child: CircleAvatar(
-                    radius: 18,
-                    backgroundImage: AssetImage('assets/empty_person.jpg'),
-                  ),
-                ),
-                Positioned(
-                    top: 12,
-                    right: 10.0,
-                    width: 10.0,
-                    height: 10.0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle
-                      ),
-                    )
-                )
-              ],
-            ),
-            Expanded(child: Center(child:  Text('My Contests')))
-          ],
-        ),
-          actions: [
-            GestureDetector(
-              onTap: (){
-                Navigator.of(context).push(
-                    CustomPageRoute(child :Wallet()));
-              },
-              child: Row(
-                children: [
-                  Icon(Icons.account_balance_wallet_outlined,),
-                  Text(' ₹'+ balance,style: TextStyle(fontSize: 19),)
-                ],
-              ),
-            ),
-            SizedBox(width: 8,),
-          ],
-          automaticallyImplyLeading: false,
-        ),
-        drawer:  Drawer(
-          backgroundColor: Colors.grey[100],
-          child: SingleChildScrollView(
-            child: MyHeaderDrawer(phno.toString(),userName),
-          ),
+          title: Text('My Contests',overflow: TextOverflow.visible,),
         ),
         body: flag==1 ?
         RefreshIndicator(
@@ -173,7 +117,7 @@ class _MyContestsState extends State<MyContests> {
                       return InkWell(
                         onTap: (){
                           Navigator.of(context).push(
-                              CustomPageRoute(child: ContestExpandable(name: contests.contest_name, fee: contests.fee, prize: contests.winning_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+                              CustomPageRoute(child: ContestExpandable(name: contests.contest_name, fee: contests.fee, prize: contests.winning_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no, image: widget.image,)));
                         },
                         child: Card(
                           elevation: 0,
@@ -193,6 +137,7 @@ class _MyContestsState extends State<MyContests> {
                                         fontWeight: FontWeight.bold,
                                         fontSize: 25
                                     ),
+                                    overflow: TextOverflow.visible,
                                   ),
                                   SizedBox(height: 5,)
                                 ],
@@ -210,14 +155,14 @@ class _MyContestsState extends State<MyContests> {
                                           Row(
                                             children: [
                                               SizedBox(width: 3,),
-                                              Text('Prize',style: TextStyle(color: Colors.blueAccent,fontSize: 10),),
+                                              Text('Prize',style: TextStyle(color: Colors.blueAccent,fontSize: 10),overflow: TextOverflow.visible,),
                                             ],
                                           ),
                                           SizedBox(height: 3,),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
-                                              Text('₹'+contests.winning_amount,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 20)),
+                                              Text('₹'+contests.winning_amount,overflow: TextOverflow.visible,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 20)),
                                             ],
                                           ),
                                         ],
@@ -230,7 +175,7 @@ class _MyContestsState extends State<MyContests> {
                                       ),
                                       Column(
                                         children: [
-                                          Text('Lucky Number',style: TextStyle(color: Colors.black,fontSize: 10),),
+                                          Text('Lucky Number',overflow: TextOverflow.visible,style: TextStyle(color: Colors.black,fontSize: 10),),
                                           SizedBox(height: 5,),
                                           SizedBox(
                                             height: 25,
@@ -242,7 +187,7 @@ class _MyContestsState extends State<MyContests> {
                                                 onPressed: (){
                                                   Navigator.push(
                                                       context,
-                                                      MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.contest_name, fee: contests.fee, prize: contests.winning_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+                                                      MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.contest_name, fee: contests.fee, prize: contests.winning_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no, image: widget.image,)));
                                                 },
                                                 child: Row(
                                                   children: [
@@ -256,9 +201,9 @@ class _MyContestsState extends State<MyContests> {
                                   ),
                                   Row(
                                     children: [
-                                      Text('Entry fee:',style: TextStyle(color: Colors.blueAccent),),
+                                      Text('Entry fee:',overflow: TextOverflow.visible,style: TextStyle(color: Colors.blueAccent),),
                                       SizedBox(width: 5,),
-                                      Text('₹'+contests.fee,style: TextStyle(color: Colors.black),)
+                                      Text('₹'+contests.fee,overflow: TextOverflow.visible,style: TextStyle(color: Colors.black),)
                                     ],
                                   )
                                 ],
@@ -285,14 +230,14 @@ class _MyContestsState extends State<MyContests> {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(8, 10, 0, 10),
-          child: Text('Contests Won',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w500,color: Colors.black),),
+          child: Text('Contests Won',overflow: TextOverflow.visible,style: TextStyle(fontSize: 22,fontWeight: FontWeight.w500,color: Colors.black),),
         ),
         Column(
           children: won!.map((contests){
             return InkWell(
               onTap: (){
                 Navigator.of(context).push(
-                    CustomPageRoute(child: ContestExpandable(name: contests.contest_name, fee: contests.fee, prize: contests.winning_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+                    CustomPageRoute(child: ContestExpandable(name: contests.contest_name, fee: contests.fee, prize: contests.winning_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no, image: widget.image,)));
               },
               child: Card(
                 elevation: 0,
@@ -307,6 +252,7 @@ class _MyContestsState extends State<MyContests> {
                       children: [
                         Text(
                           contests.contest_name,
+                          overflow: TextOverflow.visible,
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -329,14 +275,14 @@ class _MyContestsState extends State<MyContests> {
                                 Row(
                                   children: [
                                     SizedBox(width: 3,),
-                                    Text('Amount Won',style: TextStyle(color: Colors.blueAccent,),),
+                                    Text('Amount Won',overflow: TextOverflow.visible,style: TextStyle(color: Colors.blueAccent,),),
                                   ],
                                 ),
                                 SizedBox(height: 3,),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text('₹'+contests.winning_amount,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 20)),
+                                    Text('₹'+contests.winning_amount,overflow: TextOverflow.visible,style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 20)),
                                   ],
                                 ),
                               ],
@@ -349,7 +295,7 @@ class _MyContestsState extends State<MyContests> {
                             ),
                             Column(
                               children: [
-                                Text('Lucky Number',style: TextStyle(color: Colors.black,fontSize: 10),),
+                                Text('Lucky Number',overflow: TextOverflow.visible,style: TextStyle(color: Colors.black,fontSize: 10),),
                                 SizedBox(height: 5,),
                                 SizedBox(
                                   height: 25,
@@ -361,11 +307,11 @@ class _MyContestsState extends State<MyContests> {
                                       onPressed: (){
                                         Navigator.push(
                                             context,
-                                            MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.contest_name, fee: contests.fee, prize: contests.winning_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no)));
+                                            MaterialPageRoute(builder: (context) => ContestExpandable(name: contests.contest_name, fee: contests.fee, prize: contests.winning_amount, no_of_people: contests.no_of_people, lucky_draw_no: contests.lucky_draw_no, image: widget.image,)));
                                       },
                                       child: Row(
                                         children: [
-                                          Text(contests.lucky_number,style: TextStyle(color: Colors.white)),
+                                          Text(contests.lucky_number,overflow: TextOverflow.visible,style: TextStyle(color: Colors.white)),
                                         ],
                                       )),
                                 )
@@ -375,9 +321,9 @@ class _MyContestsState extends State<MyContests> {
                         ),
                         Row(
                           children: [
-                            Text('Entry fee:',style: TextStyle(color: Colors.blueAccent),),
+                            Text('Entry fee:',overflow: TextOverflow.visible,style: TextStyle(color: Colors.blueAccent),),
                             SizedBox(width: 5,),
-                            Text('₹'+contests.fee,style: TextStyle(color: Colors.black),)
+                            Text('₹'+contests.fee,overflow: TextOverflow.visible,style: TextStyle(color: Colors.black),)
                           ],
                         )
                       ],
@@ -390,7 +336,7 @@ class _MyContestsState extends State<MyContests> {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(8, 15, 0, 10),
-          child: Text('All Contests',style: TextStyle(fontSize: 22,fontWeight: FontWeight.w500,color: Colors.black),),
+          child: Text('All Contests',overflow: TextOverflow.visible,style: TextStyle(fontSize: 22,fontWeight: FontWeight.w500,color: Colors.black),),
         ),
       ],
     ) : Text('',style: TextStyle(fontSize: 0),);

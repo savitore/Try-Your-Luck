@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:try_your_luck/screens/live_contests.dart';
 import 'package:try_your_luck/services/data_services.dart';
-
-import '../screens/home.dart';
 
 class ImageView extends StatefulWidget {
   final String name, phone;
@@ -133,23 +132,23 @@ class _ImageViewState extends State<ImageView> {
                     ),
                   ),
                   SizedBox(height: 25,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('or',style: TextStyle(fontSize: 20),),
-                    ],
-                  ),
-                  SizedBox(height: 25,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,foregroundColor: Colors.white,elevation: 0,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
-                          onPressed: (){},
-                          child: Text('Choose from Gallery')
-                      ),
-                    ],
-                  )
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     Text('or',style: TextStyle(fontSize: 20),),
+                  //   ],
+                  // ),
+                  // SizedBox(height: 25,),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     ElevatedButton(
+                  //       style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600,foregroundColor: Colors.white,elevation: 0,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                  //         onPressed: (){},
+                  //         child: Text('Choose from Gallery')
+                  //     ),
+                  //   ],
+                  // )
                 ],
             ),
               ),
@@ -158,15 +157,12 @@ class _ImageViewState extends State<ImageView> {
                 height: 45,
                 child: ElevatedButton(
                   onPressed: () async {
-                    if(avatar){
-                    //
-                    }
                     var prefs = await SharedPreferences.getInstance();
                     prefs.setString("where", "home");
                     _insertData(widget.name, widget.phone, _avatar);
                     Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => Home()),
+                        MaterialPageRoute(builder: (context) => LiveContests()),
                             (route) => false);
                   },
                   child: Text('NEXT',style: TextStyle(fontSize: 20),),
@@ -198,6 +194,6 @@ class _ImageViewState extends State<ImageView> {
         : SizedBox(height: 10,);
   }
   Future<void> _insertData(String name, String phoneno, String image) async{
-    dataService.DataInsertUsers(name,phoneno,"100",image, context);
+    dataService.DataInsertUsers(name,phoneno,"0",image, context);
   }
 }

@@ -15,7 +15,8 @@ import 'package:vibration/vibration.dart';
 import '../models/TranscationsModel.dart';
 
 class Wallet extends StatefulWidget {
-  const Wallet({Key? key}) : super(key: key);
+  final String image;
+  Wallet(this.image);
 
   @override
   State<Wallet> createState() => _WalletState();
@@ -184,7 +185,8 @@ class _WalletState extends State<Wallet> {
       "update": {
         "name": name,
         "phone_number": phno,
-        "balance": Balance
+        "balance": Balance,
+        "image": widget.image
       }
     };
     try{
@@ -618,7 +620,7 @@ class _WalletState extends State<Wallet> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                if(amount.toString()==null)
+                if(amount.toString().isEmpty)
                 {
                   showToastEmpty();
                 }

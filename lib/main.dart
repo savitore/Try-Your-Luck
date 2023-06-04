@@ -2,8 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:try_your_luck/authentication/image.dart';
-import 'package:try_your_luck/screens/home.dart';
+import 'package:try_your_luck/screens/live_contests.dart';
 import 'screens/Intro.dart';
 import 'authentication/name.dart';
 
@@ -18,7 +17,7 @@ void main() async{
     if(where=="name"){
       first=Name();
     } else{
-      first = Home();
+      first = LiveContests();
     }
   } else {
     first = Intro();

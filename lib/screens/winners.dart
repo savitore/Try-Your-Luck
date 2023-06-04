@@ -3,13 +3,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/models/WinnersModel.dart';
-import 'package:try_your_luck/screens/wallet.dart';
 
 import '../widgets/custom_page_route.dart';
 import 'ContestExpandable.dart';
-import 'drawer.dart';
 
 class Winners extends StatefulWidget {
   const Winners({Key? key}) : super(key: key);
@@ -29,25 +26,10 @@ class _WinnersState extends State<Winners> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
   new GlobalKey<RefreshIndicatorState>();
 
-  Future<void> getBalance() async {
-    var prefs = await SharedPreferences.getInstance();
-    setState(() {
-      balance =prefs.getString("balance")!;
-    });
-  }
-
-  void getData() async{
-    var prefs = await SharedPreferences.getInstance();
-    name =prefs.getString("name")!;
-    phno =prefs.getString("phone")!;
-  }
-
   @override
   void initState() {
     super.initState();
-    getData();
     fetchWinners();
-    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => getBalance());
   }
 
   @override
@@ -75,7 +57,7 @@ class _WinnersState extends State<Winners> {
       var data = jsonDecode(response.body);
       for(int i=0; i<data['documents'].length;i++){
         setState((){
-          list?.add(WinnersModel(name: data['documents'][i]['name'], contest_name: data['documents'][i]['contest_name'], prize: data['documents'][i]['prize'], lucky_no: data['documents'][i]['lucky_no'], date: data['documents'][i]['date'], fee: data['documents'][i]['fee'], no_of_people: data['documents'][i]['no_of_people']));
+          list.add(WinnersModel(name: data['documents'][i]['name'], contest_name: data['documents'][i]['contest_name'], prize: data['documents'][i]['prize'], lucky_no: data['documents'][i]['lucky_no'], date: data['documents'][i]['date'], fee: data['documents'][i]['fee'], no_of_people: data['documents'][i]['no_of_people']));
         });
       }
       flag=1;
@@ -90,59 +72,10 @@ class _WinnersState extends State<Winners> {
       key: scaffoldKey,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GestureDetector(onTap: (){scaffoldKey.currentState?.openDrawer();}, child: Icon(Icons.menu)),
-            SizedBox(width: 8,),
-            Stack(
-              alignment: Alignment.topLeft,
-              children: [
-                GestureDetector(
-                  onTap: (){
-                    scaffoldKey.currentState?.openDrawer();
-                  },
-                  child: CircleAvatar(
-                    radius: 18,
-                    backgroundImage: AssetImage('assets/empty_person.jpg'),
-                  ),
-                ),
-                Positioned(
-                    top: 12,
-                    right: 10.0,
-                    width: 10.0,
-                    height: 10.0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle
-                      ),
-                    )
-                )
-              ],
-            ),
-            Expanded(child: Center(child:  Text('Winners')))
-          ],
-        ),
+        title: Text('Winners',overflow: TextOverflow.visible,),
         centerTitle: true,
         backgroundColor: Colors.green.shade600,
         foregroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        actions: [
-          GestureDetector(
-            onTap: (){
-              Navigator.of(context).push(
-                  CustomPageRoute(child :Wallet()));
-            },
-            child: Row(
-              children: [
-                Icon(Icons.account_balance_wallet_outlined,),
-                Text(' ₹'+ balance,style: TextStyle(fontSize: 19),)
-              ],
-            ),
-          ),
-          SizedBox(width: 8,),
-        ],
       ),
       body: flag==1?
       RefreshIndicator(
@@ -153,7 +86,7 @@ class _WinnersState extends State<Winners> {
               Duration(seconds: 1),
                   (){
                 setState(() {
-                  list?.clear();
+                  list.clear();
                   fetchWinners();
                 });
               }
@@ -165,11 +98,11 @@ class _WinnersState extends State<Winners> {
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment:CrossAxisAlignment.start,
-                  children: list!.map((winners){
+                  children: list.map((winners){
                     return InkWell(
                       onTap: (){
                         Navigator.of(context).push(
-                            CustomPageRoute(child: ContestExpandable(name: winners.contest_name, fee: winners.fee, prize: winners.prize, no_of_people: winners.no_of_people, lucky_draw_no: winners.lucky_no)));
+                            CustomPageRoute(child: ContestExpandable(name: winners.contest_name, fee: winners.fee, prize: winners.prize, no_of_people: winners.no_of_people, lucky_draw_no: winners.lucky_no, image: '',)));
                       },
                       child: Card(
                         elevation: 0,
@@ -186,8 +119,8 @@ class _WinnersState extends State<Winners> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(winners.contest_name,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18),),
-                                    Text(winners.date,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18))
+                                    Text(winners.contest_name,overflow: TextOverflow.visible,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18),),
+                                    Text(winners.date,overflow: TextOverflow.visible,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18))
                                   ],
                                 ),
                               ),
@@ -199,7 +132,7 @@ class _WinnersState extends State<Winners> {
                                 padding: const EdgeInsets.fromLTRB(10, 3, 10, 3),
                                 child: Row(
                                   children: [
-                                    Text(winners.name,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 25),),
+                                    Text(winners.name,overflow: TextOverflow.visible,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 25),),
                                   ],
                                 ),
                               ),
@@ -223,8 +156,8 @@ class _WinnersState extends State<Winners> {
                                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 3),
                                 child: Row(
                                   children: [
-                                    Text('Lucky Number: ',style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 22),),
-                                    Text(winners.lucky_no,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 22)),
+                                    Text('Lucky Number: ',overflow: TextOverflow.visible,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 22),),
+                                    Text(winners.lucky_no,overflow: TextOverflow.visible,style: TextStyle(fontFamily: 'Raleway',color: Colors.black,fontWeight: FontWeight.bold,fontSize: 22)),
                                   ],
                                 ),
                               )
@@ -240,12 +173,6 @@ class _WinnersState extends State<Winners> {
         ),
       ): Center(
         child: LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50),
-      ),
-      drawer: Drawer(
-        backgroundColor: Colors.grey[100],
-        child: SingleChildScrollView(
-          child: MyHeaderDrawer(phno.toString(),name),
-        ),
       ),
     );
   }

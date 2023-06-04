@@ -19,7 +19,8 @@ class ContestExpandable extends StatefulWidget {
   final String prize;
   final String no_of_people;
   final String lucky_draw_no;
-  ContestExpandable({required this.name,required this.fee,required this.prize, required this.no_of_people, required this.lucky_draw_no});
+  final String image;
+  ContestExpandable({required this.name,required this.fee,required this.prize, required this.no_of_people, required this.lucky_draw_no,required this.image});
 
   @override
   State<ContestExpandable> createState() => _ContestExpandableState();
@@ -31,7 +32,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
   int flag=0,flag1=0,luckyUserIf=0;
   var people_joined=0;
   var lucky=0;
-  String lucky_no_user='',luckyUser='';
+  String lucky_no_user='',luckyUser='',luckyUserImage='';
   bool alreadyJoined=false;
   String contestJoined='JOIN CONTEST';
   Color? button = Colors.green.shade600;
@@ -72,7 +73,8 @@ class _ContestExpandableState extends State<ContestExpandable> {
       "update": {
         "name": luckyUser,
         "phone_number": luckyUserPhone,
-        "balance": Balance
+        "balance": Balance,
+        "image": luckyUserImage
       }
     };
     try{
@@ -103,7 +105,8 @@ class _ContestExpandableState extends State<ContestExpandable> {
       "update": {
         "name": userName,
         "phone_number": phno,
-        "balance": Balance
+        "balance": Balance,
+        "image": widget.image
       }
     };
     try{
@@ -164,7 +167,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       for(int i=0; i<data['documents'].length;i++){
         lucky=i+1;
         setState((){
-          contestUsers?.add(ContestUsersModel(name: data['documents'][i]['name'], lucky_number: lucky.toString()));
+          contestUsers?.add(ContestUsersModel(name: data['documents'][i]['name'], lucky_number: lucky.toString(), image: data['documents'][i]['image']));
         });
       }
       people_joined=data['documents'].length;
@@ -241,6 +244,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       var data = jsonDecode(response.body);
       setState((){
         balanceLuckyUser=data['document']['balance'];
+        luckyUserImage=data['document']['image'];
       });
     }catch(e){
       print(e.toString());
@@ -277,7 +281,6 @@ class _ContestExpandableState extends State<ContestExpandable> {
     await for (var data in response.transform(utf8.decoder)) {
       contents.write(data);
     }
-    var output=jsonDecode(contents.toString());
     if(Redeemed=="no"){
       updateBalanceLuckyUser((int.parse(balanceLuckyUser)+int.parse(widget.prize)).toString());
       insertWinners(date);
@@ -364,13 +367,18 @@ class _ContestExpandableState extends State<ContestExpandable> {
                   child: Column(
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Prize Pool: ',style: TextStyle(color: Colors.black,fontSize: 30),),
-                          Icon(Icons.currency_rupee,color: Colors.black,size: 27,),
-                          Text(widget.prize,style: TextStyle(color: Colors.black,fontSize: 30)),
+                          Text('₹'+widget.prize,style: TextStyle(color: Colors.blueAccent,fontWeight: FontWeight.w400,fontSize: 40)),
                         ],
                       ),
-                      SizedBox(height: 5,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Prize Pool',style: TextStyle(color: Colors.black,fontSize: 20),),
+                        ],
+                      ),
+                      SizedBox(height: 15,),
                       Row(
                         children: [
                           Text('Entry fee: ',style: TextStyle(color: Colors.black,fontSize: 20),),
@@ -437,18 +445,12 @@ class _ContestExpandableState extends State<ContestExpandable> {
           padding: const EdgeInsets.all(0.0),
           child: ListTile(
             tileColor: Colors.white,
+            leading: CircleAvatar(
+              backgroundImage: AssetImage(widget.image),
+              radius: 15,
+            ),
             title: Row(
               children: [
-                Text(
-                  contestUsers.lucky_number+'.',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30,
-                    fontFamily: 'CormorantGaramond'
-                  ),
-                ),
-                SizedBox(width: 10,),
                 Text(
                   contestUsers.name,
                   style: TextStyle(
@@ -457,6 +459,16 @@ class _ContestExpandableState extends State<ContestExpandable> {
                       fontFamily: 'Merriweather'
                   ),
                 ),
+                // Text(
+                //   contestUsers.lucky_number,
+                //   style: TextStyle(
+                //       color: Colors.black,
+                //       fontWeight: FontWeight.bold,
+                //       fontSize: 30,
+                //     fontFamily: 'Merriweather'
+                //   ),
+                // ),
+                // SizedBox(width: 10,),
               ],
             ),
           ),
@@ -485,7 +497,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
           onPressed: () {
             if(alreadyJoined==false){
               if(people_joined<double.parse(widget.no_of_people)){
-                if(double.parse(_balance)>double.parse(widget.fee)){
+                if(double.parse(_balance)>=double.parse(widget.fee)){
                   showModalBottomSheet(
                       context: context,
                       builder: (context) => buildSheet(),
@@ -506,7 +518,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                           ElevatedButton(
                               onPressed: (){
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context)=> Wallet()
+                                    builder: (context)=> Wallet(widget.image)
                                 ));
                               },
                               style: ElevatedButton.styleFrom(
@@ -599,11 +611,11 @@ class _ContestExpandableState extends State<ContestExpandable> {
                     borderRadius: BorderRadius.circular(20)
                 ),
               ),
-              SizedBox(height: 30,),
+              const SizedBox(height: 30,),
               Text('CONFIRMATION', style: TextStyle(fontSize: 25,
                   color: Colors.green.shade600,
                   fontWeight: FontWeight.w500),),
-              SizedBox(height: 30,),
+              const SizedBox(height: 30,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -664,7 +676,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
                     updateBalanceCurrentUser((int.parse(_balance) - int.parse(widget.fee)).toString());
                     setBalance((int.parse(_balance) - int.parse(widget.fee)).toString());
                     dataService.DataInsertContestUsers(
-                        userName, phno!, widget.name, alreadyJoined, context);
+                        userName, phno!, widget.name, alreadyJoined,widget.image, context);
                     dataService.DataInsertUserMultipleContests(
                         widget.name,
                         phno!,
