@@ -19,7 +19,6 @@ class _WinnersState extends State<Winners> {
 
   String name='',balance='';
   String? phno;
-  Timer? timer;
   int flag=0;
   List<WinnersModel> list = [];
   var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -34,7 +33,6 @@ class _WinnersState extends State<Winners> {
 
   @override
   void dispose() {
-    timer?.cancel();
     super.dispose();
   }
 
@@ -171,7 +169,8 @@ class _WinnersState extends State<Winners> {
               ),
             )
         ),
-      ): Center(
+      ) :
+      Center(
         child: LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50),
       ),
     );
