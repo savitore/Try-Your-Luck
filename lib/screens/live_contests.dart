@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/screens/ContestExpandable.dart';
 import 'package:try_your_luck/screens/drawer.dart';
 import 'package:try_your_luck/screens/wallet.dart';
 
+import '../api_key.dart';
 import '../models/ContestModel.dart';
 import '../widgets/custom_page_route.dart';
 import '../widgets/shimmer.dart';
@@ -81,6 +82,7 @@ class _LiveContestsState extends State<LiveContests> {
     _scrollController.addListener(_scrollListener);
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) => getBalance());
   }
+
   Future<void> fetchDataProfile() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
     final body={
@@ -97,7 +99,7 @@ class _LiveContestsState extends State<LiveContests> {
           headers: {'Content-Type':'application/json',
             'Accept':'application/json',
             'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+            'api-key':API_KEY},
           body: jsonEncode(body)
       );
       var data = jsonDecode(response.body);
@@ -115,6 +117,7 @@ class _LiveContestsState extends State<LiveContests> {
       print(e.toString());
     }
   }
+
   Future<void> fetchDataContests() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/find';
     final body={
@@ -128,7 +131,7 @@ class _LiveContestsState extends State<LiveContests> {
           headers: {'Content-Type':'application/json',
             'Accept':'application/json',
             'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+            'api-key':API_KEY},
           body: jsonEncode(body)
       );
       var data = jsonDecode(response.body);
@@ -142,6 +145,7 @@ class _LiveContestsState extends State<LiveContests> {
       print(e.toString());
     }
   }
+
   void getData() async{
     var prefs = await SharedPreferences.getInstance();
     name =prefs.getString("name")!;
@@ -149,6 +153,7 @@ class _LiveContestsState extends State<LiveContests> {
     image =prefs.getString("image")!;
     fetchDataContests();
   }
+
   Future<void> getBalance() async {
     var prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -319,6 +324,7 @@ class _LiveContestsState extends State<LiveContests> {
       ),
     );
   }
+
   Widget showFilter(){
     return Padding(
       padding: const EdgeInsets.all(8.0),

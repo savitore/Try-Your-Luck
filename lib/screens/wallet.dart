@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/models/DepositsModel.dart';
 import 'package:try_your_luck/services/data_services.dart';
 import 'package:vibration/vibration.dart';
+import '../api_key.dart';
 import '../models/TranscationsModel.dart';
 
 class Wallet extends StatefulWidget {
@@ -37,11 +38,13 @@ class _WalletState extends State<Wallet> {
   final ScrollController _scrollController = ScrollController();
   double _scrollPosition = 0;
   Razorpay _razorpay = Razorpay();
+
   _scrollListener() {
     setState(() {
       _scrollPosition = _scrollController.position.pixels;
     });
   }
+
   DataService dataService = DataService();
   Timer? timer;
 
@@ -61,22 +64,26 @@ class _WalletState extends State<Wallet> {
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) => getBalance());
   }
+
   @override
   void dispose() {
     super.dispose();
     _razorpay.clear();
     timer?.cancel();
   }
+
   Future<void> getBalance() async {
     var prefs = await SharedPreferences.getInstance();
     setState(() {
       _balance =prefs.getString("balance")!;
     });
   }
+
   void getData() async{
     var prefs = await SharedPreferences.getInstance();
     name =prefs.getString("name")!;
   }
+
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     Vibration.vibrate(duration: 50);
     final now = new DateTime.now();
@@ -90,10 +97,12 @@ class _WalletState extends State<Wallet> {
     });
     Navigator.pop(context);
   }
+
   Future<void> setBalance(String balance) async {
     var prefs = await SharedPreferences.getInstance();
     prefs.setString("balance", balance);
   }
+
   void _handlePaymentError(PaymentFailureResponse response) {
     // Do something when payment fails
     print('failed');
@@ -116,7 +125,7 @@ class _WalletState extends State<Wallet> {
           headers: {'Content-Type':'application/json',
             'Accept':'application/json',
             'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+            'api-key':API_KEY},
           body: jsonEncode(body)
       );
       var data = jsonDecode(response.body);
@@ -138,6 +147,7 @@ class _WalletState extends State<Wallet> {
       print(e.toString());
     }
   }
+
   Future<void> fetchMyDeposits() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/find';
     final body={
@@ -151,7 +161,7 @@ class _WalletState extends State<Wallet> {
           headers: {'Content-Type':'application/json',
             'Accept':'application/json',
             'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+            'api-key':API_KEY},
           body: jsonEncode(body)
       );
       var data = jsonDecode(response.body);
@@ -173,6 +183,7 @@ class _WalletState extends State<Wallet> {
       print(e.toString());
     }
   }
+
   Future<void> updateBalance(String Balance) async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
     final body={
@@ -193,7 +204,7 @@ class _WalletState extends State<Wallet> {
       HttpClient httpClient=new HttpClient();
       HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
       httpClientRequest.headers.set("Content-Type", "application/json");
-      httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+      httpClientRequest.headers.set("api-key", API_KEY);
       httpClientRequest.add(utf8.encode(jsonEncode(body)));
       HttpClientResponse response=await httpClientRequest.close();
       httpClient.close();
@@ -205,6 +216,7 @@ class _WalletState extends State<Wallet> {
       print(e.toString());
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -347,6 +359,8 @@ class _WalletState extends State<Wallet> {
       ),
     );
   }
+
+
   Widget loading_balance(){
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -356,7 +370,8 @@ class _WalletState extends State<Wallet> {
       ],
     );
   }
-  Widget transcation(String contest_name, String winning_amount, String date, String time, String Result, String fee){
+
+  Widget transaction(String contest_name, String winning_amount, String date, String time, String Result, String fee){
     if(Result=="won"){
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -394,6 +409,7 @@ class _WalletState extends State<Wallet> {
       );
     }
   }
+
   Widget contests(){
     return  flag1==1 ? no_of_contests ==0 ? Container(
       height: MediaQuery.of(context).size.height*0.6,
@@ -405,7 +421,7 @@ class _WalletState extends State<Wallet> {
               tileColor: Colors.white,
               title: Column(
                 children: [
-                  transcation(contests.contest_name,contests.winning_amount,contests.date,contests.time,contests.result,contests.fee),
+                  transaction(contests.contest_name,contests.winning_amount,contests.date,contests.time,contests.result,contests.fee),
                 ],
               )
           ),
@@ -418,54 +434,85 @@ class _WalletState extends State<Wallet> {
       ],
     );
   }
-  Widget Deposits(){
-    return flag2==1 ? no_of_dw ==0 ? Container(
-        height: MediaQuery.of(context).size.height*0.6,
-        child: Center(child: Text('No transcations yet!',style: TextStyle(fontSize: 20),))
-    ) : Column(
-      children: deposits!.map((_deposits){
-        return Card(
-          child: ListTile(
-              tileColor: Colors.white,
-              title: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Amount Added',style: TextStyle(color: Colors.black,fontSize: 20),),
-                          Text(_deposits.payment_id),
-                          Row(
-                            children: [
-                              Text(_deposits.date+" | ",style: TextStyle(color: Colors.grey[600])),
-                              Text(_deposits.time,style: TextStyle(color: Colors.grey[600]))
-                            ],
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text("+",style: TextStyle(fontSize: 18,color: Colors.black),),
-                          Icon(Icons.currency_rupee_outlined,color: Colors.black,size: 18,),
-                          Text(_deposits.amount_added,style: TextStyle(fontSize: 18,color: Colors.black),),
-                        ],
-                      ),
-                    ],
-                  )
-                ],
+
+  Widget Deposits() {
+    return flag2 == 1
+        ? no_of_dw == 0
+            ? Container(
+                height: MediaQuery.of(context).size.height * 0.6,
+                child: Center(
+                    child: Text(
+                  'No transactions yet!',
+                  style: TextStyle(fontSize: 20),
+                )))
+            : Column(
+                children: deposits!.map((_deposits) {
+                  return Card(
+                    child: ListTile(
+                        tileColor: Colors.white,
+                        title: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Amount Added',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 20),
+                                    ),
+                                    Text(_deposits.payment_id),
+                                    Row(
+                                      children: [
+                                        Text(_deposits.date + " | ",
+                                            style: TextStyle(
+                                                color: Colors.grey[600])),
+                                        Text(_deposits.time,
+                                            style: TextStyle(
+                                                color: Colors.grey[600]))
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "+",
+                                      style: TextStyle(
+                                          fontSize: 18, color: Colors.black),
+                                    ),
+                                    Icon(
+                                      Icons.currency_rupee_outlined,
+                                      color: Colors.black,
+                                      size: 18,
+                                    ),
+                                    Text(
+                                      _deposits.amount_added,
+                                      style: TextStyle(
+                                          fontSize: 18, color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                          ],
+                        )),
+                  );
+                }).toList(),
               )
-          ),
-        );
-      }).toList(),
-    ) : Column(
-      children: [
-        LoadingAnimationWidget.hexagonDots(color: Colors.grey[500]!, size: 50),
-        SizedBox(height: 25,)
-      ],
-    );
+        : Column(
+            children: [
+              LoadingAnimationWidget.hexagonDots(
+                  color: Colors.grey[500]!, size: 50),
+              SizedBox(
+                height: 25,
+              )
+            ],
+          );
   }
+
   Widget entry(String fee){
     return Row(
       children: [
@@ -475,6 +522,7 @@ class _WalletState extends State<Wallet> {
       ],
     );
   }
+
   Widget winning(String winning_amount){
     return Row(
       children: [
@@ -484,6 +532,7 @@ class _WalletState extends State<Wallet> {
       ],
     );
   }
+
   showToast() =>
       Fluttertoast.showToast(
           msg: "Withdraw option will come soon.",
@@ -494,6 +543,7 @@ class _WalletState extends State<Wallet> {
           textColor: Colors.black,
           fontSize: 20.0
       );
+
   void showToastEmpty() =>
       Fluttertoast.showToast(
           msg: "Please enter amount",
@@ -504,6 +554,7 @@ class _WalletState extends State<Wallet> {
           textColor: Colors.black,
           fontSize: 16.0
       );
+
   void showToastIncomplete() =>
       Fluttertoast.showToast(
           msg: "Amount must be Rs 1.",
@@ -514,6 +565,7 @@ class _WalletState extends State<Wallet> {
           textColor: Colors.black,
           fontSize: 16.0
       );
+
   Widget buildSheet() => Padding(
     padding: const EdgeInsets.fromLTRB(25, 5, 25, 20),
     child: Container(

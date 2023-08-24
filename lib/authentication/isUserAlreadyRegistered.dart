@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:try_your_luck/api_key.dart';
 import 'package:try_your_luck/authentication/name.dart';
 import 'package:http/http.dart' as http;
 import 'package:try_your_luck/screens/live_contests.dart';
@@ -41,7 +42,7 @@ class _IsUserAlreadyRegisteredState extends State<IsUserAlreadyRegistered> {
           headers: {'Content-Type':'application/json',
             'Accept':'application/json',
             'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+            'api-key':API_KEY},
           body: jsonEncode(body)
       );
       var data = jsonDecode(response.body);
@@ -63,9 +64,11 @@ class _IsUserAlreadyRegisteredState extends State<IsUserAlreadyRegistered> {
 
   @override
   Widget build(BuildContext context) {
-      return flag ==1 ? Scaffold() : Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return flag ==1 ?
+         SizedBox() :
+         Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+           );
   }
   void getData() async{
     var prefs = await SharedPreferences.getInstance();

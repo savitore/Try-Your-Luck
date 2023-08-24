@@ -7,6 +7,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:try_your_luck/models/MyContestsModel.dart';
 import 'package:try_your_luck/widgets/shimmer.dart';
+import '../api_key.dart';
 import '../widgets/custom_page_route.dart';
 import 'ContestExpandable.dart';
 
@@ -43,6 +44,7 @@ class _MyContestsState extends State<MyContests> {
         userName=prefs.getString("name")!;
       });
   }
+
   Future<void> fetchMyContests() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/find';
     final body={
@@ -56,7 +58,7 @@ class _MyContestsState extends State<MyContests> {
           headers: {'Content-Type':'application/json',
             'Accept':'application/json',
             'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+            'api-key':API_KEY},
           body: jsonEncode(body)
       );
       var data = jsonDecode(response.body);
@@ -80,6 +82,7 @@ class _MyContestsState extends State<MyContests> {
       print(e.toString());
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -244,6 +247,8 @@ class _MyContestsState extends State<MyContests> {
 
     );
   }
+
+
   Widget ifWon(){
     return c==1 ? Column(
       crossAxisAlignment: CrossAxisAlignment.start,

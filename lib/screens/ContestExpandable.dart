@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:try_your_luck/api_key.dart';
 
 import 'package:try_your_luck/screens/wallet.dart';
 import 'package:try_your_luck/widgets/shimmer.dart';
@@ -55,6 +55,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
     var prefs = await SharedPreferences.getInstance();
     prefs.setString("balance", Balance);
   }
+
   Future<void> getData() async{
     var prefs = await SharedPreferences.getInstance();
       setState(() {
@@ -62,6 +63,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
         userName=prefs.getString("name")!;
       });
   }
+
   Future<void> updateBalanceLuckyUser(String Balance) async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
     final body={
@@ -82,7 +84,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       HttpClient httpClient=new HttpClient();
       HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
       httpClientRequest.headers.set("Content-Type", "application/json");
-      httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+      httpClientRequest.headers.set("api-key", API_KEY);
       httpClientRequest.add(utf8.encode(jsonEncode(body)));
       HttpClientResponse response=await httpClientRequest.close();
       httpClient.close();
@@ -114,7 +116,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       HttpClient httpClient=new HttpClient();
       HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
       httpClientRequest.headers.set("Content-Type", "application/json");
-      httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+      httpClientRequest.headers.set("api-key", API_KEY);
       httpClientRequest.add(utf8.encode(jsonEncode(body)));
       HttpClientResponse response=await httpClientRequest.close();
       httpClient.close();
@@ -139,7 +141,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
     HttpClient httpClient=new HttpClient();
     HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
     httpClientRequest.headers.set("Content-Type", "application/json");
-    httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+    httpClientRequest.headers.set("api-key", API_KEY);
     httpClientRequest.add(utf8.encode(jsonEncode(body)));
     HttpClientResponse response=await httpClientRequest.close();
     httpClient.close();
@@ -161,7 +163,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
           headers: {'Content-Type':'application/json',
             'Accept':'application/json',
             'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+            'api-key':API_KEY},
           body: jsonEncode(body)
       );
       var data = jsonDecode(response.body);
@@ -208,7 +210,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
           headers: {'Content-Type':'application/json',
             'Accept':'application/json',
             'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+            'api-key':API_KEY},
           body: jsonEncode(body)
       );
       var data = jsonDecode(response.body);
@@ -239,7 +241,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
           headers: {'Content-Type':'application/json',
             'Accept':'application/json',
             'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+            'api-key':API_KEY},
           body: jsonEncode(body)
       );
       var data = jsonDecode(response.body);
@@ -274,7 +276,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
     HttpClient httpClient=new HttpClient();
     HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
     httpClientRequest.headers.set("Content-Type", "application/json");
-    httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+    httpClientRequest.headers.set("api-key", API_KEY);
     httpClientRequest.add(utf8.encode(jsonEncode(body)));
     HttpClientResponse response=await httpClientRequest.close();
     httpClient.close();
@@ -303,7 +305,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
           headers: {'Content-Type':'application/json',
             'Accept':'application/json',
             'Access-Control-Request-Headers':'Access-Control-Allow-Origin, Accept',
-            'api-key':'hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y'},
+            'api-key':API_KEY},
           body: jsonEncode(body)
       );
       var data = jsonDecode(response.body);
@@ -336,7 +338,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       HttpClient httpClient=new HttpClient();
       HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
       httpClientRequest.headers.set("Content-Type", "application/json");
-      httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+      httpClientRequest.headers.set("api-key", API_KEY);
       httpClientRequest.add(utf8.encode(jsonEncode(body)));
       HttpClientResponse response=await httpClientRequest.close();
       httpClient.close();
@@ -348,6 +350,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print(e.toString());
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final now = new DateTime.now();
@@ -498,6 +501,8 @@ class _ContestExpandableState extends State<ContestExpandable> {
           )
       );
   }
+
+
   Widget loaded(){
     return people_joined!=0 ? Column(
       children: contestUsers!.map((contestUsers){
@@ -641,6 +646,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       );
     }
   }
+
   Widget spotsLeft(){
     if(people_joined<int.parse(widget.no_of_people) && int.parse(widget.no_of_people)-people_joined!=1){
       return Text( (int.parse(widget.no_of_people)-people_joined).toString()+' spots left',style: TextStyle(fontSize: 18));
@@ -807,6 +813,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
         ),
       );
   }
+
   Future<void> insertWinners(String date) async {
       dataService.DataInsertWinners(luckyUser, widget.name, widget.prize, widget.lucky_draw_no, date, widget.fee, widget.no_of_people, context);
       Vibration.vibrate(duration: 50);

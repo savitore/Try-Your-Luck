@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
+import '../api_key.dart';
+
 class DataService{
+
   Future DataInsertUsers(String name, String phone_number, String balance, String image, BuildContext context) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/insertOne';
     final body={
@@ -19,7 +22,7 @@ class DataService{
     HttpClient httpClient=new HttpClient();
     HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
     httpClientRequest.headers.set("Content-Type", "application/json");
-    httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+    httpClientRequest.headers.set("api-key", API_KEY);
     httpClientRequest.add(utf8.encode(jsonEncode(body)));
     HttpClientResponse response=await httpClientRequest.close();
     httpClient.close();
@@ -30,6 +33,7 @@ class DataService{
     var output=jsonDecode(contents.toString());
     print(output['insertedId']);
   }
+
   Future DataInsertContestUsers(String name, String phone_number, String contest_name, bool alreadyJoined, String image, BuildContext context) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/insertOne';
     final body={
@@ -46,7 +50,7 @@ class DataService{
     HttpClient httpClient=new HttpClient();
     HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
     httpClientRequest.headers.set("Content-Type", "application/json");
-    httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+    httpClientRequest.headers.set("api-key", API_KEY);
     httpClientRequest.add(utf8.encode(jsonEncode(body)));
     HttpClientResponse response=await httpClientRequest.close();
     httpClient.close();
@@ -57,6 +61,7 @@ class DataService{
     var output=jsonDecode(contents.toString());
     print(output['insertedId']);
   }
+
   Future DataInsertUserMultipleContests(String contestName, String phone_number,String winning_amount, String lucky_no_user,String fee, String lucky_draw_no,String no_of_people, String date, String time, BuildContext context) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/insertOne';
     final body={
@@ -79,7 +84,7 @@ class DataService{
     HttpClient httpClient=new HttpClient();
     HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
     httpClientRequest.headers.set("Content-Type", "application/json");
-    httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+    httpClientRequest.headers.set("api-key", API_KEY);
     httpClientRequest.add(utf8.encode(jsonEncode(body)));
     HttpClientResponse response=await httpClientRequest.close();
     httpClient.close();
@@ -88,6 +93,7 @@ class DataService{
       contents.write(data);
     }
   }
+
   Future AmountAdded(String phone_number, String balance, String paymentid, String date, String time, BuildContext context) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/insertOne';
     final body={
@@ -104,7 +110,7 @@ class DataService{
     HttpClient httpClient=new HttpClient();
     HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
     httpClientRequest.headers.set("Content-Type", "application/json");
-    httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+    httpClientRequest.headers.set("api-key", API_KEY);
     httpClientRequest.add(utf8.encode(jsonEncode(body)));
     HttpClientResponse response=await httpClientRequest.close();
     httpClient.close();
@@ -113,6 +119,7 @@ class DataService{
       contents.write(data);
     }
   }
+
   Future DataInsertWinners(String name, String contest_name, String prize, String lucky_no, String date, String fee, String no_of_people, BuildContext context) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/insertOne';
     final body={
@@ -132,7 +139,7 @@ class DataService{
     HttpClient httpClient=new HttpClient();
     HttpClientRequest httpClientRequest=await httpClient.postUrl(Uri.parse(baseUrl));
     httpClientRequest.headers.set("Content-Type", "application/json");
-    httpClientRequest.headers.set("api-key", "hFpu17U8fUsHjNaqLQmalJKIurolrUcYON0rkHLvTM34cT3tnpTjc5ryTPKX9W9y");
+    httpClientRequest.headers.set("api-key", API_KEY);
     httpClientRequest.add(utf8.encode(jsonEncode(body)));
     HttpClientResponse response=await httpClientRequest.close();
     httpClient.close();
