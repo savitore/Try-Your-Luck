@@ -96,6 +96,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print(e.toString());
     }
   }
+
   Future<void> updateBalanceCurrentUser(String Balance) async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
     final body={
@@ -128,6 +129,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print(e.toString());
     }
   }
+
   Future<void> DeleteOne(String contest_name) async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/deleteOne';
     final body={
@@ -150,6 +152,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       contents.write(data);
     }
   }
+
   Future<void> fetchContestUsers() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/find';
     final body={
@@ -194,6 +197,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print(e.toString());
     }
   }
+
   Future<void> fetchCurrentUserForAlreadyJoined() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
     final body={
@@ -225,6 +229,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print("this"+e.toString());
     }
   }
+
   Future<void> fetchBalanceLuckyUser() async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
     final body={
@@ -253,6 +258,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print(e.toString());
     }
   }
+
   Future<void> UpdateUserMultipleContests(String lucky_user_phone, String lucky_draw_no, String fee, String no_of_people, String date) async {
     String baseUrl='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
     final body={
@@ -289,6 +295,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       insertWinners(date);
     }
   }
+
   Future<void> fetchRedeemedOrNot(String contestName) async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/findOne';
     final body={
@@ -316,6 +323,7 @@ class _ContestExpandableState extends State<ContestExpandable> {
       print(e.toString());
     }
   }
+
   Future<void> updateContest(String people) async{
     String baseUrl ='https://data.mongodb-api.com/app/data-slzvn/endpoint/data/v1/action/updateOne';
     final body={
